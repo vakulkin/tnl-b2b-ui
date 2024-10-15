@@ -44,20 +44,15 @@ const createApiUrl = (homeUrl, entityName, subPath = "", queryParams = {}) => {
   return `${homeUrl}/wp-json/tnl-b2b/v1/${entityName}${subPath ? `/${subPath}` : ""}${queryString ? `?${queryString}` : ""}`;
 };
 
-// Helper function to serialize queryKey elements if they are objects
-const serializeQueryKey = (queryKey) => {
-  return queryKey.map((key) => (typeof key === "object" ? JSON.stringify(key) : key));
-};
-
-// Generic query hook
 const useGenericQuery = (queryKey, queryFn, enabled = true) =>
   useQuery({
-    queryKey: serializeQueryKey(queryKey),  // Serialize objects in queryKey
+    queryKey: queryKey,
     queryFn,
     enabled,
     onError: (error) => {
       console.error(`Error fetching ${JSON.stringify(queryKey)}:`, error);
     },
+    placeholderData: (prev) => prev,
   });
 
 // Generic mutation hook
@@ -67,7 +62,7 @@ const useGenericMutation = (mutationFn, onSuccessFn) => {
   return useMutation({
     mutationFn,
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries(serializeQueryKey([mutationFn.queryKey]));
+      queryClient.invalidateQueries(mutationFn.queryKey);
       onSuccessFn?.(data, variables);
     },
     onError: (error) => {
@@ -101,7 +96,7 @@ export const useManagement = (entityName) => {
   const useEntitiesQueries = (entityIdsArray, subPath) => {
     return useQueries({
       queries: entityIdsArray.map((entityId) => ({
-        queryKey: serializeQueryKey([entityName, subPath, entityId]),  // Serialize objects in queryKey
+        queryKey: [entityName, subPath, entityId], // Serialize objects in queryKey
         queryFn: () =>
           apiRequest("get", apiUrl(`${subPath}/${entityId}`), nonce),
         enabled: !!entityId,
