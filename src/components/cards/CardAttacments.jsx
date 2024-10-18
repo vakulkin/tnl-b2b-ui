@@ -1,12 +1,17 @@
 import React from "react";
-import { Box, Typography, Stack, Chip, Tooltip } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Chip from "@mui/material/Chip";
+import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import PropTypes from "prop-types";
 import { getEntityStore } from "../../store";
 import { useManagement } from "../../useManagement";
+import EntityIcon from "../general/EntityIcon";
 
-const CardAttacments = ({
+const CardAttachments = ({
   entityKey,
   entity,
   attachmentKey,
@@ -23,7 +28,7 @@ const CardAttacments = ({
     error: attachmentInfoError,
   } = useEntitiesQuery("info");
 
-  if (attachmentInfoIsLoading) return "Loading...";
+  if (attachmentInfoIsLoading) return <EntityIcon icon={attachmentKey} size={18} />;
   if (attachmentInfoError) return "Error loading data.";
 
   const itemsIds = entity[attachmentKey]
@@ -33,31 +38,52 @@ const CardAttacments = ({
   return (
     <Box
       sx={{
-        p: 2,
+        p: 3,
         background: "#ffffff",
-        borderRadius: 4,
-        boxShadow: "rgba(0, 0, 0, 0.04) 0px 2px 4px",
+        borderRadius: 2,
+        border: "1px solid #E2E6EF",
+        borderLeft: `5px solid ${attachmentInfoData.color}`,
       }}
     >
       <Typography
-        variant="body2"
-        sx={{ fontSize: 16, mb: 1, color: "#2C3E50" }}
+        variant="h3"
+        sx={{
+          mb: 2,
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+        }}
       >
-        {attachmentInfoData?.many ?? attachmentKey}:
+        <EntityIcon icon={attachmentKey} size={18} />
+        {attachmentInfoData?.many ?? attachmentKey}
       </Typography>
       <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
         <Chip
-          icon={itemsIds.length ? <EditOutlinedIcon /> : <AddIcon />}
+          icon={
+            itemsIds.length ? (
+              <EditOutlinedIcon fontSize="small" />
+            ) : (
+              <AddIcon />
+            )
+          }
           label={itemsIds.length ? "Edytuj" : "Dodaj"}
           variant="outlined"
-          size="small"
           onClick={() => handleFormDialogOpen("link", entity.id, attachmentKey)}
         />
         {itemsIds.map((item, index) => {
           return (
             <React.Fragment key={item.primary_id}>
               {!!index && !!separator.length && (
-                <Chip size="small" variant="outlined" label={separator} />
+                <Chip
+                  variant="outlined"
+                  label={separator}
+                  sx={{
+                    ".MuiChip-label": {
+                      p: 0,
+                    },
+                    border: "none",
+                  }}
+                />
               )}
               <Chip
                 label={
@@ -65,7 +91,8 @@ const CardAttacments = ({
                     <span>{item.name}</span>
                   </Tooltip>
                 }
-                size="small"
+                variant="outlined"
+                sx={{ borderColor: attachmentInfoData.color }}
               />
             </React.Fragment>
           );
@@ -75,14 +102,14 @@ const CardAttacments = ({
   );
 };
 
-CardAttacments.propTypes = {
+CardAttachments.propTypes = {
   entityKey: PropTypes.string.isRequired,
   entity: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }),
   attachmentKey: PropTypes.string.isRequired,
-  separator: PropTypes.string.isRequired,
+  separator: PropTypes.string,
 };
 
-export default CardAttacments;
+export default CardAttachments;

@@ -21,9 +21,9 @@ const formatKindValue = (kind, value) => {
 const RuleChips = ({ rule }) => {
   return (
     <>
-      <Chip label={rule.active === "1" ? "active" : "inactive"} />
-      <Chip label={`priority: ${rule.priority}`} />
-      <Chip label={formatKindValue(rule.kind, rule.value)} />
+      <Chip sx={{borderRadius: 2}} label={rule.active === "1" ? "active" : "inactive"} />
+      <Chip sx={{borderRadius: 2}} label={`priority: ${rule.priority}`} />
+      <Chip sx={{borderRadius: 2}} label={formatKindValue(rule.kind, rule.value)} />
     </>
   );
 };

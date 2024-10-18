@@ -2,10 +2,10 @@ import { Box } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import PropTypes from "prop-types";
-import ActionButton from "./ActionButton";
+import ActionButton from "../general/ActionButton";
 import { getEntityStore } from "../../store";
 
-const CardActions = ({ entityKey, entity }) => {
+const CardButtons = ({ entityKey, entity }) => {
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
@@ -27,7 +27,7 @@ const CardActions = ({ entityKey, entity }) => {
   );
 };
 
-CardActions.propTypes = {
+CardButtons.propTypes = {
   entityKey: PropTypes.string.isRequired,
   entity: PropTypes.shape({
     id: PropTypes.string,
@@ -35,4 +35,4 @@ CardActions.propTypes = {
   }).isRequired,
 };
 
-export default CardActions;
+export default CardButtons;

@@ -21,6 +21,7 @@ import LinkOffIcon from "@mui/icons-material/LinkOff";
 import { getEntityStore } from "../../../store";
 import { useManagement } from "../../../useManagement";
 import ActionButton from "../ActionButton";
+import SingleLoader from "../SingleLoader";
 
 const EntityAttachForm = ({ entityKey, depsData }) => {
   // Hooks and state declarations
@@ -78,9 +79,8 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
     error: attachmentInfoError,
   } = useEntitiesQueryAttachments("info");
 
-  // Handling loading and error states
   if (entityIsLoading || attachmentsIsLoading || attachmentInfoIsLoading) {
-    return "Loading...";
+    return <SingleLoader icon={attachmentKey} size={40} />;
   }
 
   if (
@@ -132,10 +132,9 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
 
   const pageCount = Math.ceil(attachmentsData.total / attachmentsData.per_page);
 
-  // Render component
   return (
     <>
-      <DialogTitle>Wybierz {attachmentInfoData?.many}</DialogTitle>
+      <DialogTitle>Wybierz {attachmentInfoData?.many.toLowerCase()}</DialogTitle>
       <DialogContent>
         <Box sx={{ py: 2 }}>
           <TextField
@@ -187,7 +186,7 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
           <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
             <ActionButton
               icon={<AddCircleOutlineIcon />}
-              label={`Dodaj ${attachmentInfoData?.whom}`}
+              label={`Dodaj ${attachmentInfoData?.whom.toLowerCase()}`}
               ariaLabel="add"
               onClick={() => {
                 handleFormDialogClose();

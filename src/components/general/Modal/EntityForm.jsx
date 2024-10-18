@@ -10,6 +10,7 @@ import { getEntityStore } from "../../../store";
 import { useManagement } from "../../../useManagement";
 import * as Yup from "yup";
 import FormFields from "./FormFields";
+import SingleLoader from "../SingleLoader";
 
 const EntityForm = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
@@ -28,15 +29,11 @@ const EntityForm = ({ entityKey }) => {
   const { data: infoData, isFetching: infoIsLoading } =
     useEntitiesQuery("info");
 
-  if (formIsLoading || entityIsLoading || infoIsLoading) return "Loading...";
+  if (formIsLoading || entityIsLoading || infoIsLoading) return <SingleLoader icon={entityKey} size={40} />;
 
-  // Extract fields from JSON data
   const fieldsList = formData || [];
-
   const isCreateMode = formMode === "add";
-
   const initialValues = fieldsList.reduce((acc, field) => {
-    // Set default value for select fields (first option if available)
     if (field.type === "select" && field.options && field.options.length > 0) {
       acc[field.name] = isCreateMode
         ? field.options[0]
@@ -55,7 +52,7 @@ const EntityForm = ({ entityKey }) => {
   return (
     <>
       <DialogTitle>
-        {isCreateMode ? "Dodaj" : "Edytuj"} {infoData?.singular}
+        {isCreateMode ? "Dodaj" : "Edytuj"} {infoData?.whom.toLowerCase()}
       </DialogTitle>
       <Formik
         initialValues={initialValues}
@@ -65,7 +62,6 @@ const EntityForm = ({ entityKey }) => {
       >
         {({ errors, touched, handleChange, values }) => (
           <Form>
-            
             <DialogContent>
               <FormFields
                 fieldsList={fieldsList}

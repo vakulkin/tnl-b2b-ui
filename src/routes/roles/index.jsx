@@ -5,6 +5,7 @@ import { useManagement } from "../../useManagement";
 import PageHeader from "../../components/general/PageHeader";
 import EditModal from "../../components/general/Modal/EditModal";
 import SingleCard from "../../components/cards/SingleCard";
+import SingleLoader from "../../components/general/SingleLoader";
 
 const Roles = () => {
   const entityKey = "roles";
@@ -16,7 +17,7 @@ const Roles = () => {
       page
     });
 
-  if (rolesIsLoading) return <>isLoading</>;
+  if (rolesIsLoading) return <SingleLoader icon={entityKey} size={40} />;
 
   const pageCount = Math.ceil(rolesData.total / rolesData.per_page);
 

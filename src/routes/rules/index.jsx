@@ -6,18 +6,21 @@ import PageHeader from "../../components/general/PageHeader";
 import EditModal from "../../components/general/Modal/EditModal";
 import SingleCard from "../../components/cards/SingleCard";
 import RuleDetails from "../../components/rules/RuleDetails";
+import SingleLoader from "../../components/general/SingleLoader";
 
 const Rules = () => {
   const entityKey = "rules";
   const [page, setPage] = useState(1);
 
   const { useEntitiesQuery } = useManagement(entityKey);
-  const { data: rulesData, isLoading: rulesIsLoading } =
-    useEntitiesQuery("joined", {
-      page
-    });
+  const { data: rulesData, isLoading: rulesIsLoading } = useEntitiesQuery(
+    "joined",
+    {
+      page,
+    }
+  );
 
-  if (rulesIsLoading) return <>isLoading</>;
+  if (rulesIsLoading) return <SingleLoader icon={entityKey} size={40} />;
 
   const pageCount = Math.ceil(rulesData.total / rulesData.per_page);
 
@@ -36,6 +39,7 @@ const Rules = () => {
             entity={rule}
             attachmentKey="logic_blocks"
             separator="lub"
+            inactive={rule.active !== "1"}
           >
             <RuleDetails rule={rule} />
           </SingleCard>

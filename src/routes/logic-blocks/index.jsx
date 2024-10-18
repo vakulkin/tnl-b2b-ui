@@ -5,6 +5,7 @@ import { useManagement } from "../../useManagement";
 import PageHeader from "../../components/general/PageHeader";
 import LogicBlockCard from "../../components/logicBlocks/LogicBlockCard";
 import EditModal from "../../components/general/Modal/EditModal";
+import SingleLoader from "../../components/general/SingleLoader";
 
 const LogicBlocks = () => {
   const entityKey = "logic_blocks";
@@ -16,7 +17,7 @@ const LogicBlocks = () => {
       page,
     });
 
-  if (logicBlocksIsLoading) return <>isLoading</>;
+  if (logicBlocksIsLoading) return <SingleLoader icon={entityKey} size={40} />;
 
   const pageCount = Math.ceil(logicBlocksData.total / logicBlocksData.per_page);
 

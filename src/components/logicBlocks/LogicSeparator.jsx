@@ -3,7 +3,7 @@ import { Box, Chip } from "@mui/material";
 
 const LogicSeparator = ({ separator }) => (
   <Box sx={{ textAlign: "center" }}>
-    <Chip sx={{ color: "#fff" }} label={separator} />
+    <Chip label={separator} />
   </Box>
 );
 

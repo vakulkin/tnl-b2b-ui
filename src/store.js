@@ -1,5 +1,11 @@
 import { create } from "zustand";
 
+export const useUiStore = create(set => ({
+  isOpen: true,
+  open: () => set({ isOpen: true }),
+  close: () => set({ isOpen: false }),
+}));
+
 export const useDataStore = create(set => ({
   nonce: null,
   homeUrl: null,
@@ -8,7 +14,6 @@ export const useDataStore = create(set => ({
 }));
 
 
-// Initial state for the store
 const commonStoreInitialState = {
   selectedEntityId: null,
   attachmentModalOpen: false,

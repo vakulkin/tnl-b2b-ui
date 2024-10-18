@@ -1,11 +1,10 @@
-// vite.config.js
 import { defineConfig } from "vite";
 import viteReact from "@vitejs/plugin-react";
+import svgr from "vite-plugin-svgr";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Convert import.meta.url to file path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -26,6 +25,7 @@ export default defineConfig(({ command }) => {
 
   return {
     plugins: [
+      svgr(),
       viteReact(),
       TanStackRouterVite(),
       ...(isServe ? [addRootDivDataAttributes()] : []),
