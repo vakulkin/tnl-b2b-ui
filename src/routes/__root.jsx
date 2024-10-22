@@ -33,20 +33,39 @@ const DrawerContent = ({ isCollapsed, handleToggleDrawer }) => (
     </Box>
     <List>
       {navigation.map((item) => (
-        <ListItemButton
-          key={item.segment}
-          component={Link}
-          to={`/${item.segment}`}
-          sx={{
-            justifyContent: isCollapsed ? "center" : "flex-start",
-            height: 56,
-          }}
-        >
-          <ListItemIcon sx={{ display: "flex", justifyContent: "center" }}>
-            {item.icon}
-          </ListItemIcon>
-          {!isCollapsed && <ListItemText primary={item.title} />}
-        </ListItemButton>
+        item.type === "internal" ? (
+          <ListItemButton
+            key={item.segment}
+            component={Link}
+            to={`/${item.segment}`}
+            sx={{
+              justifyContent: isCollapsed ? "center" : "flex-start",
+              height: 56,
+            }}
+          >
+            <ListItemIcon sx={{ display: "flex", justifyContent: "center" }}>
+              {item.icon}
+            </ListItemIcon>
+            {!isCollapsed && <ListItemText primary={item.title} />}
+          </ListItemButton>
+        ) : (
+          <ListItemButton
+            key={item.url}
+            component="a"
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              justifyContent: isCollapsed ? "center" : "flex-start",
+              height: 56,
+            }}
+          >
+            <ListItemIcon sx={{ display: "flex", justifyContent: "center" }}>
+              {item.icon}
+            </ListItemIcon>
+            {!isCollapsed && <ListItemText primary={item.title} />}
+          </ListItemButton>
+        )
       ))}
       <ListItemButton
         onClick={handleToggleDrawer}
