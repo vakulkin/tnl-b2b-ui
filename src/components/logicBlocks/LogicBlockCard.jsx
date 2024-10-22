@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid2";
 import PropTypes from "prop-types";
 import CardHeader from "../cards/CardHeader";
 
-import LogicSeparator from "./LogicSeparator";
 import CardAttacments from "../cards/CardAttacments";
 
 const LogicBlockCard = ({ logicBlock }) => {
@@ -17,8 +16,8 @@ const LogicBlockCard = ({ logicBlock }) => {
       }}
     >
       <CardHeader entityKey="logic_blocks" entity={logicBlock} />
-      <Grid container spacing={2} columns={32} alignItems="center">
-        <Grid size={{ xs: 32, xl: 10 }}>
+      <Grid container spacing={3} alignItems="center">
+        <Grid size={{ xs: 12, xl: 4 }}>
           <CardAttacments
             entityKey="logic_blocks"
             entity={logicBlock}
@@ -26,10 +25,7 @@ const LogicBlockCard = ({ logicBlock }) => {
             separator="i"
           />
         </Grid>
-        <Grid size={{ xs: 32, xl: 1 }}>
-          <LogicSeparator separator="i" />
-        </Grid>
-        <Grid size={{ xs: 32, xl: 10 }}>
+        <Grid size={{ xs: 12, xl: 4 }}>
           <CardAttacments
             entityKey="logic_blocks"
             entity={logicBlock}
@@ -37,10 +33,7 @@ const LogicBlockCard = ({ logicBlock }) => {
             separator="i"
           />
         </Grid>
-        <Grid size={{ xs: 32, xl: 1 }}>
-          <LogicSeparator separator="i" />
-        </Grid>
-        <Grid size={{ xs: 32, xl: 10 }}>
+        <Grid size={{ xs: 12, xl: 4 }}>
           <CardAttacments
             entityKey="logic_blocks"
             entity={logicBlock}

@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";
-import viteReact from "@vitejs/plugin-react";
-import svgr from "vite-plugin-svgr";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import svgr from "vite-plugin-svgr";
+import { defineConfig } from "vite";
+import viteReact from "@vitejs/plugin-react";
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

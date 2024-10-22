@@ -9,7 +9,7 @@ const CardHeader = ({ children, entityKey, entity }) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        mb: 3,
+        mb: 5,
       }}
     >
       <Box

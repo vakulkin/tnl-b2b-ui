@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import { getEntityStore } from "../../store";
 import { useManagement } from "../../useManagement";
 import EntityIcon from "../general/EntityIcon";
+import ActionButton from "../general/ActionButton";
 
 const CardAttachments = ({
   entityKey,
@@ -28,12 +29,17 @@ const CardAttachments = ({
     error: attachmentInfoError,
   } = useEntitiesQuery("info");
 
-  if (attachmentInfoIsLoading) return <EntityIcon icon={attachmentKey} size={18} />;
+  if (attachmentInfoIsLoading)
+    return <EntityIcon icon={attachmentKey} size={18} />;
+  
   if (attachmentInfoError) return "Error loading data.";
 
   const itemsIds = entity[attachmentKey]
     ? JSON.parse(entity[attachmentKey])
     : [];
+
+  // const firstWord = "123";
+  const firstWord = attachmentInfoData.whom.split(" ")[0].toLowerCase();
 
   return (
     <Box
@@ -48,56 +54,59 @@ const CardAttachments = ({
       <Typography
         variant="h3"
         sx={{
-          mb: 2,
           display: "flex",
+          justifyContent: "space-between",
           alignItems: "center",
-          gap: 1,
         }}
       >
-        <EntityIcon icon={attachmentKey} size={18} />
-        {attachmentInfoData?.many ?? attachmentKey}
-      </Typography>
-      <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
-        <Chip
-          icon={
-            itemsIds.length ? (
-              <EditOutlinedIcon fontSize="small" />
-            ) : (
-              <AddIcon />
-            )
-          }
-          label={itemsIds.length ? "Edytuj" : "Dodaj"}
-          variant="outlined"
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <EntityIcon icon={attachmentKey} size={18} />
+          {attachmentInfoData?.many ?? attachmentKey}
+        </Box>
+        <ActionButton
+          icon={itemsIds.length ? <EditOutlinedIcon /> : <AddIcon />}
+          label={itemsIds.length ? `Edytuj ${firstWord}` : `Dodaj ${firstWord}`}
+          ariaLabel={itemsIds.length ? "edit-attachment" : "add-attachment"}
           onClick={() => handleFormDialogOpen("link", entity.id, attachmentKey)}
         />
-        {itemsIds.map((item, index) => {
-          return (
-            <React.Fragment key={item.primary_id}>
-              {!!index && !!separator.length && (
+      </Typography>
+      {!!itemsIds.length && (
+        <Stack direction="row" sx={{ mt: 2, flexWrap: "wrap", gap: 1 }}>
+          {itemsIds.map((item, index) => {
+            return (
+              <React.Fragment key={item.primary_id}>
+                {!!index && !!separator.length && (
+                  <Chip
+                    variant="outlined"
+                    label={separator}
+                    sx={{
+                      ".MuiChip-label": {
+                        p: 0,
+                      },
+                      border: "none",
+                    }}
+                  />
+                )}
                 <Chip
+                  label={
+                    <Tooltip title={`id: ${item.primary_id}`} placement="top">
+                      <span>{item.name}</span>
+                    </Tooltip>
+                  }
                   variant="outlined"
-                  label={separator}
-                  sx={{
-                    ".MuiChip-label": {
-                      p: 0,
-                    },
-                    border: "none",
-                  }}
+                  sx={{ borderColor: attachmentInfoData.color }}
                 />
-              )}
-              <Chip
-                label={
-                  <Tooltip title={`id: ${item.primary_id}`} placement="top">
-                    <span>{item.name}</span>
-                  </Tooltip>
-                }
-                variant="outlined"
-                sx={{ borderColor: attachmentInfoData.color }}
-              />
-            </React.Fragment>
-          );
-        })}
-      </Stack>
+              </React.Fragment>
+            );
+          })}
+        </Stack>
+      )}
     </Box>
   );
 };
