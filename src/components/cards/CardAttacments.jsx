@@ -5,7 +5,6 @@ import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import PropTypes from "prop-types";
 import { getEntityStore } from "../../store";
 import { useManagement } from "../../useManagement";
@@ -30,7 +29,7 @@ const CardAttachments = ({
   } = useEntitiesQuery("info");
 
   if (attachmentInfoIsLoading)
-    return <EntityIcon icon={attachmentKey} size={18} />;
+    return <EntityIcon icon={attachmentKey} size={30} />;
   
   if (attachmentInfoError) return "Error loading data.";
 
@@ -66,12 +65,12 @@ const CardAttachments = ({
             gap: 1,
           }}
         >
-          <EntityIcon icon={attachmentKey} size={18} />
+          <EntityIcon icon={attachmentKey} size={30} />
           {attachmentInfoData?.many ?? attachmentKey}
         </Box>
         <ActionButton
-          icon={itemsIds.length ? <EditOutlinedIcon /> : <AddIcon />}
-          label={itemsIds.length ? `Edytuj ${firstWord}` : `Dodaj ${firstWord}`}
+          icon={<AddIcon />}
+          label={`Przypisz ${firstWord}`}
           ariaLabel={itemsIds.length ? "edit-attachment" : "add-attachment"}
           onClick={() => handleFormDialogOpen("link", entity.id, attachmentKey)}
         />

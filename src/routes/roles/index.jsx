@@ -17,7 +17,7 @@ const Roles = () => {
       page
     });
 
-  if (rolesIsLoading) return <SingleLoader icon={entityKey} size={40} />;
+  if (rolesIsLoading) return <SingleLoader icon={entityKey} size={46} />;
 
   const pageCount = Math.ceil(rolesData.total / rolesData.per_page);
 

@@ -29,7 +29,7 @@ const EntityForm = ({ entityKey }) => {
   const { data: infoData, isFetching: infoIsLoading } =
     useEntitiesQuery("info");
 
-  if (formIsLoading || entityIsLoading || infoIsLoading) return <SingleLoader icon={entityKey} size={40} />;
+  if (formIsLoading || entityIsLoading || infoIsLoading) return <SingleLoader icon={entityKey} size={46} />;
 
   const fieldsList = formData || [];
   const isCreateMode = formMode === "add";

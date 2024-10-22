@@ -80,7 +80,7 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
   } = useEntitiesQueryAttachments("info");
 
   if (entityIsLoading || attachmentsIsLoading || attachmentInfoIsLoading) {
-    return <SingleLoader icon={attachmentKey} size={40} />;
+    return <SingleLoader icon={attachmentKey} size={46} />;
   }
 
   if (

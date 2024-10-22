@@ -57,7 +57,7 @@ const DrawerContent = ({ isCollapsed, handleToggleDrawer }) => (
         }}
       >
         <ListItemIcon sx={{ display: "flex", justifyContent: "center" }}>
-          {isCollapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          {isCollapsed ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </ListItemIcon>
         {!isCollapsed && <ListItemText primary="Collapse" />}
       </ListItemButton>
@@ -66,9 +66,11 @@ const DrawerContent = ({ isCollapsed, handleToggleDrawer }) => (
 );
 
 const RootComponent = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  // Set the initial state based on whether it's mobile or desktop
+  const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
   const handleToggleDrawer = () => {
     setIsCollapsed(!isCollapsed);
@@ -76,7 +78,11 @@ const RootComponent = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, width: "100%" }}>
+        <Outlet />
+      </Box>
       <Drawer
+        anchor="right" // Move the drawer to the right side
         variant={isMobile && !isCollapsed ? "temporary" : "permanent"}
         open={!isCollapsed}
         onClose={handleToggleDrawer}
@@ -97,9 +103,6 @@ const RootComponent = () => {
           handleToggleDrawer={handleToggleDrawer}
         />
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: "100%" }}>
-        <Outlet />
-      </Box>
     </Box>
   );
 };

@@ -20,7 +20,7 @@ const Rules = () => {
     }
   );
 
-  if (rulesIsLoading) return <SingleLoader icon={entityKey} size={40} />;
+  if (rulesIsLoading) return <SingleLoader icon={entityKey} size={46} />;
 
   const pageCount = Math.ceil(rulesData.total / rulesData.per_page);
 
