@@ -25,26 +25,31 @@ const IndexLazyImport = createFileRoute('/')()
 // Create/Update Routes
 
 const IndexLazyRoute = IndexLazyImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const RulesIndexRoute = RulesIndexImport.update({
+  id: '/rules/',
   path: '/rules/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const RolesIndexRoute = RolesIndexImport.update({
+  id: '/roles/',
   path: '/roles/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const LogicBlocksIndexRoute = LogicBlocksIndexImport.update({
+  id: '/logic-blocks/',
   path: '/logic-blocks/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const GroupsIndexRoute = GroupsIndexImport.update({
+  id: '/groups/',
   path: '/groups/',
   getParentRoute: () => rootRoute,
 } as any)
