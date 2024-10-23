@@ -13,7 +13,7 @@ const EntityAttachDepsLoader = ({ entityKey }) => {
     error: depsError,
   } = useEntitiesQuery("deps");
 
-  if (depsIsLoading) return <SingleLoader icon={entityKey} size={46} />;
+  if (depsIsLoading) return <SingleLoader icon={entityKey} size={34} />;
   if (depsError) return "Error loading data.";
 
   return (

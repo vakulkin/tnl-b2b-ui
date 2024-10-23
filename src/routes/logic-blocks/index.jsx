@@ -17,7 +17,7 @@ const LogicBlocks = () => {
       page,
     });
 
-  if (logicBlocksIsLoading) return <SingleLoader icon={entityKey} size={46} />;
+  if (logicBlocksIsLoading) return <SingleLoader icon={entityKey} size={32} />;
 
   const pageCount = Math.ceil(logicBlocksData.total / logicBlocksData.per_page);
 

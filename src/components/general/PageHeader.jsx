@@ -24,14 +24,14 @@ const PageHeader = ({ entityKey }) => {
       }}
     >
       {infoIsLoading ? (
-        <EntityIcon icon={entityKey} size={46} />
+        <EntityIcon icon={entityKey} size={34} />
       ) : (
         <>
           <Typography
             sx={{ display: "flex", alignItems: "center", gap: 2 }}
             variant="h1"
           >
-            <EntityIcon icon={entityKey} size={46} />
+            <EntityIcon icon={entityKey} size={34} />
             {infoData?.many}
           </Typography>
           {infoIsLoading

@@ -3,10 +3,11 @@ import {
   Box,
   List,
   ListItem,
-  ListItemText,
   Divider,
+  ListItemText,
 } from "@mui/material";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import EntityIcon from "../components/general/EntityIcon";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -16,25 +17,42 @@ function Index() {
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Zdefiniuj role i grupy, przypisz do nich użytkowników i produkty
+        Zdefiniuj role i grupy
       </Typography>
-
       <List>
         <ListItem>
-          <ListItemText primary="Określ role użytkowników oraz grupy produktów" />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography sx={{ mr: 2 }}>Określ</Typography>
+            <EntityIcon icon="roles" size={26} />
+            <Typography sx={{ mr: 2, ml: 1 }}>role użytkowników oraz</Typography>
+            <EntityIcon icon="groups" size={26} />
+            <Typography sx={{ mr: 2, ml: 1 }}>grupy produktów</Typography>
+          </Box>
         </ListItem>
         <ListItem>
-          <ListItemText primary="Przypisz odpowiednich użytkowników do ról" />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography sx={{ mr: 2 }}>Przypisz odpowiednich</Typography>
+            <EntityIcon icon="users" size={26} />
+            <Typography sx={{ mr: 2, ml: 1 }}>użytkowników do ról</Typography>
+          </Box>
         </ListItem>
         <ListItem>
-          <ListItemText primary="Przypisz produkty do odpowiednich grup" />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography sx={{ mr: 2}}>Przypisz</Typography>
+            <EntityIcon icon="products" size={26} />
+            <Typography sx={{ mr: 2, ml: 1 }}>produkty do odpowiednich grup</Typography>
+          </Box>
         </ListItem>
       </List>
 
       <Divider sx={{ my: 4 }} />
 
       <Typography variant="h4" gutterBottom>
-        Utwórz reguły cenowe
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography sx={{ mr: 2 }}>Utwórz</Typography>
+          <EntityIcon icon="rules" size={26} />
+          <Typography sx={{ mr: 2, ml: 1 }}>reguły cenowe</Typography>
+        </Box>
       </Typography>
       <Typography variant="body1" gutterBottom>
         Każda reguła może działać na jeden z trzech sposobów:
@@ -68,7 +86,11 @@ function Index() {
 
       <Divider sx={{ my: 4 }} />
       <Typography variant="h4" gutterBottom>
-        Utwórz i przypisz do reguł cenowych bloki logiczne
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography sx={{ mr: 2 }}>Utwórz</Typography>
+          <EntityIcon icon="logic_blocks" size={26} />
+          <Typography sx={{ mr: 2, ml: 1 }}>warunki logiczne</Typography>
+        </Box>
       </Typography>
       <Typography variant="body1" gutterBottom>
         Są to warunki, przy spełnieniu których reguła zostanie zastosowana do
@@ -85,7 +107,7 @@ function Index() {
           <ListItemText primary="Grupy produktów" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="Terminy WooCommerce (kategorie, tagi, atrybuty)" />
+          <ListItemText primary="Atrybuty WooCommerce (kategorie, tagi, atrybuty)" />
         </ListItem>
       </List>
     </Box>

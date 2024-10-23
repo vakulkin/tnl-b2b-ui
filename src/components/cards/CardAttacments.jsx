@@ -29,7 +29,7 @@ const CardAttachments = ({
   } = useEntitiesQuery("info");
 
   if (attachmentInfoIsLoading)
-    return <EntityIcon icon={attachmentKey} size={30} />;
+    return <EntityIcon icon={attachmentKey} size={20} />;
   
   if (attachmentInfoError) return "Error loading data.";
 
@@ -65,7 +65,7 @@ const CardAttachments = ({
             gap: 1,
           }}
         >
-          <EntityIcon icon={attachmentKey} size={30} />
+          <EntityIcon icon={attachmentKey} size={20} />
           {attachmentInfoData?.many ?? attachmentKey}
         </Box>
         <ActionButton

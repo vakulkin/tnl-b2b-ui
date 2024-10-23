@@ -8,6 +8,7 @@ import { ThemeProvider } from "@mui/material";
 import { routeTree } from "./routeTree.gen";
 import { useDataStore } from "./store";
 import theme from "./theme";
+import './index.css';
 
 const rootElement = document.getElementById("root");
 
