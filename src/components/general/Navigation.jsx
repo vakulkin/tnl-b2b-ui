@@ -3,9 +3,9 @@ import EntityIcon from "./EntityIcon";
 const navigation = [
   // Internal Links
   {
-    segment: "rules",
-    title: "Reguły cenowe",
-    icon: <EntityIcon icon="rules" size={30} />,
+    segment: "/",
+    title: "Info",
+    icon: <EntityIcon icon="kits" size={30} />,
     type: "internal",
   },
   {
@@ -15,8 +15,14 @@ const navigation = [
     type: "internal",
   },
   {
+    segment: "rules",
+    title: "Reguły cenowe",
+    icon: <EntityIcon icon="rules" size={30} />,
+    type: "internal",
+  },
+  {
     url: "http://btwob.local/wp-admin/edit.php?post_type=product",
-    title: "Products",
+    title: "Woo Produkty",
     icon: <EntityIcon icon="products" size={30} />,
     type: "external",
   },
@@ -34,7 +40,7 @@ const navigation = [
   },
   {
     url: "http://btwob.local/wp-admin/users.php",
-    title: "Users",
+    title: "WP Użytkownicy",
     icon: <EntityIcon icon="users" size={30} />,
     type: "external",
   },

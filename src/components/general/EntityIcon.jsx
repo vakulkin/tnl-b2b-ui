@@ -7,6 +7,7 @@ import RolesIcon from "../../assets/icons/roles.svg?react";
 import RulesIcon from "../../assets/icons/rules.svg?react";
 import TermsIcon from "../../assets/icons/terms.svg?react";
 import UsersIcon from "../../assets/icons/users.svg?react";
+import KitsIcon from "../../assets/icons/kits.svg?react";
 
 
 const iconMap = {
@@ -17,6 +18,7 @@ const iconMap = {
   rules: RulesIcon,
   terms: TermsIcon,
   users: UsersIcon,
+  kits: KitsIcon,
 };
 
 const EntityIcon = ({ icon, size }) => {

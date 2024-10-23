@@ -75,7 +75,7 @@ const DrawerContent = ({ isCollapsed, handleToggleDrawer }) => (
           height: 56,
         }}
       >
-        <ListItemIcon sx={{ display: "flex", justifyContent: "center" }}>
+        <ListItemIcon sx={{ display: "flex", justifyContent: "center", color: "inherit" }}>
           {isCollapsed ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </ListItemIcon>
         {!isCollapsed && <ListItemText primary="Collapse" />}
@@ -83,6 +83,7 @@ const DrawerContent = ({ isCollapsed, handleToggleDrawer }) => (
     </List>
   </Box>
 );
+
 
 const RootComponent = () => {
   const theme = useTheme();
@@ -101,12 +102,12 @@ const RootComponent = () => {
         <Outlet />
       </Box>
       <Drawer
-        anchor="right" // Move the drawer to the right side
+        anchor="right"
         variant={isMobile && !isCollapsed ? "temporary" : "permanent"}
         open={!isCollapsed}
         onClose={handleToggleDrawer}
         ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
+          keepMounted: true,
         }}
         sx={{
           width: isCollapsed ? collapsedDrawerWidth : drawerWidth,
@@ -114,6 +115,8 @@ const RootComponent = () => {
           [`& .MuiDrawer-paper`]: {
             width: isCollapsed ? collapsedDrawerWidth : drawerWidth,
             boxSizing: "border-box",
+            backgroundColor: "#022049",
+            color: "#FFFFFF",
           },
         }}
       >
