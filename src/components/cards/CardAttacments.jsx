@@ -30,24 +30,26 @@ const CardAttachments = ({
 
   if (attachmentInfoIsLoading)
     return <EntityIcon icon={attachmentKey} size={20} />;
-  
+
   if (attachmentInfoError) return "Error loading data.";
 
   const itemsIds = entity[attachmentKey]
     ? JSON.parse(entity[attachmentKey])
     : [];
 
-  // const firstWord = "123";
   const firstWord = attachmentInfoData.whom.split(" ")[0].toLowerCase();
 
   return (
     <Box
       sx={{
         p: 3,
+        height: "100%",
         background: "#ffffff",
         borderRadius: 2,
         border: "1px solid #E2E6EF",
+
         borderLeft: `5px solid ${attachmentInfoData.color}`,
+
       }}
     >
       <Typography
@@ -92,15 +94,13 @@ const CardAttachments = ({
                     }}
                   />
                 )}
-                <Chip
-                  label={
-                    <Tooltip title={`id: ${item.primary_id}`} placement="top">
-                      <span>{item.name}</span>
-                    </Tooltip>
-                  }
-                  variant="outlined"
-                  sx={{ borderColor: attachmentInfoData.color }}
-                />
+                <Tooltip title={`id: ${item.primary_id}`} placement="top">
+                  <Chip
+                    label={item.name}
+                    variant="outlined"
+                    sx={{ borderColor: attachmentInfoData.color }}
+                  />
+                </Tooltip>
               </React.Fragment>
             );
           })}
