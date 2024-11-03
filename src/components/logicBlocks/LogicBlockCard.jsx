@@ -54,7 +54,7 @@ const LogicBlockCard = ({ logicBlock }) => {
           attachmentKey="roles"
           separator="i"
         />
-        <Box sx={{ my: 2, textAlign: "center" }}>lub</Box>
+        <Box sx={{ my: 2, textAlign: "center" }}>oraz</Box>
         <Box sx={{ mt: 3, p: 4, background: "#EAECEA", borderRadius: 2 }}>
           <Grid container spacing={3} columns={25}>
             <Grid size={{ xs: 25, xl: 8 }}>
@@ -86,7 +86,7 @@ const LogicBlockCard = ({ logicBlock }) => {
                   attachmentKey="terms"
                   separator="i"
                 />
-                <Box sx={{ my: 2, textAlign: "center" }}>lub</Box>
+                <Box sx={{ my: 2, textAlign: "center" }}>oraz</Box>
                 <CardAttacments
                   entityKey="logic_blocks"
                   entity={logicBlock}
