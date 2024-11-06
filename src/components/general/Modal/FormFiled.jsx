@@ -29,7 +29,7 @@ const FormField = ({ field, values, handleChange, errors, touched }) => {
         <>
           <Field
             as={TextField}
-            type={field.type}
+            // type={field.type}
             name={field.name}
             label={field.name}
             value={values[field.name]}

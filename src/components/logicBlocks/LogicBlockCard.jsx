@@ -1,4 +1,4 @@
-import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -20,13 +20,6 @@ const LogicBlockCard = ({ logicBlock }) => {
   const defaultTab =
     groupsTermsCount > 0 || productsCount === 0 ? "groupsTerms" : "products";
 
-  const [view, setView] = useState(defaultTab);
-
-  const handleViewChange = (event, newView) => {
-    if (newView !== null) {
-      setView(newView);
-    }
-  };
 
   return (
     <Box
@@ -48,12 +41,38 @@ const LogicBlockCard = ({ logicBlock }) => {
       </Box>
 
       <Box sx={{ mt: 5, p: 4, background: "#F4F5F4", borderRadius: 2 }}>
-        <CardAttacments
-          entityKey="logic_blocks"
-          entity={logicBlock}
-          attachmentKey="roles"
-          separator="i"
-        />
+        <Box sx={{ mt: 3, p: 4, background: "#EAECEA", borderRadius: 2 }}>
+          {/* <Grid container spacing={3} columns={25}> */}
+            {/* <Grid size={{ xs: 25, xl: 14 }}>
+              <CardAttacments
+                entityKey="logic_blocks"
+                entity={logicBlock}
+                attachmentKey="users"
+                separator="i"
+              />
+            </Grid> */}
+            {/* <Grid size={{ xs: 25, xl: 1 }}> */}
+              {/* <Box
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                lub
+              </Box> */}
+            {/* </Grid> */}
+            {/* <Grid size={{ xs: 25, xl: 10 }}> */}
+              <CardAttacments
+                entityKey="logic_blocks"
+                entity={logicBlock}
+                attachmentKey="roles"
+                separator="i"
+              />
+            {/* </Grid> */}
+          {/* </Grid> */}
+        </Box>
         <Box sx={{ my: 2, textAlign: "center" }}>oraz</Box>
         <Box sx={{ mt: 3, p: 4, background: "#EAECEA", borderRadius: 2 }}>
           <Grid container spacing={3} columns={25}>
@@ -68,7 +87,6 @@ const LogicBlockCard = ({ logicBlock }) => {
             <Grid size={{ xs: 25, xl: 1 }}>
               <Box
                 sx={{
-                  my: 2,
                   height: "100%",
                   display: "flex",
                   justifyContent: "center",

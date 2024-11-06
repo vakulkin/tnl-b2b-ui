@@ -43,6 +43,7 @@ const CardAttachments = ({
     <Box
       sx={{
         p: 3,
+        pt: 2,
         height: "100%",
         background: "#ffffff",
         borderRadius: 2,
@@ -67,7 +68,7 @@ const CardAttachments = ({
             gap: 1,
           }}
         >
-          <EntityIcon icon={attachmentKey} size={20} />
+          {/* <EntityIcon icon={attachmentKey} size={20} /> */}
           {attachmentInfoData?.many ?? attachmentKey}
         </Box>
         <ActionButton
@@ -98,7 +99,6 @@ const CardAttachments = ({
                   <Chip
                     label={item.name}
                     variant="outlined"
-                    sx={{ borderColor: attachmentInfoData.color }}
                   />
                 </Tooltip>
               </React.Fragment>

@@ -13,6 +13,8 @@ const formatKindValue = (kind, value) => {
       return `- ${value} .-`; // Decrease by a fixed amount
     case "plus_number":
       return `+ ${value} .-`; // Increase by a fixed amount
+    case "request_quote":
+      return "Cena na telefon";
     default:
       return value; // Fallback for unknown kinds
   }
@@ -24,6 +26,10 @@ const RuleChips = ({ rule }) => {
       <Chip sx={{borderRadius: 2}} label={rule.active === "1" ? "active" : "inactive"} />
       <Chip sx={{borderRadius: 2}} label={`priority: ${rule.priority}`} />
       <Chip sx={{borderRadius: 2}} label={formatKindValue(rule.kind, rule.value)} />
+      {rule.operation_value && <Chip sx={{borderRadius: 2}} label={formatKindValue(rule.operation, rule.operation_value)} />}
+      <Chip sx={{borderRadius: 2}} label={`min qty: ${rule.min}`} />
+      <Chip sx={{borderRadius: 2}} label={`max qty: ${rule.max}`} />
+      <Chip sx={{borderRadius: 2}} label={rule.show_in_table === "1" ? "show table" : "hide table"} />
     </>
   );
 };
