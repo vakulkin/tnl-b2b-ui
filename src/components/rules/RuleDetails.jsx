@@ -27,9 +27,9 @@ const RuleChips = ({ rule }) => {
       <Chip sx={{borderRadius: 2}} label={`priority: ${rule.priority}`} />
       <Chip sx={{borderRadius: 2}} label={formatKindValue(rule.kind, rule.value)} />
       {rule.operation_value && <Chip sx={{borderRadius: 2}} label={formatKindValue(rule.operation, rule.operation_value)} />}
-      <Chip sx={{borderRadius: 2}} label={`min qty: ${rule.min}`} />
-      <Chip sx={{borderRadius: 2}} label={`max qty: ${rule.max}`} />
-      <Chip sx={{borderRadius: 2}} label={rule.show_in_table === "1" ? "show table" : "hide table"} />
+      <Chip sx={{borderRadius: 2}} label={`min qty: ${rule.min_qty}`} />
+      <Chip sx={{borderRadius: 2}} label={`max qty: ${rule.max_qty}`} />
+      <Chip sx={{borderRadius: 2}}  label={`table: ${rule.show_table}`} />
     </>
   );
 };
