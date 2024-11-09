@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Box, Pagination } from "@mui/material";
-import { useManagement } from "../../useManagement";
+import { useFetchEntityList } from "../../useManagement";
 import PageHeader from "../../components/general/PageHeader";
 import LogicBlockCard from "../../components/logicBlocks/LogicBlockCard";
 import EditModal from "../../components/general/Modal/EditModal";
@@ -11,9 +11,8 @@ const LogicBlocks = () => {
   const entityKey = "logic_blocks";
   const [page, setPage] = useState(1);
 
-  const { useEntitiesQuery } = useManagement(entityKey);
   const { data: logicBlocksData, isLoading: logicBlocksIsLoading } =
-    useEntitiesQuery("joined", {
+    useFetchEntityList(entityKey, "joined", {
       page,
     });
 

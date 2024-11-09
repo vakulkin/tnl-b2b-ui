@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import debounce from "lodash/debounce"; // Import debounce from lodash
-import { useFormik } from "formik"; // Import useFormik from formik
+import debounce from "lodash/debounce";
+import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -15,35 +15,54 @@ import {
   Pagination,
   TextField,
 } from "@mui/material";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import AddLinkIcon from "@mui/icons-material/AddLink";
 import LinkOffIcon from "@mui/icons-material/LinkOff";
 import { getEntityStore } from "../../../store";
-import { useManagement } from "../../../useManagement";
+import {
+  useFetchEntityById,
+  useFetchEntityList,
+  useCreateEntityMutation,
+  useDeleteEntityMutation,
+} from '../../../useManagement';
 import ActionButton from "../ActionButton";
 import SingleLoader from "../SingleLoader";
 
 const EntityAttachForm = ({ entityKey, depsData }) => {
-  // Hooks and state declarations
   const [page, setPage] = useState(1);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   const useStore = getEntityStore(entityKey);
   const { selectedEntityId, attachmentKey, handleFormDialogClose } = useStore();
 
-  const { useEntityQuery } = useManagement(entityKey);
-  const { useEntitiesQuery: useEntitiesQueryAttachments } = useManagement(attachmentKey);
-  const { createMutation, deleteMutation } = useManagement(depsData[attachmentKey].relation.route);
   const { handleFormDialogOpen } = getEntityStore(attachmentKey)();
 
-  // Formik for handling form state
-  const formik = useFormik({
-    initialValues: {
-      search: "",
-    },
+  // Fetch the entity data
+  const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(entityKey, selectedEntityId, "joined");
+
+  // Fetch the attachments
+  const {
+    data: attachmentsData,
+    isLoading: attachmentsIsLoading,
+  } = useFetchEntityList(attachmentKey, "simple", {
+    page,
+    search: debouncedSearchTerm,
   });
 
-  // Debounced handler using lodash
+  // Fetch attachment info
+  const {
+    data: attachmentInfoData,
+    isLoading: attachmentInfoIsLoading,
+  } = useFetchEntityList(attachmentKey, "info");
+
+  // Mutation hooks for creating and deleting relationships
+  const createMutation = useCreateEntityMutation(depsData[attachmentKey].relation.route);
+  const deleteMutation = useDeleteEntityMutation(depsData[attachmentKey].relation.route);
+
+  // Formik setup
+  const formik = useFormik({
+    initialValues: { search: "" },
+  });
+
   useEffect(() => {
     const handler = debounce((value) => {
       setDebouncedSearchTerm(value);
@@ -57,51 +76,15 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
     };
   }, [formik.values.search]);
 
-  const {
-    data: entityData,
-    isFetching: entityIsFetching,
-    isLoading: entityIsLoading,
-    error: entityError,
-  } = useEntityQuery(selectedEntityId, "joined");
-
-  const {
-    data: attachmentsData,
-    isLoading: attachmentsIsLoading,
-    error: attachmentsError,
-  } = useEntitiesQueryAttachments("simple", {
-    page,
-    search: debouncedSearchTerm,
-  });
-
-  const {
-    data: attachmentInfoData,
-    isLoading: attachmentInfoIsLoading,
-    error: attachmentInfoError,
-  } = useEntitiesQueryAttachments("info");
-
   if (entityIsLoading || attachmentsIsLoading || attachmentInfoIsLoading) {
     return <SingleLoader icon={attachmentKey} size={34} />;
   }
 
-  if (
-    entityError ||
-    attachmentsError ||
-    attachmentInfoError ||
-    attachmentInfoIsLoading
-  ) {
-    return "Error loading data.";
-  }
-
-  // Functions
-  const attachedIds = entityData
-    ? JSON.parse(entityData?.[attachmentKey] || "[]")
-    : [];
+  const attachedIds = entityData ? JSON.parse(entityData[attachmentKey] || "[]") : [];
 
   const handleChipClick = (checked, item) => {
     if (checked) {
-      const elementToDelete = attachedIds.find(
-        (elem) => elem.primary_id === item.id
-      );
+      const elementToDelete = attachedIds.find((elem) => elem.primary_id === item.id);
       if (elementToDelete) {
         deleteMutation.mutate(elementToDelete.relation_id, {
           onError: (error) => {
@@ -122,23 +105,19 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
     }
   };
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
+  const handlePageChange = (event, value) => setPage(value);
 
   const checkedIds = attachedIds.map((item) => item.primary_id);
-  const disabled =
-    entityIsFetching || createMutation.isPending || deleteMutation.isPending;
-
+  const disabled = entityIsLoading || createMutation.isLoading || deleteMutation.isLoading;
   const pageCount = Math.ceil(attachmentsData.total / attachmentsData.per_page);
 
   return (
     <>
-      <DialogTitle>Wybierz {attachmentInfoData?.many.toLowerCase()}</DialogTitle>
+      <DialogTitle>Select {attachmentInfoData?.many.toLowerCase()}</DialogTitle>
       <DialogContent>
         <Box sx={{ py: 2 }}>
           <TextField
-            label="Szukaj"
+            label="Search"
             variant="outlined"
             fullWidth
             name="search"
@@ -149,10 +128,10 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
         {!!attachmentsData.items.length && (
           <>
             <Typography sx={{ mb: 2 }}>
-              Które trzeba dodać do &quot;{entityData?.name}&quot;
+              Which need to be added to "{entityData?.name}"
             </Typography>
             <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
-              {attachmentsData.items?.map((item) => {
+              {attachmentsData.items.map((item) => {
                 const checked = checkedIds.includes(item.id);
                 return (
                   <Chip
@@ -185,8 +164,8 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
         {"plugin" === attachmentInfoData?.type && (
           <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
             <ActionButton
-              icon={<AddCircleOutlineIcon />}
-              label={`Dodaj ${attachmentInfoData?.whom.toLowerCase()}`}
+              icon={<AddLinkIcon />}
+              label={`Add ${attachmentInfoData?.whom.toLowerCase()}`}
               ariaLabel="add"
               onClick={() => {
                 handleFormDialogClose();
@@ -197,7 +176,7 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleFormDialogClose}>Zamknij</Button>
+        <Button onClick={handleFormDialogClose}>Close</Button>
       </DialogActions>
     </>
   );

@@ -1,17 +1,15 @@
 import PropTypes from "prop-types";
 import EntityAttachForm from "./EntityAttachForm";
-import { useManagement } from "../../../useManagement";
+import { fetchDepsByKey } from "../../../useManagement";
 import SingleLoader from "../SingleLoader";
 
 const EntityAttachDepsLoader = ({ entityKey }) => {
-  
-  const { useEntitiesQuery } = useManagement(entityKey);
 
   const {
     data: depsData,
     isLoading: depsIsLoading,
     error: depsError,
-  } = useEntitiesQuery("deps");
+  } = fetchDepsByKey(entityKey);
 
   if (depsIsLoading) return <SingleLoader icon={entityKey} size={34} />;
   if (depsError) return "Error loading data.";

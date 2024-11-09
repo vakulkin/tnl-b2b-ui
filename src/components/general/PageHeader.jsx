@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { getEntityStore } from "../../store";
-import { useManagement } from "../../useManagement";
+import { fetchInfoByKey } from "../../useManagement";
 import { Box, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ActionButton from "./ActionButton";
@@ -10,9 +10,7 @@ const PageHeader = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
-  const { useEntitiesQuery } = useManagement(entityKey);
-
-  const { data: infoData, isLoading: infoIsLoading } = useEntitiesQuery("info");
+  const { data: infoData, isLoading: infoIsLoading } = fetchInfoByKey(entityKey);
 
   return (
     <Box
@@ -39,7 +37,7 @@ const PageHeader = ({ entityKey }) => {
                 <ActionButton
                   icon={<AddCircleOutlineIcon />}
                   size="large"
-                  label={`Dodaj ${infoData?.whom.toLowerCase()}`}
+                  label={`Dodaj ${infoData?.whom?.toLowerCase()}`}
                   ariaLabel="add"
                   onClick={() => handleFormDialogOpen("add")}
                 />

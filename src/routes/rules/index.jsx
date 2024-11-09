@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Box, Pagination } from "@mui/material";
-import { useManagement } from "../../useManagement";
+import { useFetchEntityList } from "../../useManagement";
 import PageHeader from "../../components/general/PageHeader";
 import EditModal from "../../components/general/Modal/EditModal";
 import SingleCard from "../../components/cards/SingleCard";
@@ -12,8 +12,8 @@ const Rules = () => {
   const entityKey = "rules";
   const [page, setPage] = useState(1);
 
-  const { useEntitiesQuery } = useManagement(entityKey);
-  const { data: rulesData, isLoading: rulesIsLoading } = useEntitiesQuery(
+  const { data: rulesData, isLoading: rulesIsLoading } = useFetchEntityList(
+    entityKey,
     "joined",
     {
       page,

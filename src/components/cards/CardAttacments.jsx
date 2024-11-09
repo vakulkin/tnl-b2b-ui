@@ -7,9 +7,9 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
 import { getEntityStore } from "../../store";
-import { useManagement } from "../../useManagement";
 import EntityIcon from "../general/EntityIcon";
 import ActionButton from "../general/ActionButton";
+import { fetchInfoByKey } from "../../useManagement";
 
 const CardAttachments = ({
   entityKey,
@@ -20,13 +20,11 @@ const CardAttachments = ({
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
-  const { useEntitiesQuery } = useManagement(attachmentKey);
-
   const {
     data: attachmentInfoData,
     isLoading: attachmentInfoIsLoading,
     error: attachmentInfoError,
-  } = useEntitiesQuery("info");
+  } = fetchInfoByKey(attachmentKey);
 
   if (attachmentInfoIsLoading)
     return <EntityIcon icon={attachmentKey} size={20} />;
@@ -37,7 +35,7 @@ const CardAttachments = ({
     ? JSON.parse(entity[attachmentKey])
     : [];
 
-  const firstWord = attachmentInfoData.whom.split(" ")[0].toLowerCase();
+  const firstWord = attachmentInfoData?.whom?.split(" ")[0].toLowerCase();
 
   return (
     <Box
@@ -50,7 +48,6 @@ const CardAttachments = ({
         border: "1px solid #E2E6EF",
 
         borderLeft: `5px solid ${attachmentInfoData.color}`,
-
       }}
     >
       <Typography
@@ -96,10 +93,7 @@ const CardAttachments = ({
                   />
                 )}
                 <Tooltip title={`id: ${item.primary_id}`} placement="top">
-                  <Chip
-                    label={item.name}
-                    variant="outlined"
-                  />
+                  <Chip label={item.name} variant="outlined" />
                 </Tooltip>
               </React.Fragment>
             );

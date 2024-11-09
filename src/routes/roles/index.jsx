@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Box, Pagination } from "@mui/material";
-import { useManagement } from "../../useManagement";
+import { useFetchEntityList } from "../../useManagement";
 import PageHeader from "../../components/general/PageHeader";
 import EditModal from "../../components/general/Modal/EditModal";
 import SingleCard from "../../components/cards/SingleCard";
@@ -11,11 +11,13 @@ const Roles = () => {
   const entityKey = "roles";
   const [page, setPage] = useState(1);
 
-  const { useEntitiesQuery } = useManagement(entityKey);
-  const { data: rolesData, isLoading: rolesIsLoading } =
-    useEntitiesQuery("joined",  {
-      page
-    });
+  const { data: rolesData, isLoading: rolesIsLoading } = useFetchEntityList(
+    entityKey,
+    "joined",
+    {
+      page,
+    }
+  );
 
   if (rolesIsLoading) return <SingleLoader icon={entityKey} size={32} />;
 

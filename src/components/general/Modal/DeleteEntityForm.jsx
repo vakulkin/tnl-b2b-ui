@@ -7,17 +7,15 @@ import {
   DialogContent,
 } from "@mui/material";
 import { getEntityStore } from "../../../store";
-import { useManagement } from "../../../useManagement";
+import { useDeleteEntityMutation } from "../../../useManagement";
 
 const DeleteEntityForm = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
   const { selectedEntityId, handleFormDialogClose } = useStore();
 
-  const { deleteMutation } = useManagement(entityKey);
-
   // Handle the delete action
   const handleDelete = () => {
-    deleteMutation.mutate(selectedEntityId);
+    useDeleteEntityMutation.mutate(selectedEntityId);
     handleFormDialogClose(); // Close the modal after deletion
   };
 

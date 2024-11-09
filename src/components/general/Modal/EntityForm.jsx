@@ -7,7 +7,12 @@ import {
   DialogContent,
 } from "@mui/material";
 import { getEntityStore } from "../../../store";
-import { useManagement } from "../../../useManagement";
+import {
+  useFetchEntityById,
+  useFetchEntityList,
+  useCreateEntityMutation,
+  useUpdateEntityMutation,
+} from '../../../useManagement';
 import * as Yup from "yup";
 import FormFields from "./FormFields";
 import SingleLoader from "../SingleLoader";
@@ -16,81 +21,38 @@ const EntityForm = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
   const { formMode, selectedEntityId, handleFormDialogClose } = useStore();
 
-  const { useEntityQuery, useEntitiesQuery, createMutation, updateMutation } =
-    useManagement(entityKey);
+  const isCreateMode = formMode === "add";
 
-  const { data: formData, isLoading: formIsLoading } = useEntitiesQuery("form");
+  // Fetch form data, entity data, and entity info
+  const { data: formData, isLoading: formIsLoading } = useFetchEntityList(entityKey, "form");
+  const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(entityKey, selectedEntityId, "joined");
+  const { data: infoData, isLoading: infoIsLoading } = useFetchEntityList(entityKey, "info");
 
-  const { data: entityData, isLoading: entityIsLoading } = useEntityQuery(
-    selectedEntityId,
-    "joined"
-  );
-
-  const { data: infoData, isFetching: infoIsLoading } =
-    useEntitiesQuery("info");
+  // Mutation hooks for creating and updating
+  const createMutation = useCreateEntityMutation(entityKey);
+  const updateMutation = useUpdateEntityMutation(entityKey);
 
   if (formIsLoading || entityIsLoading || infoIsLoading) return <SingleLoader icon={entityKey} size={34} />;
 
   const fieldsList = formData || [];
-  const isCreateMode = formMode === "add";
   const initialValues = fieldsList.reduce((acc, field) => {
-    if (field.type === "select" && field.options && field.options.length > 0) {
-      acc[field.name] = isCreateMode
-        ? field.options[0]
-        : (entityData?.[field.name] ?? "");
-    } else {
-      acc[field.name] = isCreateMode
-        ? ""
-        : (entityData?.[field.name] ?? "");
-    }
+    acc[field.name] = isCreateMode ? (field.type === "select" ? field.options[0] : "") : entityData?.[field.name] || "";
     return acc;
   }, {});
 
-  // Convert validations to Yup schema
   const validationSchema = convertToYupSchema(fieldsList);
-
-  return (
-    <>
-      <DialogTitle>
-        {isCreateMode ? "Dodaj" : "Edytuj"} {infoData?.whom.toLowerCase()}
-      </DialogTitle>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        enableReinitialize
-        onSubmit={handleSubmit}
-      >
-        {({ errors, touched, handleChange, values }) => (
-          <Form>
-            <DialogContent>
-              <FormFields
-                fieldsList={fieldsList}
-                values={values}
-                handleChange={handleChange}
-                errors={errors}
-                touched={touched}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleFormDialogClose}>Zamknij</Button>
-              <Button type="submit" variant="contained" color="primary">
-                {isCreateMode ? "Dodaj" : "Aktualizuj"}
-              </Button>
-            </DialogActions>
-          </Form>
-        )}
-      </Formik>
-    </>
-  );
 
   function handleSubmit(values) {
     if (isCreateMode) {
-      createMutation.mutate({
-        attachmentKey: infoData.dependent_key,
-        ...values,
-      });
+      createMutation.mutate(
+        { attachmentKey: infoData.dependent_key, ...values },
+        { onSuccess: () => handleFormDialogClose() }
+      );
     } else {
-      updateMutation.mutate({ id: selectedEntityId, ...values });
+      updateMutation.mutate(
+        { id: selectedEntityId, ...values },
+        { onSuccess: () => handleFormDialogClose() }
+      );
     }
   }
 
@@ -101,54 +63,34 @@ const EntityForm = ({ entityKey }) => {
       const validations = field.validation || [];
       let validator = null;
 
-      // Iterate over all the validations and chain them together
-      validations.forEach((validation) => {
-        const { rule, params } = validation;
+      validations.forEach(({ rule, params }) => {
         switch (rule) {
           case "string":
-            validator = (validator || Yup.string()).typeError(
-              "Must be a string"
-            );
+            validator = (validator || Yup.string()).typeError("Must be a string");
             break;
           case "integer":
-            validator = (validator || Yup.number().integer()).typeError(
-              "Must be an integer"
-            );
+            validator = (validator || Yup.number().integer()).typeError("Must be an integer");
             break;
           case "number":
-            validator = (validator || Yup.number()).typeError(
-              "Must be a number"
-            );
+            validator = (validator || Yup.number()).typeError("Must be a number");
             break;
           case "maxLength":
-            validator = (validator || Yup.string()).max(
-              params,
-              `Maximum length is ${params}`
-            );
+            validator = (validator || Yup.string()).max(params, `Maximum length is ${params}`);
             break;
           case "min":
-            validator = (validator || Yup.number()).min(
-              params,
-              `Minimum value is ${params}`
-            );
+            validator = (validator || Yup.number()).min(params, `Minimum value is ${params}`);
             break;
           case "notEmpty":
-            validator = (validator || Yup.mixed()).required(
-              "This field is required"
-            );
+            validator = (validator || Yup.mixed()).required("This field is required");
             break;
           case "oneOf":
-            validator = (validator || Yup.mixed()).oneOf(
-              field.options,
-              `Must be one of: ${field.options.join(", ")}`
-            );
+            validator = (validator || Yup.mixed()).oneOf(field.options, `Must be one of: ${field.options.join(", ")}`);
             break;
           default:
             break;
         }
       });
 
-      // If no validations are defined, provide default validator based on field type
       if (!validator) {
         switch (field.type) {
           case "text":
@@ -170,6 +112,38 @@ const EntityForm = ({ entityKey }) => {
 
     return Yup.object().shape(shape);
   }
+
+  return (
+    <>
+      <DialogTitle>{isCreateMode ? "Add" : "Edit"} {infoData?.whom.toLowerCase()}</DialogTitle>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={handleSubmit}
+      >
+        {({ errors, touched, handleChange, values }) => (
+          <Form>
+            <DialogContent>
+              <FormFields
+                fieldsList={fieldsList}
+                values={values}
+                handleChange={handleChange}
+                errors={errors}
+                touched={touched}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleFormDialogClose}>Close</Button>
+              <Button type="submit" variant="contained" color="primary">
+                {isCreateMode ? "Add" : "Update"}
+              </Button>
+            </DialogActions>
+          </Form>
+        )}
+      </Formik>
+    </>
+  );
 };
 
 EntityForm.propTypes = {
