@@ -1,63 +1,47 @@
-import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Box, Pagination } from "@mui/material";
-import { useFetchEntityList } from "../../useManagement";
-import PageHeader from "../../components/general/PageHeader";
-import EditModal from "../../components/general/Modal/EditModal";
-import SingleCard from "../../components/cards/SingleCard";
-import SingleLoader from "../../components/general/SingleLoader";
+import { createFileRoute } from '@tanstack/react-router';
+import EntityTable from '../../components/general/EntitiyTable';
 
 const Roles = () => {
-  const entityKey = "roles";
-  const [page, setPage] = useState(1);
+  const entityKey = 'roles';
 
-  const { data: rolesData, isLoading: rolesIsLoading } = useFetchEntityList(
-    entityKey,
-    "joined",
+  const columnsConfig = [
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'name', headerName: 'Name', width: 300 },
     {
-      page,
-    }
-  );
-
-  if (rolesIsLoading) return <SingleLoader icon={entityKey} size={32} />;
-
-  const pageCount = Math.ceil(rolesData.total / rolesData.per_page);
-
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
+      field: 'users',
+      headerName: 'Users',
+      width: 700,
+      type: 'limitedChips',
+    },
+    {
+      field: 'edit',
+      headerName: 'Edit',
+      width: 100,
+      type: 'action',
+      action: 'edit',
+    },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 100,
+      type: 'action',
+      action: 'delete',
+    },
+  ];
 
   return (
-    <>
-      <Box sx={{ p: 4 }}>
-        <PageHeader entityKey={entityKey} />
-        {rolesData.items?.map((role) => (
-          <SingleCard
-            key={role.id}
-            entityKey={entityKey}
-            entity={role}
-            attachmentKey="users"
-          />
-        ))}
-        {pageCount > 1 && (
-          <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
-            <Pagination
-              disabled={rolesIsLoading}
-              count={pageCount}
-              page={page}
-              onChange={handlePageChange}
-            />
-          </Box>
-        )}
-        <EditModal entityKey={entityKey} />
-      </Box>
-    </>
+    <EntityTable
+      entityKey={entityKey}
+      columnsConfig={columnsConfig}
+      additionalModals={['users']}
+    />
   );
 };
 
+Roles.propTypes = {};
+
 export default Roles;
 
-// Export the Route for routing purposes
-export const Route = createFileRoute("/roles/")({
+export const Route = createFileRoute('/roles/')({
   component: () => <Roles />,
 });

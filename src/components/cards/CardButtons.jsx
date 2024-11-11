@@ -4,13 +4,13 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import PropTypes from "prop-types";
 import ActionButton from "../general/ActionButton";
 import { getEntityStore } from "../../store";
-import { fetchInfoByKey } from "../../useManagement";
+import { useFetchInfoByKey } from "../../useManagement";
 
 const CardButtons = ({ entityKey, entity }) => {
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
-  const { data: infoData, isLoading: infoIsLoading } = fetchInfoByKey(entityKey);
+  const { data: infoData, isLoading: infoIsLoading } = useFetchInfoByKey(entityKey);
 
   if (infoIsLoading) return null;
 

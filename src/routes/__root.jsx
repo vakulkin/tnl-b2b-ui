@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Box, Drawer, useMediaQuery, useTheme } from '@mui/material';
 import DrawerContent from '../components/general/Header/DrawerContent';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 
 const drawerWidth = 240;
 const collapsedDrawerWidth = 60;
@@ -42,6 +44,7 @@ const RootComponent = () => {
           handleToggleDrawer={handleToggleDrawer}
         />
       </Drawer>
+      <ReactQueryDevtools initialIsOpen={false} />
     </Box>
   );
 };

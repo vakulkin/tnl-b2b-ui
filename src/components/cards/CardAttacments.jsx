@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import { getEntityStore } from "../../store";
 import EntityIcon from "../general/EntityIcon";
 import ActionButton from "../general/ActionButton";
-import { fetchInfoByKey } from "../../useManagement";
+import { useFetchInfoByKey } from "../../useManagement";
 
 const CardAttachments = ({
   entityKey,
@@ -24,7 +24,7 @@ const CardAttachments = ({
     data: attachmentInfoData,
     isLoading: attachmentInfoIsLoading,
     error: attachmentInfoError,
-  } = fetchInfoByKey(attachmentKey);
+  } = useFetchInfoByKey(attachmentKey);
 
   if (attachmentInfoIsLoading)
     return <EntityIcon icon={attachmentKey} size={20} />;
@@ -79,7 +79,7 @@ const CardAttachments = ({
         <Stack direction="row" sx={{ mt: 2, flexWrap: "wrap", gap: 1 }}>
           {itemsIds.map((item, index) => {
             return (
-              <React.Fragment key={item.primary_id}>
+              <React.Fragment key={item.id}>
                 {!!index && !!separator.length && (
                   <Chip
                     variant="outlined"
@@ -92,7 +92,7 @@ const CardAttachments = ({
                     }}
                   />
                 )}
-                <Tooltip title={`id: ${item.primary_id}`} placement="top">
+                <Tooltip title={`id: ${item.id}`} placement="top">
                   <Chip label={item.name} variant="outlined" />
                 </Tooltip>
               </React.Fragment>

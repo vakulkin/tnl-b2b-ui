@@ -5,6 +5,7 @@ import {
   Button,
   DialogTitle,
   DialogContent,
+  Box,
 } from "@mui/material";
 import { getEntityStore } from "../../../store";
 import {
@@ -12,10 +13,13 @@ import {
   useFetchEntityList,
   useCreateEntityMutation,
   useUpdateEntityMutation,
-} from '../../../useManagement';
+  useFetchInfoByKey,
+  useFetchDepsByKey,
+} from "../../../useManagement";
 import * as Yup from "yup";
 import FormFields from "./FormFields";
 import SingleLoader from "../SingleLoader";
+import EntityAttachForm from "./EntityAttachForm";
 
 const EntityForm = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
@@ -24,19 +28,34 @@ const EntityForm = ({ entityKey }) => {
   const isCreateMode = formMode === "add";
 
   // Fetch form data, entity data, and entity info
-  const { data: formData, isLoading: formIsLoading } = useFetchEntityList(entityKey, "form");
-  const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(entityKey, selectedEntityId, "joined");
-  const { data: infoData, isLoading: infoIsLoading } = useFetchEntityList(entityKey, "info");
+  const { data: formData, isLoading: formIsLoading } = useFetchEntityList(
+    entityKey,
+    "form"
+  );
+  const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(
+    entityKey,
+    selectedEntityId,
+    "joined"
+  );
+  const { data: infoData, isLoading: infoIsLoading } =
+    useFetchInfoByKey(entityKey);
+  const { data: depsData, isLoading: depsIsLoading } =
+    useFetchDepsByKey(entityKey);
 
   // Mutation hooks for creating and updating
-  const createMutation = useCreateEntityMutation(entityKey);
-  const updateMutation = useUpdateEntityMutation(entityKey);
+  const createMutation = useCreateEntityMutation(entityKey, [[entityKey, 'joined']]);
+  const updateMutation = useUpdateEntityMutation(entityKey, [[entityKey, 'joined']]);
 
-  if (formIsLoading || entityIsLoading || infoIsLoading) return <SingleLoader icon={entityKey} size={34} />;
+  if (formIsLoading || entityIsLoading || infoIsLoading || depsIsLoading)
+    return <SingleLoader icon={entityKey} size={34} />;
 
   const fieldsList = formData || [];
   const initialValues = fieldsList.reduce((acc, field) => {
-    acc[field.name] = isCreateMode ? (field.type === "select" ? field.options[0] : "") : entityData?.[field.name] || "";
+    acc[field.name] = isCreateMode
+      ? field.type === "select"
+        ? field.options[0]
+        : ""
+      : entityData?.[field.name] || "";
     return acc;
   }, {});
 
@@ -44,15 +63,11 @@ const EntityForm = ({ entityKey }) => {
 
   function handleSubmit(values) {
     if (isCreateMode) {
-      createMutation.mutate(
-        { attachmentKey: infoData.dependent_key, ...values },
-        { onSuccess: () => handleFormDialogClose() }
-      );
+      createMutation.mutate({
+        ...values,
+      });
     } else {
-      updateMutation.mutate(
-        { id: selectedEntityId, ...values },
-        { onSuccess: () => handleFormDialogClose() }
-      );
+      updateMutation.mutate({ id: selectedEntityId, ...values });
     }
   }
 
@@ -66,25 +81,42 @@ const EntityForm = ({ entityKey }) => {
       validations.forEach(({ rule, params }) => {
         switch (rule) {
           case "string":
-            validator = (validator || Yup.string()).typeError("Must be a string");
+            validator = (validator || Yup.string()).typeError(
+              "Must be a string"
+            );
             break;
           case "integer":
-            validator = (validator || Yup.number().integer()).typeError("Must be an integer");
+            validator = (validator || Yup.number().integer()).typeError(
+              "Must be an integer"
+            );
             break;
           case "number":
-            validator = (validator || Yup.number()).typeError("Must be a number");
+            validator = (validator || Yup.number()).typeError(
+              "Must be a number"
+            );
             break;
           case "maxLength":
-            validator = (validator || Yup.string()).max(params, `Maximum length is ${params}`);
+            validator = (validator || Yup.string()).max(
+              params,
+              `Maximum length is ${params}`
+            );
             break;
           case "min":
-            validator = (validator || Yup.number()).min(params, `Minimum value is ${params}`);
+            validator = (validator || Yup.number()).min(
+              params,
+              `Minimum value is ${params}`
+            );
             break;
           case "notEmpty":
-            validator = (validator || Yup.mixed()).required("This field is required");
+            validator = (validator || Yup.mixed()).required(
+              "This field is required"
+            );
             break;
           case "oneOf":
-            validator = (validator || Yup.mixed()).oneOf(field.options, `Must be one of: ${field.options.join(", ")}`);
+            validator = (validator || Yup.mixed()).oneOf(
+              field.options,
+              `Must be one of: ${field.options.join(", ")}`
+            );
             break;
           default:
             break;
@@ -115,7 +147,9 @@ const EntityForm = ({ entityKey }) => {
 
   return (
     <>
-      <DialogTitle>{isCreateMode ? "Add" : "Edit"} {infoData?.whom.toLowerCase()}</DialogTitle>
+      <DialogTitle>
+        {isCreateMode ? "Add" : "Edit"} {infoData?.whom.toLowerCase()}
+      </DialogTitle>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -124,24 +158,49 @@ const EntityForm = ({ entityKey }) => {
       >
         {({ errors, touched, handleChange, values }) => (
           <Form>
-            <DialogContent>
-              <FormFields
-                fieldsList={fieldsList}
-                values={values}
-                handleChange={handleChange}
-                errors={errors}
-                touched={touched}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleFormDialogClose}>Close</Button>
-              <Button type="submit" variant="contained" color="primary">
-                {isCreateMode ? "Add" : "Update"}
-              </Button>
-            </DialogActions>
+            <fieldset
+              disabled={createMutation.isLoading || updateMutation.isLoading}
+              style={{ border: "none", padding: 0, margin: 0 }}
+            >
+              <DialogContent>
+                <FormFields
+                  fieldsList={fieldsList}
+                  values={values}
+                  handleChange={handleChange}
+                  errors={errors}
+                  touched={touched}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleFormDialogClose}>Close</Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={
+                    createMutation.isLoading || updateMutation.isLoading
+                  }
+                >
+                  {isCreateMode ? "Add" : "Update"}
+                </Button>
+              </DialogActions>
+            </fieldset>
           </Form>
         )}
       </Formik>
+      {!isCreateMode && (
+        <>
+          {Object.entries(depsData).map(([key, dependent]) => (
+            <Box key={key} sx={{ p: 3 }}>
+              <EntityAttachForm
+                entityKey={entityKey}
+                depsKey={key}
+                depsData={dependent}
+              />
+            </Box>
+          ))}
+        </>
+      )}
     </>
   );
 };

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { getEntityStore } from "../../store";
-import { fetchInfoByKey } from "../../useManagement";
+import { useFetchInfoByKey } from "../../useManagement";
 import { Box, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ActionButton from "./ActionButton";
@@ -10,10 +10,11 @@ const PageHeader = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
-  const { data: infoData, isLoading: infoIsLoading } = fetchInfoByKey(entityKey);
+  const { data: infoData, isLoading: infoIsLoading } = useFetchInfoByKey(entityKey);
 
   return (
     <Box
+      className="logicBlocksTable"
       sx={{
         mb: 6,
         display: "flex",
@@ -29,6 +30,7 @@ const PageHeader = ({ entityKey }) => {
             sx={{ display: "flex", alignItems: "center", gap: 2 }}
             variant="h1"
           >
+            <EntityIcon icon={entityKey} size={34} />
             {infoData?.many}
           </Typography>
           {infoIsLoading

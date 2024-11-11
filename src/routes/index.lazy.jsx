@@ -15,7 +15,7 @@ export const Route = createLazyFileRoute("/")({
 
 function Index() {
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{ p: 4, background: '#fff' }}>
       <Typography variant="h4" gutterBottom>
         Zdefiniuj role i grupy
       </Typography>

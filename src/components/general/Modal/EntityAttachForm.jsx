@@ -4,8 +4,6 @@ import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import {
   Box,
-  DialogActions,
-  Button,
   DialogTitle,
   DialogContent,
   Typography,
@@ -21,42 +19,48 @@ import { getEntityStore } from "../../../store";
 import {
   useFetchEntityById,
   useFetchEntityList,
+  useFetchInfoByKey,
   useCreateEntityMutation,
   useDeleteEntityMutation,
-} from '../../../useManagement';
+} from "../../../useManagement";
 import ActionButton from "../ActionButton";
 import SingleLoader from "../SingleLoader";
 
-const EntityAttachForm = ({ entityKey, depsData }) => {
+const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const [page, setPage] = useState(1);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   const useStore = getEntityStore(entityKey);
-  const { selectedEntityId, attachmentKey, handleFormDialogClose } = useStore();
-
-  const { handleFormDialogOpen } = getEntityStore(attachmentKey)();
+  const { selectedEntityId, handleFormDialogOpen, handleFormDialogClose } =
+    useStore();
 
   // Fetch the entity data
-  const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(entityKey, selectedEntityId, "joined");
+  const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(
+    entityKey,
+    selectedEntityId,
+    "joined"
+  );
 
   // Fetch the attachments
-  const {
-    data: attachmentsData,
-    isLoading: attachmentsIsLoading,
-  } = useFetchEntityList(attachmentKey, "simple", {
-    page,
-    search: debouncedSearchTerm,
-  });
+  const { data: attachmentsData, isLoading: attachmentsIsLoading } =
+    useFetchEntityList(depsKey, "simple", {
+      page,
+      search: debouncedSearchTerm,
+    });
 
   // Fetch attachment info
-  const {
-    data: attachmentInfoData,
-    isLoading: attachmentInfoIsLoading,
-  } = useFetchEntityList(attachmentKey, "info");
+  const { data: attachmentInfoData, isLoading: attachmentInfoIsLoading } =
+    useFetchInfoByKey(depsKey);
 
   // Mutation hooks for creating and deleting relationships
-  const createMutation = useCreateEntityMutation(depsData[attachmentKey].relation.route);
-  const deleteMutation = useDeleteEntityMutation(depsData[attachmentKey].relation.route);
+  const createMutation = useCreateEntityMutation(depsData.relation.route, [
+    [entityKey, selectedEntityId, "joined"],
+    [entityKey, "joined"],
+  ]);
+  const deleteMutation = useDeleteEntityMutation(depsData.relation.route, [
+    [entityKey, selectedEntityId, "joined"],
+    [entityKey, "joined"],
+  ]);
 
   // Formik setup
   const formik = useFormik({
@@ -77,16 +81,16 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
   }, [formik.values.search]);
 
   if (entityIsLoading || attachmentsIsLoading || attachmentInfoIsLoading) {
-    return <SingleLoader icon={attachmentKey} size={34} />;
+    return <SingleLoader icon={depsKey} size={34} />;
   }
 
-  const attachedIds = entityData ? JSON.parse(entityData[attachmentKey] || "[]") : [];
+  const attachedIds = entityData ? JSON.parse(entityData[depsKey] || "[]") : [];
 
   const handleChipClick = (checked, item) => {
     if (checked) {
-      const elementToDelete = attachedIds.find((elem) => elem.primary_id === item.id);
+      const elementToDelete = attachedIds.find((elem) => elem.id === item.id);
       if (elementToDelete) {
-        deleteMutation.mutate(elementToDelete.relation_id, {
+        deleteMutation.mutate(elementToDelete.rel_id, {
           onError: (error) => {
             console.error("Error deleting relation:", error);
           },
@@ -94,30 +98,34 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
       }
     } else {
       const newEntity = {
-        [depsData[attachmentKey].relation.foreign_key_1]: selectedEntityId,
-        [depsData[attachmentKey].relation.foreign_key_2]: item.id,
+        [depsData.relation.foreign_key_1]: selectedEntityId,
+        [depsData.relation.foreign_key_2]: item.id,
       };
-      createMutation.mutate(newEntity, {
-        onError: (error) => {
-          console.error("Error creating relation:", error);
-        },
-      });
+      createMutation.mutate(newEntity);
     }
   };
 
   const handlePageChange = (event, value) => setPage(value);
 
-  const checkedIds = attachedIds.map((item) => item.primary_id);
-  const disabled = entityIsLoading || createMutation.isLoading || deleteMutation.isLoading;
+  const checkedIds = attachedIds.map((item) => item.id);
+  const disabled =
+    entityIsLoading || createMutation.isLoading || deleteMutation.isLoading;
   const pageCount = Math.ceil(attachmentsData.total / attachmentsData.per_page);
 
   return (
-    <>
+    <Box
+      sx={{
+        border: "1px solid #ccc",
+        borderLeftColor: attachmentInfoData.color,
+        borderLeftWidth: 7,
+      }}
+    >
       <DialogTitle>Select {attachmentInfoData?.many.toLowerCase()}</DialogTitle>
       <DialogContent>
         <Box sx={{ py: 2 }}>
           <TextField
             label="Search"
+            size="small"
             variant="outlined"
             fullWidth
             name="search"
@@ -128,7 +136,7 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
         {!!attachmentsData.items.length && (
           <>
             <Typography sx={{ mb: 2 }}>
-              Which need to be added to "{entityData?.name}"
+              Which need to be added to {entityData?.name}
             </Typography>
             <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
               {attachmentsData.items.map((item) => {
@@ -175,15 +183,13 @@ const EntityAttachForm = ({ entityKey, depsData }) => {
           </Box>
         )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleFormDialogClose}>Close</Button>
-      </DialogActions>
-    </>
+    </Box>
   );
 };
 
 EntityAttachForm.propTypes = {
   entityKey: PropTypes.string.isRequired,
+  depsKey: PropTypes.string.isRequired,
   depsData: PropTypes.object.isRequired,
 };
 

@@ -39,7 +39,12 @@ export const makeApiRequest = async (method, url, nonce, data = {}) => {
 };
 
 // Utility function to build the API URL
-export const buildApiUrl = (homeUrl, entityName, subPath = "", queryParams = {}) => {
+export const buildApiUrl = (
+  homeUrl,
+  entityName,
+  subPath = "",
+  queryParams = {}
+) => {
   const queryString = new URLSearchParams(queryParams).toString();
   return `${homeUrl}/wp-json/tnl-b2b/v1/${entityName}${subPath ? `/${subPath}` : ""}${queryString ? `?${queryString}` : ""}`;
 };
@@ -50,7 +55,10 @@ export const useGenericQuery = (queryKey, queryFn, enabled = true) =>
     queryKey,
     queryFn,
     enabled,
-    onError: (error) => console.error(`Error fetching ${JSON.stringify(queryKey)}:`, error),
+    // staleTime: 1800000,
+    // cacheTime: 3600000,
+    onError: (error) =>
+      console.error(`Error fetching ${JSON.stringify(queryKey)}:`, error),
     placeholderData: (prev) => prev,
   });
 
@@ -75,27 +83,30 @@ const useGeneralSection = (section, key = null) => {
   return useQuery({
     queryKey: ["general"],
     queryFn: () => makeApiRequest("get", url, nonce),
-    select: (data) => key ? data?.[section]?.[key] || null : data?.[section] || {},
+    select: (data) =>
+      key ? data?.[section]?.[key] || null : data?.[section] || {},
     staleTime: Infinity,
     cacheTime: Infinity,
   });
 };
 
-// Function to fetch the entire "info" section
-export const fetchGeneralInfo = () => useGeneralSection("info");
+// Hook to fetch the entire "info" section
+export const useFetchGeneralInfo = () => useGeneralSection("info");
 
-// Function to fetch the entire "options" section
-export const fetchGeneralOptions = () => useGeneralSection("options");
+// Hook to fetch the entire "options" section
+export const useFetchGeneralOptions = () => useGeneralSection("options");
 
-// Function to fetch a specific "info" item by key
-export const fetchInfoByKey = (key) => useGeneralSection("info", key);
+// Hook to fetch the entire "options" section
+export const useFetchGeneralDeps = () => useGeneralSection("deps");
 
-// Function to fetch a specific "option" item by key
-export const fetchOptionByKey = (key) => useGeneralSection("options", key);
+// Hook to fetch a specific "info" item by key
+export const useFetchInfoByKey = (key) => useGeneralSection("info", key);
 
-// Function to fetch a specific "deps" item by key
-export const fetchDepsByKey = (key) => useGeneralSection("deps", key);
+// Hook to fetch a specific "option" item by key
+export const useFetchOptionByKey = (key) => useGeneralSection("options", key);
 
+// Hook to fetch a specific "deps" item by key
+export const useFetchDepsByKey = (key) => useGeneralSection("deps", key);
 // Entity management-specific hooks
 
 // Hook to fetch a list of entities
@@ -113,14 +124,19 @@ export const useFetchEntityById = (entityName, entityId, subPath) => {
   const { nonce, homeUrl } = useDataStore();
   const apiUrl = buildApiUrl(homeUrl, entityName, `${subPath}/${entityId}`);
 
-  return useGenericQuery([entityName, entityId, subPath], () =>
-    makeApiRequest("get", apiUrl, nonce),
+  return useGenericQuery(
+    [entityName, entityId, subPath],
+    () => makeApiRequest("get", apiUrl, nonce),
     !!entityId
   );
 };
 
 // Hook to fetch multiple entities by an array of IDs
-export const useFetchMultipleEntitiesByIds = (entityName, entityIdsArray, subPath) => {
+export const useFetchMultipleEntitiesByIds = (
+  entityName,
+  entityIdsArray,
+  subPath
+) => {
   const { nonce, homeUrl } = useDataStore();
   const apiUrl = buildApiUrl(homeUrl, entityName, subPath);
 
@@ -129,10 +145,13 @@ export const useFetchMultipleEntitiesByIds = (entityName, entityIdsArray, subPat
       queryKey: [entityName, subPath, entityId],
       queryFn: () => makeApiRequest("get", `${apiUrl}/${entityId}`, nonce),
       enabled: !!entityId,
-      staleTime: 1800000,
-      cacheTime: 3600000,
+      // staleTime: 1800000,
+      // cacheTime: 3600000,
       onError: (error) => {
-        console.error(`Error fetching ${entityName} with ID ${entityId}:`, error);
+        console.error(
+          `Error fetching ${entityName} with ID ${entityId}:`,
+          error
+        );
       },
     })),
   });
@@ -143,16 +162,19 @@ export const useCreateEntityMutation = (entityName, relatedQueries = []) => {
   const { nonce, homeUrl } = useDataStore();
   const apiUrl = buildApiUrl(homeUrl, entityName);
 
+  const useStore = getEntityStore(entityName);
+  const { handleFormDialogOpen } = useStore();
+
   return useMutation({
     mutationFn: (newEntity) => makeApiRequest("post", apiUrl, nonce, newEntity),
-    onSuccess: (data, variables) => {
-      const { handleFormDialogOpen } = getEntityStore(entityName);
-      if (data?.id && variables.attachmentKey) {
-        handleFormDialogOpen("link", data.id, variables.attachmentKey);
+    onSuccess: (data) => {
+      if (data?.id && handleFormDialogOpen) {
+        // console.log("link", data.id, entityName);
+        handleFormDialogOpen("edit", data.id, entityName);
       }
-      // Invalidate queries related to the entity and any additional related queries
-      queryClient.invalidateQueries([entityName]);
-      relatedQueries.forEach((queryKey) => queryClient.invalidateQueries(queryKey));
+      relatedQueries.forEach((queryKey) =>
+        queryClient.invalidateQueries({ queryKey })
+      );
     },
     onError: (error) => console.error("Error creating entity:", error),
   });
@@ -165,11 +187,14 @@ export const useUpdateEntityMutation = (entityName, relatedQueries = []) => {
   const apiUrl = (entityId) => buildApiUrl(homeUrl, entityName, entityId);
 
   return useMutation({
-    mutationFn: (updatedEntity) => makeApiRequest("put", apiUrl(updatedEntity.id), nonce, updatedEntity),
+    mutationFn: (updatedEntity) =>
+      makeApiRequest("put", apiUrl(updatedEntity.id), nonce, updatedEntity),
     onSuccess: () => {
       // Invalidate queries related to the entity and any additional related queries
-      queryClient.invalidateQueries([entityName]);
-      relatedQueries.forEach((queryKey) => queryClient.invalidateQueries(queryKey));
+      // queryClient.invalidateQueries([entityName]);
+      relatedQueries.forEach((queryKey) =>
+        queryClient.invalidateQueries({ queryKey })
+      );
     },
     onError: (error) => console.error("Error updating entity:", error),
   });
@@ -185,8 +210,10 @@ export const useDeleteEntityMutation = (entityName, relatedQueries = []) => {
     mutationFn: (entityId) => makeApiRequest("delete", apiUrl(entityId), nonce),
     onSuccess: () => {
       // Invalidate queries related to the entity and any additional related queries
-      queryClient.invalidateQueries([entityName]);
-      relatedQueries.forEach((queryKey) => queryClient.invalidateQueries(queryKey));
+      // queryClient.invalidateQueries([entityName]);
+      relatedQueries.forEach((queryKey) =>
+        queryClient.invalidateQueries({ queryKey })
+      );
     },
     onError: (error) => console.error("Error deleting entity:", error),
   });

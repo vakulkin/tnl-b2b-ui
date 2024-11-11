@@ -1,69 +1,85 @@
-import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Box, Pagination } from "@mui/material";
-import { useFetchEntityList } from "../../useManagement";
-import PageHeader from "../../components/general/PageHeader";
-import EditModal from "../../components/general/Modal/EditModal";
-import SingleCard from "../../components/cards/SingleCard";
-import RuleDetails from "../../components/rules/RuleDetails";
-import SingleLoader from "../../components/general/SingleLoader";
+import { createFileRoute } from '@tanstack/react-router';
+import EntityTable from '../../components/general/EntitiyTable';
+
+const formatKindValue = (kind, value) => {
+  value = value || 0;
+  switch (kind) {
+    case 'equals':
+      return `= ${value} .-`;
+    case 'minus_percent':
+      return `- ${value}%`;
+    case 'plus_percent':
+      return `+ ${value}%`;
+    case 'minus_number':
+      return `- ${value} .-`;
+    case 'plus_number':
+      return `+ ${value} .-`;
+    case 'request_quote':
+      return 'Cena na telefon';
+    default:
+      return '';
+  }
+};
 
 const Rules = () => {
-  const entityKey = "rules";
-  const [page, setPage] = useState(1);
+  const entityKey = 'rules';
 
-  const { data: rulesData, isLoading: rulesIsLoading } = useFetchEntityList(
-    entityKey,
-    "joined",
+  const columnsConfig = [
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'name', headerName: 'Name', width: 300 },
+    { field: 'priority', headerName: 'Priority', width: 100 },
     {
-      page,
-    }
-  );
-
-  if (rulesIsLoading) return <SingleLoader icon={entityKey} size={32} />;
-
-  const pageCount = Math.ceil(rulesData.total / rulesData.per_page);
-
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
+      field: 'kind',
+      headerName: 'Kind',
+      width: 150,
+      valueGetter: (params, row) =>
+        formatKindValue(params, row.value),
+    },
+    {
+      field: 'operation',
+      headerName: 'Operation',
+      width: 150,
+      valueGetter: (params, row) =>
+        formatKindValue(params, row.operation_value),
+    },
+    { field: 'min_qty', headerName: 'Min Qty', width: 100 },
+    { field: 'max_qty', headerName: 'Max Qty', width: 100 },
+    { field: 'show_table', headerName: 'Show Table', width: 100 },
+    {
+      field: 'logic_blocks',
+      headerName: 'Logic Blocks',
+      width: 250,
+      type: 'limitedChips',
+    },
+    {
+      field: 'edit',
+      headerName: 'Edit',
+      width: 100,
+      type: 'action',
+      action: 'edit',
+    },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 100,
+      type: 'action',
+      action: 'delete',
+    },
+  ];
 
   return (
-    <>
-      <Box sx={{ p: 4 }}>
-        <PageHeader entityKey={entityKey} />
-        {rulesData.items?.map((rule) => (
-          <SingleCard
-            key={rule.id}
-            entityKey={entityKey}
-            entity={rule}
-            attachmentKey="logic_blocks"
-            separator="lub"
-            inactive={rule.active !== "1"}
-          >
-            <RuleDetails rule={rule} />
-          </SingleCard>
-        ))}
-        {pageCount > 1 && (
-          <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
-            <Pagination
-              disabled={rulesIsLoading}
-              count={pageCount}
-              page={page}
-              onChange={handlePageChange}
-            />
-          </Box>
-        )}
-        <EditModal entityKey={entityKey} />
-        <EditModal entityKey="logic_blocks" />
-      </Box>
-    </>
+    <EntityTable
+      entityKey={entityKey}
+      columnsConfig={columnsConfig}
+      additionalModals={['logic_blocks']}
+    />
   );
 };
 
+Rules.propTypes = {};
+
 export default Rules;
 
-// Export the Route for routing purposes
-export const Route = createFileRoute("/rules/")({
+export const Route = createFileRoute('/rules/')({
   component: () => <Rules />,
 });

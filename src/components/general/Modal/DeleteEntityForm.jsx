@@ -13,9 +13,13 @@ const DeleteEntityForm = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
   const { selectedEntityId, handleFormDialogClose } = useStore();
 
+  const deleteMutation = useDeleteEntityMutation(entityKey, [
+    [entityKey, "joined"],
+  ]);
+
   // Handle the delete action
   const handleDelete = () => {
-    useDeleteEntityMutation.mutate(selectedEntityId);
+    deleteMutation.mutate(selectedEntityId);
     handleFormDialogClose(); // Close the modal after deletion
   };
 
