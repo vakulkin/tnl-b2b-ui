@@ -31,22 +31,24 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   const useStore = getEntityStore(entityKey);
-  const { selectedEntityId, handleFormDialogOpen, handleFormDialogClose } =
-    useStore();
+  const { selectedEntityId, handleFormDialogOpen } = useStore();
 
   // Fetch the entity data
-  const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(
-    entityKey,
-    selectedEntityId,
-    "joined"
-  );
+  const {
+    data: entityData,
+    isLoading: entityIsLoading,
+    isFetching: entityIsFetching,
+  } = useFetchEntityById(entityKey, selectedEntityId, "joined");
 
   // Fetch the attachments
-  const { data: attachmentsData, isLoading: attachmentsIsLoading } =
-    useFetchEntityList(depsKey, "simple", {
-      page,
-      search: debouncedSearchTerm,
-    });
+  const {
+    data: attachmentsData,
+    isLoading: attachmentsIsLoading,
+    isFetching: attachmentsIsFetching,
+  } = useFetchEntityList(depsKey, "simple", {
+    page,
+    search: debouncedSearchTerm,
+  });
 
   // Fetch attachment info
   const { data: attachmentInfoData, isLoading: attachmentInfoIsLoading } =
@@ -84,17 +86,13 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
     return <SingleLoader icon={depsKey} size={34} />;
   }
 
-  const attachedIds = entityData ? JSON.parse(entityData[depsKey] || "[]") : [];
+  const attachedData = entityData ? JSON.parse(entityData[depsKey] || "[]") : [];
 
   const handleChipClick = (checked, item) => {
     if (checked) {
-      const elementToDelete = attachedIds.find((elem) => elem.id === item.id);
+      const elementToDelete = attachedData.find((elem) => elem.id === item.id);
       if (elementToDelete) {
-        deleteMutation.mutate(elementToDelete.rel_id, {
-          onError: (error) => {
-            console.error("Error deleting relation:", error);
-          },
-        });
+        deleteMutation.mutate(elementToDelete.rel_id);
       }
     } else {
       const newEntity = {
@@ -107,9 +105,12 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
 
   const handlePageChange = (event, value) => setPage(value);
 
-  const checkedIds = attachedIds.map((item) => item.id);
+  const checkedIds = attachedData.map((item) => item.id);
   const disabled =
-    entityIsLoading || createMutation.isLoading || deleteMutation.isLoading;
+    entityIsFetching ||
+    attachmentsIsFetching ||
+    createMutation.isPending ||
+    deleteMutation.isPending;
   const pageCount = Math.ceil(attachmentsData.total / attachmentsData.per_page);
 
   return (
@@ -122,22 +123,36 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
     >
       <DialogTitle>Select {attachmentInfoData?.many.toLowerCase()}</DialogTitle>
       <DialogContent>
-        <Box sx={{ py: 2 }}>
-          <TextField
-            label="Search"
-            size="small"
-            variant="outlined"
-            fullWidth
-            name="search"
-            value={formik.values.search}
-            onChange={formik.handleChange}
-          />
-        </Box>
+        {            <Stack direction="row" sx={{ mt: 2, flexWrap: "wrap", gap: 0.5 }}>
+              {attachedData.map((item) => {
+                return (
+                  <Tooltip
+                    key={item.id}
+                    title={`id: ${item.id}`}
+                    placement="top"
+                  >
+                    <Chip label={item.name} variant="outlined" size="small" />
+                  </Tooltip>
+                );
+              })}
+            </Stack>}
         {!!attachmentsData.items.length && (
           <>
-            <Typography sx={{ mb: 2 }}>
+            <Typography>
               Which need to be added to {entityData?.name}
             </Typography>
+            <Box sx={{ py: 2 }}>
+              <TextField
+                label="Search"
+                size="small"
+                variant="outlined"
+                fullWidth
+                name="search"
+                value={formik.values.search}
+                onChange={formik.handleChange}
+                disabled={disabled}
+              />
+            </Box>
             <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
               {attachmentsData.items.map((item) => {
                 const checked = checkedIds.includes(item.id);
@@ -153,6 +168,7 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
                     icon={checked ? <LinkOffIcon /> : <AddLinkIcon />}
                     variant={checked ? "filled" : "outlined"}
                     onClick={() => handleChipClick(checked, item)}
+                    size="small"
                   />
                 );
               })}
@@ -176,7 +192,6 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
               label={`Add ${attachmentInfoData?.whom.toLowerCase()}`}
               ariaLabel="add"
               onClick={() => {
-                handleFormDialogClose();
                 handleFormDialogOpen("add");
               }}
             />

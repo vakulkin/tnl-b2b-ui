@@ -168,6 +168,10 @@ const EntityTable = ({ entityKey, columnsConfig, additionalModals = [] }) => {
           rowCount={entityData.total}
           pageSizeOptions={[10, 20, 30, 50]}
           onSortModelChange={handleSortModelChange}
+
+          disableColumnFilter
+          disableColumnSelector
+          disableDensitySelector
         />
       </Box>
 
@@ -192,11 +196,7 @@ const EntityTable = ({ entityKey, columnsConfig, additionalModals = [] }) => {
         />
       </Box>
 
-      {/* Modals */}
       <EditModal entityKey={entityKey} />
-      {additionalModals.map((key) => (
-        <EditModal key={key} entityKey={key} />
-      ))}
     </Box>
   );
 };

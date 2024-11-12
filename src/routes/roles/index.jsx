@@ -12,6 +12,7 @@ const Roles = () => {
       headerName: 'Users',
       width: 700,
       type: 'limitedChips',
+      sortable: false
     },
     {
       field: 'edit',
@@ -19,6 +20,7 @@ const Roles = () => {
       width: 100,
       type: 'action',
       action: 'edit',
+      sortable: false
     },
     {
       field: 'delete',
@@ -26,6 +28,7 @@ const Roles = () => {
       width: 100,
       type: 'action',
       action: 'delete',
+      sortable: false
     },
   ];
 

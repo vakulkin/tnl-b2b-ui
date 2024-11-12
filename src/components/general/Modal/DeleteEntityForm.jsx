@@ -17,10 +17,9 @@ const DeleteEntityForm = ({ entityKey }) => {
     [entityKey, "joined"],
   ]);
 
-  // Handle the delete action
   const handleDelete = () => {
     deleteMutation.mutate(selectedEntityId);
-    handleFormDialogClose(); // Close the modal after deletion
+    handleFormDialogClose();
   };
 
   return (

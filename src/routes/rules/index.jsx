@@ -34,6 +34,7 @@ const Rules = () => {
       width: 150,
       valueGetter: (params, row) =>
         formatKindValue(params, row.value),
+      sortable: false
     },
     {
       field: 'operation',
@@ -41,15 +42,17 @@ const Rules = () => {
       width: 150,
       valueGetter: (params, row) =>
         formatKindValue(params, row.operation_value),
+      sortable: false
     },
     { field: 'min_qty', headerName: 'Min Qty', width: 100 },
     { field: 'max_qty', headerName: 'Max Qty', width: 100 },
-    { field: 'show_table', headerName: 'Show Table', width: 100 },
+    { field: 'show_table', headerName: 'Show Table', width: 100, sortable: false },
     {
       field: 'logic_blocks',
       headerName: 'Logic Blocks',
       width: 250,
       type: 'limitedChips',
+      sortable: false
     },
     {
       field: 'edit',
@@ -57,6 +60,7 @@ const Rules = () => {
       width: 100,
       type: 'action',
       action: 'edit',
+      sortable: false
     },
     {
       field: 'delete',
@@ -64,6 +68,7 @@ const Rules = () => {
       width: 100,
       type: 'action',
       action: 'delete',
+      sortable: false
     },
   ];
 

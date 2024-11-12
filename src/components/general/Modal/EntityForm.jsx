@@ -20,6 +20,7 @@ import * as Yup from "yup";
 import FormFields from "./FormFields";
 import SingleLoader from "../SingleLoader";
 import EntityAttachForm from "./EntityAttachForm";
+import LogicBlockCard from "../../logicBlocks/LogicBlockCard";
 
 const EntityForm = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
@@ -43,8 +44,12 @@ const EntityForm = ({ entityKey }) => {
     useFetchDepsByKey(entityKey);
 
   // Mutation hooks for creating and updating
-  const createMutation = useCreateEntityMutation(entityKey, [[entityKey, 'joined']]);
-  const updateMutation = useUpdateEntityMutation(entityKey, [[entityKey, 'joined']]);
+  const createMutation = useCreateEntityMutation(entityKey, [
+    [entityKey, "joined"],
+  ]);
+  const updateMutation = useUpdateEntityMutation(entityKey, [
+    [entityKey, "joined"],
+  ]);
 
   if (formIsLoading || entityIsLoading || infoIsLoading || depsIsLoading)
     return <SingleLoader icon={entityKey} size={34} />;
@@ -171,7 +176,7 @@ const EntityForm = ({ entityKey }) => {
                   touched={touched}
                 />
               </DialogContent>
-              <DialogActions>
+              <DialogActions sx={{ px: 3, pb: 5 }}>
                 <Button onClick={handleFormDialogClose}>Close</Button>
                 <Button
                   type="submit"
@@ -190,6 +195,9 @@ const EntityForm = ({ entityKey }) => {
       </Formik>
       {!isCreateMode && (
         <>
+          {"logic_blocks" === entityKey && (
+            <LogicBlockCard logicBlock={entityData} />
+          )}
           {Object.entries(depsData).map(([key, dependent]) => (
             <Box key={key} sx={{ p: 3 }}>
               <EntityAttachForm

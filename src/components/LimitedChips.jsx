@@ -1,15 +1,14 @@
 import PropTypes from "prop-types";
 import { Stack, Chip, Tooltip } from "@mui/material";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import { getEntityStore } from "../store";
 import { useFetchInfoByKey } from "../useManagement";
 import EntityIcon from "./general/EntityIcon";
 
 // Helper function to format labels: trim spaces and limit to 25 characters
 const formatLabel = (label) => {
-  const trimmedLabel = label.split(" ")[0].toLowerCase().trim();
-  return trimmedLabel.length > 25
-    ? `${trimmedLabel.substring(0, 22)}...`
+  const trimmedLabel = label.toLowerCase().trim();
+  return trimmedLabel.length > 15
+    ? `${trimmedLabel.substring(0, 15).trim()}...`
     : trimmedLabel;
 };
 
@@ -30,52 +29,56 @@ const LimitedChips = ({
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
-  // Helper function to generate tooltip title with prefix and postfix
-  const generateTooltipTitle = (items) =>
-    `${prefix}${items.map((item) => item.name).join(", ")}${postfix}`;
-
   const {
     data: infoData,
     isLoading: infoIsLoading,
     error: infoError,
   } = useFetchInfoByKey(attachmentKey);
 
-  if (infoIsLoading) return <EntityIcon icon={attachmentKey} size={20} />;
+  // Helper function to generate tooltip title with prefix and postfix
+  const generateTooltipTitle = (items) =>
+    `${prefix} ${infoData.singular.toLowerCase()}: ${items.map((item) => item.name).join(", ")}${postfix}`;
+
+  if (infoIsLoading) return <EntityIcon icon={attachmentKey} size={14} />;
 
   if (infoError) return "Error loading data.";
 
   const chipStyle = {
-    fontSize: "0.75rem",
+    fontSize: ".75rem",
     height: "20px",
     borderColor: `${infoData.color}B3`,
     background: `${infoData.color}0D`,
   };
 
-  const firstChipLabel =
-    maxVisibleItems === 0
-      ? `${formatLabel(infoData.many)} (${itemCount})`
-      : formatLabel(infoData.many);
+  let firstChipLabel = "";
+
+  if (itemCount === 1) {
+    firstChipLabel = formatLabel(items[0].name);
+  } else {
+    firstChipLabel =
+      maxVisibleItems === 0
+        ? `${prefix} ${infoData.singular.split(" ")[0].toLowerCase()}: ${itemCount}`
+        : infoData.many.split(" ")[0].toLowerCase();
+  }
 
   const firstChipTooltipTitle =
-    maxVisibleItems === 0 ? generateTooltipTitle(items) : "Dołącz";
+    maxVisibleItems === 0 ? generateTooltipTitle(items) : `Dołącz ${infoData.many.toLowerCase()}`;
 
   return (
     <Stack direction="row" sx={{ flexWrap: "wrap", gap: 0.5 }}>
-      {/* First Chip */}
       <Tooltip title={firstChipTooltipTitle} arrow>
         <Chip
-          icon={<InsertLinkIcon />}
+          icon={<EntityIcon icon={attachmentKey} size={12} />}
           label={firstChipLabel}
           variant="outlined"
           size="small"
-          sx={chipStyle}
+          sx={{ ...chipStyle, pl: 1 }}
           onClick={() => handleFormDialogOpen("link", entity.id, attachmentKey)}
         />
       </Tooltip>
 
-      {/* Visible Items */}
       {visibleItems.map((item) => (
-        <Tooltip key={item.id} title={`id: ${item.id}`} arrow>
+        <Tooltip key={item.id} title={`${item.id}: ${item.name}`} arrow>
           <Chip
             label={formatLabel(item.name)}
             variant="outlined"
@@ -85,7 +88,6 @@ const LimitedChips = ({
         </Tooltip>
       ))}
 
-      {/* "+N" Chip with Tooltip */}
       {remainingCount > 0 && maxVisibleItems > 0 && (
         <Tooltip title={generateTooltipTitle(remainingItems)} arrow>
           <Chip

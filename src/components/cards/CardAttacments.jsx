@@ -11,12 +11,7 @@ import EntityIcon from "../general/EntityIcon";
 import ActionButton from "../general/ActionButton";
 import { useFetchInfoByKey } from "../../useManagement";
 
-const CardAttachments = ({
-  entityKey,
-  entity,
-  attachmentKey,
-  separator = "",
-}) => {
+const CardAttachments = ({ entityKey, entity, attachmentKey }) => {
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
@@ -58,44 +53,15 @@ const CardAttachments = ({
           alignItems: "center",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          {/* <EntityIcon icon={attachmentKey} size={20} /> */}
-          {attachmentInfoData?.many ?? attachmentKey}
-        </Box>
-        <ActionButton
-          icon={<AddIcon />}
-          label={`Przypisz ${firstWord}`}
-          ariaLabel={itemsIds.length ? "edit-attachment" : "add-attachment"}
-          onClick={() => handleFormDialogOpen("link", entity.id, attachmentKey)}
-        />
+        {attachmentInfoData?.many ?? attachmentKey}
       </Typography>
       {!!itemsIds.length && (
-        <Stack direction="row" sx={{ mt: 2, flexWrap: "wrap", gap: 1 }}>
-          {itemsIds.map((item, index) => {
+        <Stack direction="row" sx={{ mt: 2, flexWrap: "wrap", gap: 0.5 }}>
+          {itemsIds.map((item) => {
             return (
-              <React.Fragment key={item.id}>
-                {!!index && !!separator.length && (
-                  <Chip
-                    variant="outlined"
-                    label={separator}
-                    sx={{
-                      ".MuiChip-label": {
-                        p: 0,
-                      },
-                      border: "none",
-                    }}
-                  />
-                )}
-                <Tooltip title={`id: ${item.id}`} placement="top">
-                  <Chip label={item.name} variant="outlined" />
-                </Tooltip>
-              </React.Fragment>
+              <Tooltip key={item.id} title={`id: ${item.id}`} placement="top">
+                <Chip label={item.name} variant="outlined" size="small" />
+              </Tooltip>
             );
           })}
         </Stack>
