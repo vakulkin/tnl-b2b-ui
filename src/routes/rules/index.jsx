@@ -50,7 +50,7 @@ const Rules = () => {
     {
       field: 'logic_blocks',
       headerName: 'Logic Blocks',
-      width: 250,
+      width: 400,
       type: 'limitedChips',
       sortable: false
     },
@@ -76,7 +76,6 @@ const Rules = () => {
     <EntityTable
       entityKey={entityKey}
       columnsConfig={columnsConfig}
-      additionalModals={['logic_blocks']}
     />
   );
 };

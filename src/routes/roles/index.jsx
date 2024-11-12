@@ -36,7 +36,6 @@ const Roles = () => {
     <EntityTable
       entityKey={entityKey}
       columnsConfig={columnsConfig}
-      additionalModals={['users']}
     />
   );
 };

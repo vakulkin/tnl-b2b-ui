@@ -12,7 +12,7 @@ import LimitedChips from "../LimitedChips";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-const EntityTable = ({ entityKey, columnsConfig, additionalModals = [] }) => {
+const EntityTable = ({ entityKey, columnsConfig }) => {
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
@@ -175,7 +175,6 @@ const EntityTable = ({ entityKey, columnsConfig, additionalModals = [] }) => {
         />
       </Box>
 
-      {/* Custom Pagination with Page Numbers */}
       <Box
         sx={{
           display: "flex",
@@ -186,9 +185,9 @@ const EntityTable = ({ entityKey, columnsConfig, additionalModals = [] }) => {
       >
         <Pagination
           count={totalPages}
-          page={paginationModel.page + 1} // Convert 0-based index to 1-based for Pagination component
+          page={paginationModel.page + 1}
           onChange={(event, value) => {
-            setPaginationModel((prev) => ({ ...prev, page: value - 1 })); // Convert back to 0-based index
+            setPaginationModel((prev) => ({ ...prev, page: value - 1 }));
           }}
           color="primary"
           showFirstButton
@@ -205,7 +204,6 @@ const EntityTable = ({ entityKey, columnsConfig, additionalModals = [] }) => {
 EntityTable.propTypes = {
   entityKey: PropTypes.string.isRequired,
   columnsConfig: PropTypes.arrayOf(PropTypes.object).isRequired,
-  additionalModals: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default EntityTable;

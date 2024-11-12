@@ -36,7 +36,6 @@ const Groups = () => {
     <EntityTable
       entityKey={entityKey}
       columnsConfig={columnsConfig}
-      additionalModals={['products']}
     />
   );
 };

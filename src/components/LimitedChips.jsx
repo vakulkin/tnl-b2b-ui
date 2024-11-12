@@ -4,12 +4,35 @@ import { getEntityStore } from "../store";
 import { useFetchInfoByKey } from "../useManagement";
 import EntityIcon from "./general/EntityIcon";
 
-// Helper function to format labels: trim spaces and limit to 25 characters
+// Utility function to format labels
 const formatLabel = (label) => {
-  const trimmedLabel = label.toLowerCase().trim();
-  return trimmedLabel.length > 15
-    ? `${trimmedLabel.substring(0, 15).trim()}...`
-    : trimmedLabel;
+  const trimmed = label.toLowerCase().trim();
+  return trimmed.length > 20
+    ? `${trimmed.substring(0, 15).trim()}...`
+    : trimmed;
+};
+
+// Styles defined outside the component to prevent re-creation on each render
+const chipBaseStyle = (color) => ({
+  fontSize: ".75rem",
+  height: "20px",
+  borderColor: `${color}B3`,
+  background: `${color}0D`,
+});
+
+const emptyIconChipStyle = {
+  px: 0.5,
+  "&:hover": {
+    opacity: 1,
+  },
+  "& .MuiChip-label": {
+    display: "none",
+  },
+};
+
+const iconOnlyChipStyle = {
+  background: "none",
+  border: "none",
 };
 
 const LimitedChips = ({
@@ -21,83 +44,88 @@ const LimitedChips = ({
   prefix = "",
   postfix = "",
 }) => {
+  // Correctly accessing the store using the hook returned by getEntityStore
+  const useStore = getEntityStore(entityKey);
+  const handleFormDialogOpen = useStore((state) => state.handleFormDialogOpen);
+
   const itemCount = items.length;
   const visibleItems = items.slice(0, maxVisibleItems);
-  const remainingItems = items.slice(maxVisibleItems);
-  const remainingCount = remainingItems.length;
+  const remainingCount = itemCount - maxVisibleItems;
 
-  const useStore = getEntityStore(entityKey);
-  const { handleFormDialogOpen } = useStore();
+  const { data: infoData, isLoading, error } = useFetchInfoByKey(attachmentKey);
 
-  const {
-    data: infoData,
-    isLoading: infoIsLoading,
-    error: infoError,
-  } = useFetchInfoByKey(attachmentKey);
-
-  // Helper function to generate tooltip title with prefix and postfix
-  const generateTooltipTitle = (items) =>
-    `${prefix} ${infoData.singular.toLowerCase()}: ${items.map((item) => item.name).join(", ")}${postfix}`;
-
-  if (infoIsLoading) return <EntityIcon icon={attachmentKey} size={14} />;
-
-  if (infoError) return "Error loading data.";
-
-  const chipStyle = {
-    fontSize: ".75rem",
-    height: "20px",
-    borderColor: `${infoData.color}B3`,
-    background: `${infoData.color}0D`,
-  };
-
-  let firstChipLabel = "";
-
-  if (itemCount === 1) {
-    firstChipLabel = formatLabel(items[0].name);
-  } else {
-    firstChipLabel =
-      maxVisibleItems === 0
-        ? `${prefix} ${infoData.singular.split(" ")[0].toLowerCase()}: ${itemCount}`
-        : infoData.many.split(" ")[0].toLowerCase();
+  if (isLoading) {
+    return <EntityIcon icon={attachmentKey} size={14} />;
   }
 
-  const firstChipTooltipTitle =
-    maxVisibleItems === 0 ? generateTooltipTitle(items) : `Dołącz ${infoData.many.toLowerCase()}`;
+  if (error) {
+    return "Error loading data.";
+  }
 
-  return (
-    <Stack direction="row" sx={{ flexWrap: "wrap", gap: 0.5 }}>
-      <Tooltip title={firstChipTooltipTitle} arrow>
+  // Generates the tooltip title based on the number of items
+  const generateTooltipTitle = (displayItems) => {
+    const prefixText = displayItems.length > 1 ? `${prefix} ` : "";
+    const names = displayItems.map(({ name }) => name).join(", ");
+    return `${prefixText}${infoData.singular.toLowerCase()}: ${names}${postfix}`;
+  };
+
+  // Render function for the "No Items" case
+  const renderNoItemsChip = () => (
+    <Tooltip title={`Dołącz ${infoData.many.toLowerCase()}`} arrow>
+      <Chip
+        icon={<EntityIcon icon={attachmentKey} size={14} />}
+        variant="outlined"
+        size="small"
+        clickable
+        sx={{
+          ...chipBaseStyle(infoData.color),
+          ...emptyIconChipStyle,
+          ...iconOnlyChipStyle,
+          opacity: 0.4,
+        }}
+        onClick={() => handleFormDialogOpen("link", entity.id, attachmentKey)}
+      />
+    </Tooltip>
+  );
+
+  // Render function for individual chips when items are present
+  const renderChip = (item, index) => {
+    const isFirst = index === 0;
+    const shouldAppendRemaining = isFirst && remainingCount > 0;
+    const label = shouldAppendRemaining
+      ? `${formatLabel(item.name)} +${remainingCount}`
+      : formatLabel(item.name);
+
+    const tooltipTitle = isFirst
+      ? // && maxVisibleItems > 1
+        generateTooltipTitle(items)
+      : `${item.id}: ${item.name}`;
+    return (
+      <Tooltip key={item.id} title={tooltipTitle} arrow>
         <Chip
-          icon={<EntityIcon icon={attachmentKey} size={12} />}
-          label={firstChipLabel}
+          label={label}
           variant="outlined"
           size="small"
-          sx={{ ...chipStyle, pl: 1 }}
-          onClick={() => handleFormDialogOpen("link", entity.id, attachmentKey)}
+          sx={{
+            ...chipBaseStyle(infoData.color),
+            pl: isFirst ? 1 : undefined,
+          }}
+          onClick={
+            isFirst
+              ? () => handleFormDialogOpen("link", entity.id, attachmentKey)
+              : undefined
+          }
+          icon={
+            isFirst ? <EntityIcon icon={attachmentKey} size={14} /> : undefined
+          }
         />
       </Tooltip>
+    );
+  };
 
-      {visibleItems.map((item) => (
-        <Tooltip key={item.id} title={`${item.id}: ${item.name}`} arrow>
-          <Chip
-            label={formatLabel(item.name)}
-            variant="outlined"
-            size="small"
-            sx={chipStyle}
-          />
-        </Tooltip>
-      ))}
-
-      {remainingCount > 0 && maxVisibleItems > 0 && (
-        <Tooltip title={generateTooltipTitle(remainingItems)} arrow>
-          <Chip
-            label={`+${remainingCount}`}
-            variant="outlined"
-            size="small"
-            sx={chipStyle}
-          />
-        </Tooltip>
-      )}
+  return (
+    <Stack direction="row" flexWrap="wrap" gap={0.5}>
+      {itemCount === 0 ? renderNoItemsChip() : visibleItems.map(renderChip)}
     </Stack>
   );
 };
