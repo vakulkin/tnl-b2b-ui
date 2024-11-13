@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
   Box,
 } from "@mui/material";
@@ -16,12 +15,5 @@ const AddNewEntityButton = ({ attachmentInfoData, handleFormDialogOpen }) => (
     />
   </Box>
 );
-
-AddNewEntityButton.propTypes = {
-  attachmentInfoData: PropTypes.shape({
-    whom: PropTypes.string.isRequired,
-  }).isRequired,
-  handleFormDialogOpen: PropTypes.func.isRequired,
-};
 
 export default AddNewEntityButton;

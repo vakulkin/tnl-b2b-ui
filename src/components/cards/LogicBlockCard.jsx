@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import PropTypes from "prop-types";
 import EntityAttachForm from "../modal/EntityAttachForm";
 
 const LogicBlockCard = ({ depsData }) => {
@@ -69,19 +68,6 @@ const LogicBlockCard = ({ depsData }) => {
       </Box>
     </Box>
   );
-};
-
-LogicBlockCard.propTypes = {
-  logicBlock: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    users: PropTypes.string,
-    roles: PropTypes.string,
-    products: PropTypes.string,
-    groups: PropTypes.string,
-    terms: PropTypes.string,
-  }).isRequired,
-  depsData: PropTypes.object.isRequired,
 };
 
 export default LogicBlockCard;

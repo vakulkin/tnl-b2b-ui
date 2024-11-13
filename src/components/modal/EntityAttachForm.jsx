@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import debounce from "lodash/debounce";
 import { useFormik } from "formik";
-import PropTypes from "prop-types";
+
 import { Box, DialogTitle, DialogContent, Typography } from "@mui/material";
 import { getEntityStore } from "../../store";
 import {
@@ -15,20 +15,27 @@ import SingleLoader from "../general/SingleLoader";
 import AttachedItems from "./AttachedItems";
 import SearchField from "./SearchField";
 import AttachmentItems from "./AttachmentItems";
-// import PaginationComponent from "../general/PaginationComponent";
+import PaginationComponent from "../general/PaginationComponent";
 import AddNewEntityButton from "../buttons/AddNewEntityButton";
 
 const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
-  const [page, setPage] = useState(1);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-  const useStore = getEntityStore(entityKey);
-  const { selectedEntityId, handleFormDialogOpen } = useStore();
+  const useStoreEntity = getEntityStore(entityKey);
+  const { selectedEntityId } = useStoreEntity();
+
+  const useStoreDependency = getEntityStore(depsKey);
+  const { handleFormDialogOpen } = useStoreDependency();
 
   const entityData = useEntityData(entityKey, selectedEntityId);
   const attachmentsData = useAttachmentsData(
     depsKey,
-    page,
+    paginationModel.page + 1,
     debouncedSearchTerm
   );
   const attachmentInfoData = useAttachmentInfo(depsKey);
@@ -47,7 +54,7 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   useEffect(() => {
     const handler = debounce((value) => {
       setDebouncedSearchTerm(value);
-      setPage(1);
+      setPaginationModel((prev) => ({ ...prev, page: 0 }));
     }, 500);
     handler(formik.values.search);
     return () => handler.cancel();
@@ -70,9 +77,10 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
     attachmentsData.isFetching ||
     createMutation.isPending ||
     deleteMutation.isPending;
-  // const pageCount = Math.ceil(
-  //   attachmentsData.data.total / attachmentsData.data.per_page
-  // );
+
+  const totalPages = Math.ceil(
+    attachmentsData.data.total / attachmentsData.data.per_page
+  );
 
   return (
     <Box sx={formStyles.container(attachmentInfoData.data.color)}>
@@ -104,14 +112,16 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
                 )
               }
             />
-            {/* {pageCount > 1 && (
+            {totalPages > 1 && (
               <PaginationComponent
                 disabled={disabled}
-                totalPages={pageCount}
-                page={page}
-                onPageChange={(event, value) => setPage(value)}
+                totalPages={totalPages}
+                paginationModel={paginationModel.page}
+                onPageChange={(event, value) => {
+                  setPaginationModel((prev) => ({ ...prev, page: value }));
+                }}
               />
-            )} */}
+            )}
           </>
         )}
         {attachmentInfoData.data?.type === "plugin" && (
@@ -127,17 +137,12 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
 
 const formStyles = {
   container: (color) => ({
+    height: "100%",
     background: "#ffffff",
     border: "1px solid #ccc",
     borderLeftColor: color,
     borderLeftWidth: 7,
   }),
-};
-
-EntityAttachForm.propTypes = {
-  entityKey: PropTypes.string.isRequired,
-  depsKey: PropTypes.string.isRequired,
-  depsData: PropTypes.object.isRequired,
 };
 
 export default EntityAttachForm;

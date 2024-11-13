@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useState, useMemo } from "react";
 import { Box } from "@mui/material";
 import { getEntityStore } from "../../store";
@@ -93,7 +92,11 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
         }}
       />
 
-      <EditModal entityKey={entityKey} />
+      <EditModal entityKey="rules" />
+      <EditModal entityKey="logic_blocks" />
+      <EditModal entityKey="roles" />
+      <EditModal entityKey="groups" />
+      <EditModal entityKey="terms" />
     </Box>
   );
 };
@@ -137,10 +140,5 @@ const getColumns = (columnsConfig, entityKey, handleFormDialogOpen) =>
         return col;
     }
   });
-
-EntityTable.propTypes = {
-  entityKey: PropTypes.string.isRequired,
-  columnsConfig: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
 
 export default EntityTable;

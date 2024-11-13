@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import EntityAttachForm from "./EntityAttachForm";
 import { useFetchDepsByKey } from "../../useManagement";
 import SingleLoader from "../general/SingleLoader";
@@ -22,10 +21,6 @@ const EntityAttachDepsLoader = ({ entityKey }) => {
   return (
     <EntityAttachForm entityKey={entityKey} depsKey={attachmentKey} depsData={depsData[attachmentKey]} />
   );
-};
-
-EntityAttachDepsLoader.propTypes = {
-  entityKey: PropTypes.string.isRequired,
 };
 
 export default EntityAttachDepsLoader;

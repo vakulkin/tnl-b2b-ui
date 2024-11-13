@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { TextField } from "@mui/material";
 
 const SearchBar = ({ searchTerm, onSearchChange }) => (
@@ -12,10 +11,5 @@ const SearchBar = ({ searchTerm, onSearchChange }) => (
     fullWidth
   />
 );
-
-SearchBar.propTypes = {
-  searchTerm: PropTypes.string.isRequired,
-  onSearchChange: PropTypes.func.isRequired,
-};
 
 export default SearchBar;

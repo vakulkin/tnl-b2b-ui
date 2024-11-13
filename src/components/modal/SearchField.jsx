@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
   Box,
   TextField,
@@ -18,10 +17,5 @@ const SearchField = ({ formik, disabled }) => (
     />
   </Box>
 );
-
-SearchField.propTypes = {
-  formik: PropTypes.object.isRequired,
-  disabled: PropTypes.bool.isRequired,
-};
 
 export default SearchField;

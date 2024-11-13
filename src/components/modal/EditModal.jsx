@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Dialog } from "@mui/material";
 import { getEntityStore } from "../../store";
 import EntityForm from "./EntityForm";
@@ -28,10 +27,6 @@ const EditModal = ({ entityKey }) => {
       {renderContent()}
     </Dialog>
   );
-};
-
-EditModal.propTypes = {
-  entityKey: PropTypes.string.isRequired,
 };
 
 export default EditModal;

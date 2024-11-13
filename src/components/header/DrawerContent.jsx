@@ -3,7 +3,6 @@ import DrawerHeader from './DrawerHeader';
 import NavigationItem from './NavigationItem';
 import ToggleCollapseButton from './ToggleCollapseButton';
 import EntityIcon from '../general/EntityIcon';
-import PropTypes from "prop-types";
 
 const navigation = [
   // Internal Links
@@ -81,23 +80,5 @@ const NavigationList = ({ navigation, isCollapsed }) => (
     ))}
   </List>
 );
-
-DrawerContent.propTypes = {
-  isCollapsed: PropTypes.bool.isRequired,
-  handleToggleDrawer: PropTypes.func.isRequired,
-};
-
-NavigationList.propTypes = {
-  navigation: PropTypes.arrayOf(
-    PropTypes.shape({
-      segment: PropTypes.string,
-      url: PropTypes.string,
-      title: PropTypes.string.isRequired,
-      icon: PropTypes.node.isRequired,
-      type: PropTypes.oneOf(['internal', 'external']).isRequired,
-    })
-  ).isRequired,
-  isCollapsed: PropTypes.bool.isRequired,
-};
 
 export default DrawerContent;

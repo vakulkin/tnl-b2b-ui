@@ -34,7 +34,6 @@ export const iconOnlyChipStyle = {
   border: "none",
 };
 
-
 export const convertToYupSchema = (fields) => {
   const shape = {};
 
@@ -107,4 +106,23 @@ export const convertToYupSchema = (fields) => {
   });
 
   return Yup.object().shape(shape);
+};
+
+export const formatKindValue = (kind, value) => {
+  switch (kind) {
+    case "equals":
+      return `= ${value} .-`; // Price equals a fixed value
+    case "minus_percent":
+      return `- ${value}%`; // Decrease by percentage
+    case "plus_percent":
+      return `+ ${value}%`; // Increase by percentage
+    case "minus_number":
+      return `- ${value} .-`; // Decrease by a fixed amount
+    case "plus_number":
+      return `+ ${value} .-`; // Increase by a fixed amount
+    case "request_quote":
+      return "Cena na telefon";
+    default:
+      return value; // Fallback for unknown kinds
+  }
 };

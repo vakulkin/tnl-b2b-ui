@@ -1,5 +1,3 @@
-import PropTypes from "prop-types";
-
 import GroupsIcon from "../../assets/icons/groups.svg?react";
 import LogicBlocksIcon from "../../assets/icons/logic_blocks.svg?react";
 import ProductsIcon from "../../assets/icons/products.svg?react";
@@ -32,11 +30,6 @@ const EntityIcon = ({ icon, size }) => {
   }
 
   return <IconComponent style={{ width: size, height: size }} />;
-};
-
-EntityIcon.propTypes = {
-  icon: PropTypes.string.isRequired,
-  size: PropTypes.number.isRequired,
 };
 
 export default EntityIcon;

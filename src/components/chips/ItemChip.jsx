@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Chip, Tooltip } from "@mui/material";
 import EntityIcon from "../general/EntityIcon";
 import { formatLabel, chipBaseStyle } from "../../helpers";
@@ -45,39 +44,6 @@ const ItemChip = ({
       />
     </Tooltip>
   );
-};
-
-ItemChip.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.any.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-  index: PropTypes.number.isRequired,
-  visibleItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.any.isRequired,
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.any.isRequired,
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  remainingCount: PropTypes.number.isRequired,
-  infoData: PropTypes.shape({
-    color: PropTypes.string.isRequired,
-    singular: PropTypes.string.isRequired,
-  }).isRequired,
-  handleFormDialogOpen: PropTypes.func.isRequired,
-  entity: PropTypes.shape({
-    id: PropTypes.any.isRequired,
-  }).isRequired,
-  attachmentKey: PropTypes.any.isRequired,
-  totalSymbols: PropTypes.number.isRequired,
-  prefix: PropTypes.string,
-  postfix: PropTypes.string,
 };
 
 export default ItemChip;

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import EntityIcon from "./EntityIcon";
 import { motion } from "framer-motion";
 import { Box } from "@mui/material";
@@ -25,10 +24,5 @@ const SingleLoader = ({ icon, size }) => (
     </motion.div>
   </Box>
 );
-
-SingleLoader.propTypes = {
-  icon: PropTypes.string.isRequired,
-  size: PropTypes.number.isRequired,
-};
 
 export default SingleLoader;

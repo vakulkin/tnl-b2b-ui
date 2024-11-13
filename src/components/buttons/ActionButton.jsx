@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 
 const ActionButton = ({ icon, label, ariaLabel, onClick, size = "medium" }) => (
@@ -15,13 +14,5 @@ const ActionButton = ({ icon, label, ariaLabel, onClick, size = "medium" }) => (
     {label}
   </Button>
 );
-
-ActionButton.propTypes = {
-  icon: PropTypes.element.isRequired,
-  label: PropTypes.string.isRequired,
-  ariaLabel: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-  size: PropTypes.string,
-};
 
 export default ActionButton;

@@ -1,51 +1,43 @@
 import { Chip } from "@mui/material";
-import PropTypes from "prop-types";
-
-const formatKindValue = (kind, value) => {
-  switch (kind) {
-    case "equals":
-      return `= ${value} .-`; // Price equals a fixed value
-    case "minus_percent":
-      return `- ${value}%`; // Decrease by percentage
-    case "plus_percent":
-      return `+ ${value}%`; // Increase by percentage
-    case "minus_number":
-      return `- ${value} .-`; // Decrease by a fixed amount
-    case "plus_number":
-      return `+ ${value} .-`; // Increase by a fixed amount
-    case "request_quote":
-      return "Cena na telefon";
-    default:
-      return value; // Fallback for unknown kinds
-  }
-};
+import { formatKindValue } from "../../helpers";
 
 const RuleChips = ({ rule }) => {
+  const chipData = [
+    { label: rule.active === "1" ? "active" : "inactive" },
+    { label: `priority: ${rule.priority}` },
+    { label: formatKindValue(rule.kind, rule.value) },
+    rule.operation_value && { label: formatKindValue(rule.operation, rule.operation_value) },
+    { label: `min qty: ${rule.min_qty}` },
+    { label: `max qty: ${rule.max_qty}` },
+    { label: `table: ${rule.show_table}` },
+  ].filter(Boolean);
+
   return (
     <>
-      <Chip sx={{borderRadius: 2}} label={rule.active === "1" ? "active" : "inactive"} />
-      <Chip sx={{borderRadius: 2}} label={`priority: ${rule.priority}`} />
-      <Chip sx={{borderRadius: 2}} label={formatKindValue(rule.kind, rule.value)} />
-      {rule.operation_value && <Chip sx={{borderRadius: 2}} label={formatKindValue(rule.operation, rule.operation_value)} />}
-      <Chip sx={{borderRadius: 2}} label={`min qty: ${rule.min_qty}`} />
-      <Chip sx={{borderRadius: 2}} label={`max qty: ${rule.max_qty}`} />
-      <Chip sx={{borderRadius: 2}}  label={`table: ${rule.show_table}`} />
+      {chipData.map((chip, index) => (
+        <Chip key={index} sx={{ borderRadius: 2 }} label={chip.label} />
+      ))}
     </>
   );
 };
 
-RuleChips.propTypes = {
-  rule: PropTypes.shape({
-    name: PropTypes.string,
-    id: PropTypes.string,
-    created_at: PropTypes.string,
-    updated_at: PropTypes.string,
-    priority: PropTypes.string.isRequired,
-    kind: PropTypes.oneOf(['minus_percent', 'plus_percent', 'minus_number', 'plus_number', 'equals']).isRequired,
-    value: PropTypes.string.isRequired,
-    active: PropTypes.oneOf(["1", "0"]).isRequired,
-    logic_blocks: PropTypes.string,
-  }).isRequired,
-};
+// RuleChips.propTypes = {
+//   rule: PropTypes.shape({
+//     name: PropTypes.string,
+//     id: PropTypes.string,
+//     created_at: PropTypes.string,
+//     updated_at: PropTypes.string,
+//     priority: PropTypes.string.isRequired,
+//     kind: PropTypes.oneOf(["minus_percent", "plus_percent", "minus_number", "plus_number", "equals", "request_quote"]).isRequired,
+//     value: PropTypes.string.isRequired,
+//     active: PropTypes.oneOf(["1", "0"]).isRequired,
+//     logic_blocks: PropTypes.string,
+//     operation: PropTypes.string,
+//     operation_value: PropTypes.string,
+//     min_qty: PropTypes.string,
+//     max_qty: PropTypes.string,
+//     show_table: PropTypes.string,
+//   }).isRequired,
+// };
 
 export default RuleChips;

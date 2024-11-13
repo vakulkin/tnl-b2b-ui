@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { TextField, Select, MenuItem, InputLabel, FormControl, FormHelperText } from "@mui/material";
 import { Field } from "formik";
 
@@ -45,18 +44,6 @@ const FormField = ({ field, values, handleChange, errors, touched }) => {
       )}
     </FormControl>
   );
-};
-
-FormField.propTypes = {
-  field: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    options: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
-  }).isRequired,
-  values: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  errors: PropTypes.object,
-  touched: PropTypes.object,
 };
 
 export default FormField;

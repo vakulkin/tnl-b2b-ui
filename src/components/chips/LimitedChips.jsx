@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Stack } from "@mui/material";
 import { getEntityStore } from "../../store";
 import { useFetchInfoByKey } from "../../useManagement";
@@ -65,23 +64,6 @@ const LimitedChips = ({
       )}
     </Stack>
   );
-};
-
-LimitedChips.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.any.isRequired,
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  maxVisibleItems: PropTypes.number,
-  entityKey: PropTypes.string.isRequired,
-  entity: PropTypes.object.isRequired,
-  attachmentKey: PropTypes.any.isRequired,
-  prefix: PropTypes.string,
-  postfix: PropTypes.string,
-  emptyIcon: PropTypes.bool,
-  totalSymbols: PropTypes.number,
 };
 
 export default LimitedChips;

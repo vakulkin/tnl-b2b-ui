@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Chip, Tooltip } from "@mui/material";
 import EntityIcon from "../general/EntityIcon";
 import { chipBaseStyle, emptyIconChipStyle, iconOnlyChipStyle } from "../../helpers";
@@ -21,18 +20,5 @@ const NoItemsChip = ({ infoData, emptyIcon, handleFormDialogOpen, entity, attach
     />
   </Tooltip>
 );
-
-NoItemsChip.propTypes = {
-  infoData: PropTypes.shape({
-    many: PropTypes.string.isRequired,
-    color: PropTypes.string.isRequired,
-  }).isRequired,
-  emptyIcon: PropTypes.bool,
-  handleFormDialogOpen: PropTypes.func.isRequired,
-  entity: PropTypes.shape({
-    id: PropTypes.any.isRequired,
-  }).isRequired,
-  attachmentKey: PropTypes.any.isRequired,
-};
 
 export default NoItemsChip;

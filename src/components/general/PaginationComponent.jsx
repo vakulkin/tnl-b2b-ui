@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Box, Pagination } from "@mui/material";
 
 const PaginationComponent = ({
@@ -26,11 +25,5 @@ const PaginationComponent = ({
   </Box>
 );
 
-PaginationComponent.propTypes = {
-  totalPages: PropTypes.number.isRequired,
-  paginationModel: PropTypes.object.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-};
 
 export default PaginationComponent;

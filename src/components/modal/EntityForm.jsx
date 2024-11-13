@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
 import {
   DialogActions,
@@ -136,10 +135,6 @@ const EntityForm = ({ entityKey }) => {
         ))}
     </>
   );
-};
-
-EntityForm.propTypes = {
-  entityKey: PropTypes.string.isRequired,
 };
 
 export default EntityForm;

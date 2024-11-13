@@ -1,35 +1,42 @@
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import PropTypes from 'prop-types';
+import {
+  DialogActions,
+  Button,
+  Typography,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
+import { getEntityStore } from "../../store";
+import { useDeleteEntityMutation } from "../../useManagement";
 
-const ToggleCollapseButton = ({ isCollapsed, handleToggleDrawer }) => (
-  <ListItemButton onClick={handleToggleDrawer} sx={toggleButtonStyles.listItemButtonStyle(isCollapsed)}>
-    <ListItemIcon className="icon-default" sx={toggleButtonStyles.listItemIconStyle}>
-      {isCollapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-    </ListItemIcon>
-    {!isCollapsed && <ListItemText primary="Collapse" className="text-default" />}
-  </ListItemButton>
-);
+const DeleteEntityForm = ({ entityKey }) => {
+  const useStore = getEntityStore(entityKey);
+  const { selectedEntityId, handleFormDialogClose } = useStore();
 
-const toggleButtonStyles = {
-  listItemButtonStyle: (isCollapsed) => ({
-    mt: 5,
-    justifyContent: isCollapsed ? 'center' : 'flex-start',
-    alignItems: 'center',
-    height: 56,
-  }),
-  listItemIconStyle: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'inherit',
-  },
+  const deleteMutation = useDeleteEntityMutation(entityKey, [
+    [entityKey, "joined"],
+  ]);
+
+  const handleDelete = () => {
+    deleteMutation.mutate(selectedEntityId);
+    handleFormDialogClose();
+  };
+
+  return (
+    <>
+      <DialogTitle>Usuń</DialogTitle>
+      <DialogContent>
+        <Typography>
+          Czy na pewno chcesz usunąć ten podmiot? Tej akcji nie można cofnąć.
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleFormDialogClose}>Zamknij</Button>
+        <Button variant="contained" onClick={handleDelete}>
+          Usuń
+        </Button>
+      </DialogActions>
+    </>
+  );
 };
 
-ToggleCollapseButton.propTypes = {
-  isCollapsed: PropTypes.bool.isRequired,
-  handleToggleDrawer: PropTypes.func.isRequired,
-};
-
-export default ToggleCollapseButton;
+export default DeleteEntityForm;

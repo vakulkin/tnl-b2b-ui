@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { getEntityStore } from "../../store";
 import { useFetchInfoByKey } from "../../useManagement";
 import { Box, Typography } from "@mui/material";
@@ -48,10 +47,6 @@ const PageHeader = ({ entityKey }) => {
       )}
     </Box>
   );
-};
-
-PageHeader.propTypes = {
-  entityKey: PropTypes.string.isRequired,
 };
 
 export default PageHeader;
