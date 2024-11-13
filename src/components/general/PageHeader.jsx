@@ -3,7 +3,7 @@ import { getEntityStore } from "../../store";
 import { useFetchInfoByKey } from "../../useManagement";
 import { Box, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import ActionButton from "./ActionButton";
+import ActionButton from "../buttons/ActionButton";
 import EntityIcon from "./EntityIcon";
 
 const PageHeader = ({ entityKey }) => {

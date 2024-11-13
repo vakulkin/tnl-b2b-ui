@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Box, Drawer, useMediaQuery, useTheme } from '@mui/material';
-import DrawerContent from '../components/general/Header/DrawerContent';
+import DrawerContent from '../components/header/DrawerContent';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const drawerWidth = 240;

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Box, Typography } from "@mui/material";
-import EntityTable from "../../components/general/EntitiyTable";
-import LimitedChips from "../../components/LimitedChips";
+import EntityTable from '../../components/table/EntitiyTable';
+import LimitedChips from "../../components/chips/LimitedChips";
 
 const LogicBlocks = () => {
   const entityKey = "logic_blocks";
@@ -76,6 +76,8 @@ const LogicBlocks = () => {
                 prefix={component.prefix}
                 postfix={component.postfix || ""}
                 maxVisibleItems={1}
+                emptyIcon={true}
+                totalSymbols={20}
               />
             );
           }

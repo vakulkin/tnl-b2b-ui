@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import EntityAttachForm from "./EntityAttachForm";
-import { useFetchDepsByKey } from "../../../useManagement";
-import SingleLoader from "../SingleLoader";
-import { getEntityStore } from "../../../store";
+import { useFetchDepsByKey } from "../../useManagement";
+import SingleLoader from "../general/SingleLoader";
+import { getEntityStore } from "../../store";
 
 const EntityAttachDepsLoader = ({ entityKey }) => {
 
@@ -20,7 +20,6 @@ const EntityAttachDepsLoader = ({ entityKey }) => {
   if (depsError) return "Error loading data.";
 
   return (
-    // <>{JSON.stringify([entityKey, attachmentKey, depsData])}</>
     <EntityAttachForm entityKey={entityKey} depsKey={attachmentKey} depsData={depsData[attachmentKey]} />
   );
 };

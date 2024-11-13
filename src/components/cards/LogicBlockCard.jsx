@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PropTypes from "prop-types";
-import CardAttacments from "../cards/CardAttacments";
+import EntityAttachForm from "../modal/EntityAttachForm";
 
-const LogicBlockCard = ({ logicBlock }) => {
+const LogicBlockCard = ({ depsData }) => {
   return (
     <Box
       sx={{
@@ -13,32 +13,28 @@ const LogicBlockCard = ({ logicBlock }) => {
         borderRadius: 3,
       }}
     >
-      <Box>
-        <CardAttacments
-          entityKey="logic_blocks"
-          entity={logicBlock}
-          attachmentKey="rules"
-        />
-      </Box>
+      <EntityAttachForm
+        entityKey="logic_blocks"
+        depsKey="rules"
+        depsData={depsData["rules"]}
+      />
 
       <Box sx={{ mt: 5, p: 4, background: "#F4F5F4", borderRadius: 2 }}>
         <Box sx={{ mt: 3, p: 4, background: "#EAECEA", borderRadius: 2 }}>
-          <CardAttacments
+          <EntityAttachForm
             entityKey="logic_blocks"
-            entity={logicBlock}
-            attachmentKey="roles"
-            separator="i"
+            depsKey="roles"
+            depsData={depsData["roles"]}
           />
         </Box>
         <Box sx={{ my: 2, textAlign: "center" }}>oraz</Box>
         <Box sx={{ mt: 3, p: 4, background: "#EAECEA", borderRadius: 2 }}>
           <Grid container spacing={3} columns={25}>
             <Grid size={{ xs: 25, xl: 8 }}>
-              <CardAttacments
+              <EntityAttachForm
                 entityKey="logic_blocks"
-                entity={logicBlock}
-                attachmentKey="products"
-                separator="lub"
+                depsKey="products"
+                depsData={depsData["products"]}
               />
             </Grid>
             <Grid size={{ xs: 25, xl: 1 }}>
@@ -55,18 +51,16 @@ const LogicBlockCard = ({ logicBlock }) => {
             </Grid>
             <Grid size={{ xs: 25, xl: 16 }}>
               <Box>
-                <CardAttacments
+                <EntityAttachForm
                   entityKey="logic_blocks"
-                  entity={logicBlock}
-                  attachmentKey="terms"
-                  separator="i"
+                  depsKey="terms"
+                  depsData={depsData["terms"]}
                 />
                 <Box sx={{ my: 2, textAlign: "center" }}>oraz</Box>
-                <CardAttacments
+                <EntityAttachForm
                   entityKey="logic_blocks"
-                  entity={logicBlock}
-                  attachmentKey="groups"
-                  separator="i"
+                  depsKey="groups"
+                  depsData={depsData["groups"]}
                 />
               </Box>
             </Grid>
@@ -87,6 +81,7 @@ LogicBlockCard.propTypes = {
     groups: PropTypes.string,
     terms: PropTypes.string,
   }).isRequired,
+  depsData: PropTypes.object.isRequired,
 };
 
 export default LogicBlockCard;

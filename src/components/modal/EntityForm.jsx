@@ -7,7 +7,7 @@ import {
   DialogContent,
   Box,
 } from "@mui/material";
-import { getEntityStore } from "../../../store";
+import { getEntityStore } from "../../store";
 import {
   useFetchEntityById,
   useFetchEntityList,
@@ -15,12 +15,13 @@ import {
   useUpdateEntityMutation,
   useFetchInfoByKey,
   useFetchDepsByKey,
-} from "../../../useManagement";
-import * as Yup from "yup";
+} from "../../useManagement";
 import FormFields from "./FormFields";
-import SingleLoader from "../SingleLoader";
+import SingleLoader from "../general/SingleLoader";
 import EntityAttachForm from "./EntityAttachForm";
-import LogicBlockCard from "../../logicBlocks/LogicBlockCard";
+import LogicBlockCard from "../cards/LogicBlockCard";
+
+import { convertToYupSchema } from "../../helpers";
 
 const EntityForm = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
@@ -66,7 +67,7 @@ const EntityForm = ({ entityKey }) => {
 
   const validationSchema = convertToYupSchema(fieldsList);
 
-  function handleSubmit(values) {
+  const handleSubmit = (values) => {
     if (isCreateMode) {
       createMutation.mutate({
         ...values,
@@ -74,81 +75,7 @@ const EntityForm = ({ entityKey }) => {
     } else {
       updateMutation.mutate({ id: selectedEntityId, ...values });
     }
-  }
-
-  function convertToYupSchema(fields) {
-    const shape = {};
-
-    fields.forEach((field) => {
-      const validations = field.validation || [];
-      let validator = null;
-
-      validations.forEach(({ rule, params }) => {
-        switch (rule) {
-          case "string":
-            validator = (validator || Yup.string()).typeError(
-              "Must be a string"
-            );
-            break;
-          case "integer":
-            validator = (validator || Yup.number().integer()).typeError(
-              "Must be an integer"
-            );
-            break;
-          case "number":
-            validator = (validator || Yup.number()).typeError(
-              "Must be a number"
-            );
-            break;
-          case "maxLength":
-            validator = (validator || Yup.string()).max(
-              params,
-              `Maximum length is ${params}`
-            );
-            break;
-          case "min":
-            validator = (validator || Yup.number()).min(
-              params,
-              `Minimum value is ${params}`
-            );
-            break;
-          case "notEmpty":
-            validator = (validator || Yup.mixed()).required(
-              "This field is required"
-            );
-            break;
-          case "oneOf":
-            validator = (validator || Yup.mixed()).oneOf(
-              field.options,
-              `Must be one of: ${field.options.join(", ")}`
-            );
-            break;
-          default:
-            break;
-        }
-      });
-
-      if (!validator) {
-        switch (field.type) {
-          case "text":
-            validator = Yup.string();
-            break;
-          case "number":
-            validator = Yup.number().typeError("Must be a number");
-            break;
-          case "select":
-            validator = Yup.mixed();
-            break;
-          default:
-            validator = Yup.mixed();
-        }
-      }
-
-      shape[field.name] = validator;
-    });
-
-    return Yup.object().shape(shape);
-  }
+  };
 
   return (
     <>
@@ -193,12 +120,11 @@ const EntityForm = ({ entityKey }) => {
           </Form>
         )}
       </Formik>
-      {!isCreateMode && (
-        <>
-          {"logic_blocks" === entityKey && (
-            <LogicBlockCard logicBlock={entityData} />
-          )}
-          {Object.entries(depsData).map(([key, dependent]) => (
+      {!isCreateMode &&
+        (entityKey === "logic_blocks" ? (
+          <LogicBlockCard depsData={depsData} />
+        ) : (
+          Object.entries(depsData).map(([key, dependent]) => (
             <Box key={key} sx={{ p: 3 }}>
               <EntityAttachForm
                 entityKey={entityKey}
@@ -206,9 +132,8 @@ const EntityForm = ({ entityKey }) => {
                 depsData={dependent}
               />
             </Box>
-          ))}
-        </>
-      )}
+          ))
+        ))}
     </>
   );
 };

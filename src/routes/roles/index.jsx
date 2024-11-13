@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import EntityTable from '../../components/general/EntitiyTable';
+import EntityTable from '../../components/table/EntitiyTable';
 
 const Roles = () => {
   const entityKey = 'roles';

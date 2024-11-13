@@ -9,10 +9,7 @@ const ActionButton = ({ icon, label, ariaLabel, onClick, size = "medium" }) => (
     aria-label={ariaLabel}
     onClick={onClick}
     sx={{
-      minWidth: "auto",
-      padding: "6px",
       color: "#2C3E50",
-      textTransform: "initial",
     }}
   >
     {label}
