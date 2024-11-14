@@ -13,6 +13,7 @@ const DeleteEntityForm = ({ entityKey }) => {
   const { selectedEntityId, handleFormDialogClose } = useStore();
 
   const deleteMutation = useDeleteEntityMutation(entityKey, [
+    [entityKey, "simple"],
     [entityKey, "joined"],
   ]);
 

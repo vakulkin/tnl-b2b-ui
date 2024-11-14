@@ -41,12 +41,12 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const attachmentInfoData = useAttachmentInfo(depsKey);
 
   const createMutation = useCreateEntityMutation(depsData.relation.route, [
-    [entityKey, selectedEntityId, "joined"],
     [entityKey, "joined"],
+    [depsKey, "joined"],
   ]);
   const deleteMutation = useDeleteEntityMutation(depsData.relation.route, [
-    [entityKey, selectedEntityId, "joined"],
     [entityKey, "joined"],
+    [depsKey, "joined"],
   ]);
 
   const formik = useFormik({ initialValues: { search: "" } });
@@ -149,7 +149,7 @@ export default EntityAttachForm;
 
 // Utility hooks
 const useEntityData = (entityKey, selectedEntityId) =>
-  useFetchEntityById(entityKey, selectedEntityId, "joined");
+  useFetchEntityById(entityKey, "joined", selectedEntityId);
 
 const useAttachmentsData = (depsKey, page, searchTerm) =>
   useFetchEntityList(depsKey, "simple", { page, search: searchTerm });

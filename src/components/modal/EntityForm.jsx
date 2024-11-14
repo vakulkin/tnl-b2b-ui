@@ -35,8 +35,8 @@ const EntityForm = ({ entityKey }) => {
   );
   const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(
     entityKey,
-    selectedEntityId,
-    "joined"
+    "joined",
+    selectedEntityId
   );
   const { data: infoData, isLoading: infoIsLoading } =
     useFetchInfoByKey(entityKey);
@@ -45,9 +45,11 @@ const EntityForm = ({ entityKey }) => {
 
   // Mutation hooks for creating and updating
   const createMutation = useCreateEntityMutation(entityKey, [
+    [entityKey, "simple"],
     [entityKey, "joined"],
   ]);
   const updateMutation = useUpdateEntityMutation(entityKey, [
+    [entityKey, "simple"],
     [entityKey, "joined"],
   ]);
 

@@ -1,10 +1,5 @@
 import axios from "axios";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  useQueries,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDataStore, getEntityStore } from "./store";
 
 // Utility for making API requests
@@ -120,41 +115,15 @@ export const useFetchEntityList = (entityName, subPath, data) => {
 };
 
 // Hook to fetch a single entity by ID
-export const useFetchEntityById = (entityName, entityId, subPath) => {
+export const useFetchEntityById = (entityName, subPath, entityId) => {
   const { nonce, homeUrl } = useDataStore();
   const apiUrl = buildApiUrl(homeUrl, entityName, `${subPath}/${entityId}`);
 
   return useGenericQuery(
-    [entityName, entityId, subPath],
+    [entityName, subPath, entityId],
     () => makeApiRequest("get", apiUrl, nonce),
     !!entityId
   );
-};
-
-// Hook to fetch multiple entities by an array of IDs
-export const useFetchMultipleEntitiesByIds = (
-  entityName,
-  entityIdsArray,
-  subPath
-) => {
-  const { nonce, homeUrl } = useDataStore();
-  const apiUrl = buildApiUrl(homeUrl, entityName, subPath);
-
-  return useQueries({
-    queries: entityIdsArray.map((entityId) => ({
-      queryKey: [entityName, subPath, entityId],
-      queryFn: () => makeApiRequest("get", `${apiUrl}/${entityId}`, nonce),
-      enabled: !!entityId,
-      // staleTime: 1800000,
-      // cacheTime: 3600000,
-      onError: (error) => {
-        console.error(
-          `Error fetching ${entityName} with ID ${entityId}:`,
-          error
-        );
-      },
-    })),
-  });
 };
 
 export const useCreateEntityMutation = (entityName, relatedQueries = []) => {
@@ -169,7 +138,6 @@ export const useCreateEntityMutation = (entityName, relatedQueries = []) => {
     mutationFn: (newEntity) => makeApiRequest("post", apiUrl, nonce, newEntity),
     onSuccess: (data) => {
       if (data?.id && handleFormDialogOpen) {
-        // console.log("link", data.id, entityName);
         handleFormDialogOpen("edit", data.id, entityName);
       }
       relatedQueries.forEach((queryKey) =>
@@ -180,7 +148,6 @@ export const useCreateEntityMutation = (entityName, relatedQueries = []) => {
   });
 };
 
-// Hook to update an existing entity and invalidate relevant queries
 export const useUpdateEntityMutation = (entityName, relatedQueries = []) => {
   const queryClient = useQueryClient();
   const { nonce, homeUrl } = useDataStore();
@@ -190,8 +157,6 @@ export const useUpdateEntityMutation = (entityName, relatedQueries = []) => {
     mutationFn: (updatedEntity) =>
       makeApiRequest("put", apiUrl(updatedEntity.id), nonce, updatedEntity),
     onSuccess: () => {
-      // Invalidate queries related to the entity and any additional related queries
-      // queryClient.invalidateQueries([entityName]);
       relatedQueries.forEach((queryKey) =>
         queryClient.invalidateQueries({ queryKey })
       );
@@ -200,7 +165,6 @@ export const useUpdateEntityMutation = (entityName, relatedQueries = []) => {
   });
 };
 
-// Hook to delete an entity and invalidate relevant queries
 export const useDeleteEntityMutation = (entityName, relatedQueries = []) => {
   const queryClient = useQueryClient();
   const { nonce, homeUrl } = useDataStore();
@@ -209,8 +173,6 @@ export const useDeleteEntityMutation = (entityName, relatedQueries = []) => {
   return useMutation({
     mutationFn: (entityId) => makeApiRequest("delete", apiUrl(entityId), nonce),
     onSuccess: () => {
-      // Invalidate queries related to the entity and any additional related queries
-      // queryClient.invalidateQueries([entityName]);
       relatedQueries.forEach((queryKey) =>
         queryClient.invalidateQueries({ queryKey })
       );

@@ -25,13 +25,14 @@ const Rules = () => {
   const entityKey = 'rules';
 
   const columnsConfig = [
-    { field: 'id', headerName: 'ID', width: 50 },
-    { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'priority', headerName: 'Priority', width: 50 },
+    { field: 'id', headerName: 'ID', flex: 50 },
+    { field: 'name', headerName: 'Name', flex: 200 },
+    { field: 'priority', headerName: 'Priority', flex: 70 },
+    { field: 'active', headerName: 'Active', flex: 70 },
     {
       field: 'kind',
       headerName: 'Kind',
-      width: 120,
+      flex: 120,
       valueGetter: (params, row) =>
         formatKindValue(params, row.value),
       sortable: false
@@ -39,25 +40,25 @@ const Rules = () => {
     {
       field: 'operation',
       headerName: 'Operation',
-      width: 120,
+      flex: 120,
       valueGetter: (params, row) =>
         formatKindValue(params, row.operation_value),
       sortable: false
     },
-    { field: 'min_qty', headerName: 'Min Qty', width: 80 },
-    { field: 'max_qty', headerName: 'Max Qty', width: 80 },
-    { field: 'show_table', headerName: 'Show Table', width: 100, sortable: false },
+    { field: 'min_qty', headerName: 'Min Qty', flex: 80 },
+    { field: 'max_qty', headerName: 'Max Qty', flex: 80 },
+    { field: 'show_table', headerName: 'Show Table', flex: 100, sortable: false },
     {
       field: 'logic_blocks',
       headerName: 'Logic Blocks',
-      width: 600,
+      flex: 600,
       type: 'limitedChips',
       sortable: false
     },
     {
       field: 'edit',
       headerName: 'Edit',
-      width: 70,
+      flex: 70,
       type: 'action',
       action: 'edit',
       sortable: false
@@ -65,7 +66,7 @@ const Rules = () => {
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 70,
+      flex: 70,
       type: 'action',
       action: 'delete',
       sortable: false

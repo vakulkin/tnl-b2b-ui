@@ -1,4 +1,4 @@
-/* .text-default {
+.text-default {
   color: rgba(255, 255, 255, 0.5);
   transition: color 0.3s ease-in-out;
 }
@@ -6,4 +6,4 @@
 .list-item-active .text-default,
 .list-item-hover:hover .text-default {
   color: inherit;
-} */
+}
