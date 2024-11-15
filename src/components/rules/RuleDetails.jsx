@@ -21,23 +21,4 @@ const RuleChips = ({ rule }) => {
   );
 };
 
-// RuleChips.propTypes = {
-//   rule: PropTypes.shape({
-//     name: PropTypes.string,
-//     id: PropTypes.string,
-//     created_at: PropTypes.string,
-//     updated_at: PropTypes.string,
-//     priority: PropTypes.string.isRequired,
-//     kind: PropTypes.oneOf(["minus_percent", "plus_percent", "minus_number", "plus_number", "equals", "request_quote"]).isRequired,
-//     value: PropTypes.string.isRequired,
-//     active: PropTypes.oneOf(["1", "0"]).isRequired,
-//     logic_blocks: PropTypes.string,
-//     operation: PropTypes.string,
-//     operation_value: PropTypes.string,
-//     min_qty: PropTypes.string,
-//     max_qty: PropTypes.string,
-//     show_table: PropTypes.string,
-//   }).isRequired,
-// };
-
 export default RuleChips;

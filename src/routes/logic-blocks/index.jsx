@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Box, Typography } from "@mui/material";
-import EntityTable from '../../components/table/EntitiyTable';
+import EntityTable from "../../components/table/EntitiyTable";
 import LimitedChips from "../../components/chips/LimitedChips";
 
 const LogicBlocks = () => {
   const entityKey = "logic_blocks";
+
 
   const renderLogicCell = (params) => {
     const row = params.row;
@@ -89,8 +90,8 @@ const LogicBlocks = () => {
 
   const columnsConfig = [
     { field: "id", headerName: "ID", flex: 100 },
-    { field: "name", headerName: "Name", flex: 300 },
-    { field: "active", headerName: "Active", flex: 300 },
+    { field: "name", headerName: "Name", flex: 200 },
+    { field: "active", headerName: "Active", flex: 70 },
     {
       field: "rules",
       headerName: "Rules",
@@ -123,15 +124,8 @@ const LogicBlocks = () => {
     },
   ];
 
-  return (
-    <EntityTable
-      entityKey={entityKey}
-      columnsConfig={columnsConfig}
-    />
-  );
+  return <EntityTable entityKey={entityKey} columnsConfig={columnsConfig} />;
 };
-
-LogicBlocks.propTypes = {};
 
 export default LogicBlocks;
 

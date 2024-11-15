@@ -1,8 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router';
 import EntityTable from '../../components/table/EntitiyTable';
+import { useFetchGeneralInfo } from '../../useManagement';
+import SingleLoader from '../../components/general/SingleLoader';
 
 const Roles = () => {
   const entityKey = 'roles';
+
+  const { data: infoData, isLoading: infoIsLoading } =
+  useFetchGeneralInfo(entityKey);
+
+if (infoIsLoading) {
+  return <SingleLoader icon={entityKey} size={34} />;
+}
 
   const columnsConfig = [
     { field: 'id', headerName: 'ID', flex: 100 },
@@ -12,7 +21,8 @@ const Roles = () => {
       headerName: 'Users',
       flex: 700,
       type: 'limitedChips',
-      sortable: false
+      sortable: false,
+      description: infoData.users.description,
     },
     {
       field: 'edit',
@@ -40,7 +50,6 @@ const Roles = () => {
   );
 };
 
-Roles.propTypes = {};
 
 export default Roles;
 

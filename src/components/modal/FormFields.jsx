@@ -1,7 +1,7 @@
 import { Grid2 } from "@mui/material";
 import FormField from "./FormFiled";
 
-const FormFields = ({ fieldsList, values, handleChange, errors, touched }) => {
+const FormFields = ({ fieldsList, values, handleChange, errors, touched, disabled }) => {
   return (
     <Grid2 container spacing={2}>
       {fieldsList.map((field) => (
@@ -12,6 +12,7 @@ const FormFields = ({ fieldsList, values, handleChange, errors, touched }) => {
           handleChange={handleChange}
           errors={errors}
           touched={touched}
+          disabled={disabled}
         />
       ))}
     </Grid2>

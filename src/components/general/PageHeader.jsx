@@ -4,12 +4,14 @@ import { Box, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ActionButton from "../buttons/ActionButton";
 import EntityIcon from "./EntityIcon";
+import InfoTooltip from "../table/InfoTooltip";
 
 const PageHeader = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
-  const { data: infoData, isLoading: infoIsLoading } = useFetchInfoByKey(entityKey);
+  const { data: infoData, isLoading: infoIsLoading } =
+    useFetchInfoByKey(entityKey);
 
   return (
     <Box
@@ -25,24 +27,23 @@ const PageHeader = ({ entityKey }) => {
         <EntityIcon icon={entityKey} size={34} />
       ) : (
         <>
-          <Typography
-            sx={{ display: "flex", alignItems: "center", gap: 2 }}
-            variant="h1"
-          >
-            <EntityIcon icon={entityKey} size={34} />
-            {infoData?.many}
-          </Typography>
-          {infoIsLoading
-            ? null
-            : handleFormDialogOpen && (
-                <ActionButton
-                  icon={<AddCircleOutlineIcon />}
-                  size="large"
-                  label={`Dodaj ${infoData?.whom?.toLowerCase()}`}
-                  ariaLabel="add"
-                  onClick={() => handleFormDialogOpen("add")}
-                />
-              )}
+          <InfoTooltip field={entityKey}>
+            <Typography
+              sx={{ display: "flex", alignItems: "center", gap: 2 }}
+              variant="h1"
+            >
+              <EntityIcon icon={entityKey} size={34} />
+              {infoData?.many}
+            </Typography>
+          </InfoTooltip>
+
+          <ActionButton
+            icon={<AddCircleOutlineIcon />}
+            size="large"
+            label={`Dodaj ${infoData?.whom?.toLowerCase()}`}
+            ariaLabel="add"
+            onClick={() => handleFormDialogOpen("add")}
+          />
         </>
       )}
     </Box>

@@ -78,6 +78,8 @@ const EntityForm = ({ entityKey }) => {
     }
   };
 
+  const disabled = createMutation.isPending || updateMutation.isPending;
+
   return (
     <>
       <DialogTitle>
@@ -91,33 +93,27 @@ const EntityForm = ({ entityKey }) => {
       >
         {({ errors, touched, handleChange, values }) => (
           <Form>
-            <fieldset
-              disabled={createMutation.isLoading || updateMutation.isLoading}
-              style={{ border: "none", padding: 0, margin: 0 }}
-            >
-              <DialogContent>
-                <FormFields
-                  fieldsList={fieldsList}
-                  values={values}
-                  handleChange={handleChange}
-                  errors={errors}
-                  touched={touched}
-                />
-              </DialogContent>
-              <DialogActions sx={{ px: 3, pb: 5 }}>
-                <Button onClick={handleFormDialogClose}>Close</Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  disabled={
-                    createMutation.isLoading || updateMutation.isLoading
-                  }
-                >
-                  {isCreateMode ? "Add" : "Update"}
-                </Button>
-              </DialogActions>
-            </fieldset>
+            <DialogContent>
+              <FormFields
+                fieldsList={fieldsList}
+                values={values}
+                handleChange={handleChange}
+                errors={errors}
+                touched={touched}
+                disabled={disabled}
+              />
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 5 }}>
+              <Button onClick={handleFormDialogClose}>Close</Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={disabled}
+              >
+                {isCreateMode ? "Add" : "Update"}
+              </Button>
+            </DialogActions>
           </Form>
         )}
       </Formik>

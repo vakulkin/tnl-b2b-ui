@@ -17,6 +17,7 @@ import SearchField from "./SearchField";
 import AttachmentItems from "./AttachmentItems";
 import PaginationComponent from "../general/PaginationComponent";
 import AddNewEntityButton from "../buttons/AddNewEntityButton";
+import InfoTooltip from "../table/InfoTooltip";
 
 const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const [paginationModel, setPaginationModel] = useState({
@@ -85,7 +86,7 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   return (
     <Box sx={formStyles.container(attachmentInfoData.data.color)}>
       <DialogTitle>
-        Select {attachmentInfoData.data?.many.toLowerCase()}
+        <InfoTooltip field={depsKey} >Select {attachmentInfoData.data?.many.toLowerCase()}</InfoTooltip>
       </DialogTitle>
       <DialogContent>
         <Typography>

@@ -9,7 +9,14 @@ import {
 } from "@mui/material";
 import { Field } from "formik";
 
-const FormField = ({ field, values, handleChange, errors, touched }) => {
+const FormField = ({
+  field,
+  values,
+  handleChange,
+  errors,
+  touched,
+  disabled,
+}) => {
   const isError = Boolean(touched[field.name] && errors[field.name]);
 
   return (
@@ -24,6 +31,7 @@ const FormField = ({ field, values, handleChange, errors, touched }) => {
               label={field.name}
               value={values[field.name]}
               onChange={handleChange}
+              disabled={disabled}
             >
               {field.options.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -48,6 +56,7 @@ const FormField = ({ field, values, handleChange, errors, touched }) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              disabled={disabled}
             />
           </>
         )}

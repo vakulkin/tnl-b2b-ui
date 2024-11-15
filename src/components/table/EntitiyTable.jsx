@@ -12,6 +12,7 @@ import IconActionButton from "../buttons/IconActionButton";
 import SearchBar from "../general/SeachBar";
 import EntityDataGrid from "./EntityDataGrid";
 import PaginationComponent from "../general/PaginationComponent";
+import InfoTooltip from "./InfoTooltip";
 
 const EntityTable = ({ entityKey, columnsConfig }) => {
   const useStore = getEntityStore(entityKey);
@@ -100,11 +101,22 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
 };
 
 const getColumns = (columnsConfig, entityKey, handleFormDialogOpen) =>
+  
   columnsConfig.map((col) => {
-    switch (col.type) {
+
+    const newCol = {
+      ...col,
+      renderHeader: (params) => (
+        <InfoTooltip field={params.field}>
+            {params.field}
+        </InfoTooltip>
+      ),
+    }
+    
+    switch (newCol.type) {
       case "limitedChips":
         return {
-          ...col,
+          ...newCol,
           renderCell: (params) => (
             <LimitedChips
               items={params.value ? JSON.parse(params.value) : []}
@@ -119,7 +131,7 @@ const getColumns = (columnsConfig, entityKey, handleFormDialogOpen) =>
         };
       case "action":
         return {
-          ...col,
+          ...newCol,
           renderCell: (params) => (
             <IconActionButton
               icon={
@@ -135,7 +147,7 @@ const getColumns = (columnsConfig, entityKey, handleFormDialogOpen) =>
           ),
         };
       default:
-        return col;
+        return newCol;
     }
   });
 

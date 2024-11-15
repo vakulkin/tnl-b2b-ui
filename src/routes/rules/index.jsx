@@ -81,8 +81,6 @@ const Rules = () => {
   );
 };
 
-Rules.propTypes = {};
-
 export default Rules;
 
 export const Route = createFileRoute('/rules/')({

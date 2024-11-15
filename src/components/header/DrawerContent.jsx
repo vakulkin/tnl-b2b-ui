@@ -5,10 +5,9 @@ import ToggleCollapseButton from './ToggleCollapseButton';
 import EntityIcon from '../general/EntityIcon';
 
 const navigation = [
-  // Internal Links
   {
     segment: "/",
-    title: "Info",
+    title: "Informacje",
     icon: <EntityIcon icon="info" size={24} />,
     type: "internal",
   },

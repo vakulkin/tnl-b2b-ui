@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material';
-import PropTypes from 'prop-types';
 
 const DrawerHeader = ({ isCollapsed }) => (
   <Box sx={drawerHeaderStyles.boxStyle}>
@@ -17,10 +16,6 @@ const drawerHeaderStyles = {
   typographyStyle: {
     textAlign: 'center',
   },
-};
-
-DrawerHeader.propTypes = {
-  isCollapsed: PropTypes.bool.isRequired,
 };
 
 export default DrawerHeader;

@@ -1,6 +1,5 @@
 import { Link, useMatchRoute } from '@tanstack/react-router';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import PropTypes from 'prop-types';
 
 const NavigationItem = ({ item, isCollapsed }) => {
   const matchRoute = useMatchRoute();
@@ -62,30 +61,5 @@ const ExternalNavigationLink = ({ item, commonProps, listItemIcon, listItemText 
     {listItemText}
   </ListItemButton>
 );
-
-NavigationItem.propTypes = {
-  item: PropTypes.shape({
-    segment: PropTypes.string,
-    url: PropTypes.string,
-    title: PropTypes.string.isRequired,
-    icon: PropTypes.node.isRequired,
-    type: PropTypes.oneOf(['internal', 'external']).isRequired,
-  }).isRequired,
-  isCollapsed: PropTypes.bool.isRequired,
-};
-
-InternalNavigationLink.propTypes = {
-  item: PropTypes.object.isRequired,
-  commonProps: PropTypes.object.isRequired,
-  listItemIcon: PropTypes.node.isRequired,
-  listItemText: PropTypes.node,
-};
-
-ExternalNavigationLink.propTypes = {
-  item: PropTypes.object.isRequired,
-  commonProps: PropTypes.object.isRequired,
-  listItemIcon: PropTypes.node.isRequired,
-  listItemText: PropTypes.node,
-};
 
 export default NavigationItem;
