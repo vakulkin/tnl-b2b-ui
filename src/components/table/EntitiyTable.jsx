@@ -17,19 +17,17 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
   const useStore = getEntityStore(entityKey);
   const { handleFormDialogOpen } = useStore();
 
-  // Pagination and sorting state using paginationModel
   const [paginationModel, setPaginationModel] = useState({
-    page: 0, // 0-based index for DataGrid
-    pageSize: 10, // Default page size
+    page: 0,
+    pageSize: 10,
   });
 
   const [sortModel, setSortModel] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Build query parameters based on paginationModel and sortModel
   const queryParams = useMemo(
     () => ({
-      page: paginationModel.page + 1, // Backend expects 1-based indexing
+      page: paginationModel.page + 1,
       per_page: paginationModel.pageSize,
       order_by: sortModel[0]?.field || "",
       order_dir: sortModel[0]?.sort || "ASC",
@@ -55,7 +53,7 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    setPaginationModel((prev) => ({ ...prev, page: 0 })); // Reset to first page on search
+    setPaginationModel((prev) => ({ ...prev, page: 0 }));
   };
 
   // Memoize columns to prevent unnecessary re-renders
@@ -83,14 +81,14 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
         onSortModelChange={handleSortModelChange}
       />
 
-      <PaginationComponent
+      {totalPages > 1 && <PaginationComponent
         disabled={isFetching}
         totalPages={totalPages}
-        paginationModel={paginationModel}
+        paginationModel={{ ...paginationModel, page: paginationModel.page + 1 }}
         onPageChange={(event, value) => {
           setPaginationModel((prev) => ({ ...prev, page: value - 1 }));
         }}
-      />
+      />}
 
       <EditModal entityKey="rules" />
       <EditModal entityKey="logic_blocks" />

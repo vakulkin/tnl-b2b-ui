@@ -20,7 +20,7 @@ import AddNewEntityButton from "../buttons/AddNewEntityButton";
 
 const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const [paginationModel, setPaginationModel] = useState({
-    page: 0,
+    page: 1,
     pageSize: 10,
   });
 
@@ -35,7 +35,7 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const entityData = useEntityData(entityKey, selectedEntityId);
   const attachmentsData = useAttachmentsData(
     depsKey,
-    paginationModel.page + 1,
+    paginationModel.page,
     debouncedSearchTerm
   );
   const attachmentInfoData = useAttachmentInfo(depsKey);
@@ -54,7 +54,7 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   useEffect(() => {
     const handler = debounce((value) => {
       setDebouncedSearchTerm(value);
-      setPaginationModel((prev) => ({ ...prev, page: 0 }));
+      setPaginationModel((prev) => ({ ...prev, page: 1 }));
     }, 500);
     handler(formik.values.search);
     return () => handler.cancel();
@@ -93,36 +93,33 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
         </Typography>
         <AttachedItems attachedData={attachedData} />
         <SearchField formik={formik} disabled={disabled} />
-
         {!!attachmentsData.data.items.length && (
-          <>
-            <AttachmentItems
-              items={attachmentsData.data.items}
-              checkedIds={checkedIds}
-              disabled={disabled}
-              handleChipClick={(checked, item) =>
-                handleChipClick(
-                  checked,
-                  item,
-                  attachedData,
-                  createMutation,
-                  deleteMutation,
-                  selectedEntityId,
-                  depsData
-                )
-              }
-            />
-            {totalPages > 1 && (
-              <PaginationComponent
-                disabled={disabled}
-                totalPages={totalPages}
-                paginationModel={paginationModel.page}
-                onPageChange={(event, value) => {
-                  setPaginationModel((prev) => ({ ...prev, page: value }));
-                }}
-              />
-            )}
-          </>
+          <AttachmentItems
+            items={attachmentsData.data.items}
+            checkedIds={checkedIds}
+            disabled={disabled}
+            handleChipClick={(checked, item) =>
+              handleChipClick(
+                checked,
+                item,
+                attachedData,
+                createMutation,
+                deleteMutation,
+                selectedEntityId,
+                depsData
+              )
+            }
+          />
+        )}
+        {totalPages > 1 && (
+          <PaginationComponent
+            disabled={disabled}
+            totalPages={totalPages}
+            paginationModel={paginationModel.page}
+            onPageChange={(event, value) => {
+              setPaginationModel((prev) => ({ ...prev, page: value }));
+            }}
+          />
         )}
         {attachmentInfoData.data?.type === "plugin" && (
           <AddNewEntityButton

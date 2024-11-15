@@ -17,7 +17,7 @@ const PaginationComponent = ({
     <Pagination
       disabled={disabled}
       count={totalPages}
-      page={paginationModel.page + 1}
+      page={paginationModel.page}
       onChange={onPageChange}
       showFirstButton
       showLastButton
