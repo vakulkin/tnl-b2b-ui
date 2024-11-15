@@ -12,7 +12,7 @@ import IconActionButton from "../buttons/IconActionButton";
 import SearchBar from "../general/SeachBar";
 import EntityDataGrid from "./EntityDataGrid";
 import PaginationComponent from "../general/PaginationComponent";
-import InfoTooltip from "./InfoTooltip";
+import InfoTooltip from "../general/InfoTooltip";
 
 const EntityTable = ({ entityKey, columnsConfig }) => {
   const useStore = getEntityStore(entityKey);

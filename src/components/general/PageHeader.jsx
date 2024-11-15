@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ActionButton from "../buttons/ActionButton";
 import EntityIcon from "./EntityIcon";
-import InfoTooltip from "../table/InfoTooltip";
+import InfoTooltip from "./InfoTooltip";
 
 const PageHeader = ({ entityKey }) => {
   const useStore = getEntityStore(entityKey);

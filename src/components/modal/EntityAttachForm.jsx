@@ -17,7 +17,7 @@ import SearchField from "./SearchField";
 import AttachmentItems from "./AttachmentItems";
 import PaginationComponent from "../general/PaginationComponent";
 import AddNewEntityButton from "../buttons/AddNewEntityButton";
-import InfoTooltip from "../table/InfoTooltip";
+import InfoTooltip from "../general/InfoTooltip";
 
 const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const [paginationModel, setPaginationModel] = useState({
