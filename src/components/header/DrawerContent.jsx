@@ -36,10 +36,10 @@ const navigation = [
     type: "internal",
   },
   {
-    url: "/wp-admin/edit.php?post_type=product",
+    segment: "products",
     title: "Produkty",
     icon: <EntityIcon icon="products" size={24} />,
-    type: "external",
+    type: "internal",
   },
   {
     url: "/wp-admin/users.php",

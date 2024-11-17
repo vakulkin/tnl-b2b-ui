@@ -96,6 +96,8 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
       <EditModal entityKey="roles" />
       <EditModal entityKey="groups" />
       <EditModal entityKey="terms" />
+      <EditModal entityKey="products" />
+      <EditModal entityKey="users" />
     </Box>
   );
 };

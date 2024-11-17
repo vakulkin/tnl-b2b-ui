@@ -2,10 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Box, Typography } from "@mui/material";
 import EntityTable from "../../components/table/EntitiyTable";
 import LimitedChips from "../../components/chips/LimitedChips";
+import { useFetchGeneralInfo } from "../../useManagement";
+import SingleLoader from "../../components/general/SingleLoader";
 
 const LogicBlocks = () => {
   const entityKey = "logic_blocks";
 
+  const { data: infoData, isLoading: infoIsLoading } =
+    useFetchGeneralInfo(entityKey);
+
+  if (infoIsLoading) {
+    return <SingleLoader icon={entityKey} size={34} />;
+  }
 
   const renderLogicCell = (params) => {
     const row = params.row;
@@ -98,6 +106,7 @@ const LogicBlocks = () => {
       flex: 250,
       type: "limitedChips",
       sortable: false,
+      description: infoData.rules.description,
     },
     {
       field: "logic",

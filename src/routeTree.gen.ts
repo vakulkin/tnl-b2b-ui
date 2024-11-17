@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as RulesIndexImport } from './routes/rules/index'
 import { Route as RolesIndexImport } from './routes/roles/index'
+import { Route as ProductsIndexImport } from './routes/products/index'
 import { Route as LogicBlocksIndexImport } from './routes/logic-blocks/index'
 import { Route as GroupsIndexImport } from './routes/groups/index'
 
@@ -39,6 +40,12 @@ const RulesIndexRoute = RulesIndexImport.update({
 const RolesIndexRoute = RolesIndexImport.update({
   id: '/roles/',
   path: '/roles/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductsIndexRoute = ProductsIndexImport.update({
+  id: '/products/',
+  path: '/products/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -79,6 +86,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LogicBlocksIndexImport
       parentRoute: typeof rootRoute
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/roles/': {
       id: '/roles/'
       path: '/roles'
@@ -102,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/groups': typeof GroupsIndexRoute
   '/logic-blocks': typeof LogicBlocksIndexRoute
+  '/products': typeof ProductsIndexRoute
   '/roles': typeof RolesIndexRoute
   '/rules': typeof RulesIndexRoute
 }
@@ -110,6 +125,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/groups': typeof GroupsIndexRoute
   '/logic-blocks': typeof LogicBlocksIndexRoute
+  '/products': typeof ProductsIndexRoute
   '/roles': typeof RolesIndexRoute
   '/rules': typeof RulesIndexRoute
 }
@@ -119,16 +135,30 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/groups/': typeof GroupsIndexRoute
   '/logic-blocks/': typeof LogicBlocksIndexRoute
+  '/products/': typeof ProductsIndexRoute
   '/roles/': typeof RolesIndexRoute
   '/rules/': typeof RulesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/groups' | '/logic-blocks' | '/roles' | '/rules'
+  fullPaths:
+    | '/'
+    | '/groups'
+    | '/logic-blocks'
+    | '/products'
+    | '/roles'
+    | '/rules'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/groups' | '/logic-blocks' | '/roles' | '/rules'
-  id: '__root__' | '/' | '/groups/' | '/logic-blocks/' | '/roles/' | '/rules/'
+  to: '/' | '/groups' | '/logic-blocks' | '/products' | '/roles' | '/rules'
+  id:
+    | '__root__'
+    | '/'
+    | '/groups/'
+    | '/logic-blocks/'
+    | '/products/'
+    | '/roles/'
+    | '/rules/'
   fileRoutesById: FileRoutesById
 }
 
@@ -136,6 +166,7 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   GroupsIndexRoute: typeof GroupsIndexRoute
   LogicBlocksIndexRoute: typeof LogicBlocksIndexRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
   RolesIndexRoute: typeof RolesIndexRoute
   RulesIndexRoute: typeof RulesIndexRoute
 }
@@ -144,6 +175,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   GroupsIndexRoute: GroupsIndexRoute,
   LogicBlocksIndexRoute: LogicBlocksIndexRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
   RolesIndexRoute: RolesIndexRoute,
   RulesIndexRoute: RulesIndexRoute,
 }
@@ -163,6 +195,7 @@ export const routeTree = rootRoute
         "/",
         "/groups/",
         "/logic-blocks/",
+        "/products/",
         "/roles/",
         "/rules/"
       ]
@@ -175,6 +208,9 @@ export const routeTree = rootRoute
     },
     "/logic-blocks/": {
       "filePath": "logic-blocks/index.jsx"
+    },
+    "/products/": {
+      "filePath": "products/index.jsx"
     },
     "/roles/": {
       "filePath": "roles/index.jsx"
