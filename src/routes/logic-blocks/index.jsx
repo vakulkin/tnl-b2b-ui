@@ -98,11 +98,11 @@ const LogicBlocks = () => {
 
   const columnsConfig = [
     { field: "id", headerName: "ID", flex: 100 },
-    { field: "name", headerName: "Name", flex: 200 },
-    { field: "active", headerName: "Active", flex: 70 },
+    { field: "name", headerName: "Nazwa", flex: 200 },
+    { field: "active", headerName: "Aktywny", flex: 70 },
     {
       field: "rules",
-      headerName: "Rules",
+      headerName: "Reguły",
       flex: 250,
       type: "limitedChips",
       sortable: false,
@@ -110,14 +110,14 @@ const LogicBlocks = () => {
     },
     {
       field: "logic",
-      headerName: "Logic",
+      headerName: "Logika",
       flex: 500,
       renderCell: renderLogicCell,
       sortable: false,
     },
     {
       field: "edit",
-      headerName: "Edit",
+      headerName: "Edytuj",
       flex: 100,
       type: "action",
       action: "edit",
@@ -125,7 +125,7 @@ const LogicBlocks = () => {
     },
     {
       field: "delete",
-      headerName: "Delete",
+      headerName: "Usuń",
       flex: 100,
       type: "action",
       action: "delete",

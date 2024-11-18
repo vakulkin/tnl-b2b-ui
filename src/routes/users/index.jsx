@@ -3,8 +3,8 @@ import EntityTable from "../../components/table/EntitiyTable";
 import { useFetchGeneralInfo } from "../../useManagement";
 import SingleLoader from "../../components/general/SingleLoader";
 
-const Groups = () => {
-  const entityKey = "groups";
+const Users = () => {
+  const entityKey = "users";
 
   const { data: infoData, isLoading: infoIsLoading } =
     useFetchGeneralInfo(entityKey);
@@ -15,13 +15,14 @@ const Groups = () => {
 
   const columnsConfig = [
     { field: "id", headerName: "ID", flex: 100 },
-    { field: "name", headerName: "Nazwa", flex: 300 },
+    { field: "user_email", headerName: "User email", flex: 300 },
     {
-      field: "products",
-      headerName: "Produkty",
+      field: "roles",
+      headerName: "Role",
       flex: 700,
       type: "limitedChips",
       sortable: false,
+      description: infoData.roles.description,
     },
     {
       field: "logic_blocks",
@@ -31,29 +32,13 @@ const Groups = () => {
       sortable: false,
       description: infoData.logic_blocks.description,
     },
-    {
-      field: "edit",
-      headerName: "Edytuj",
-      flex: 100,
-      type: "action",
-      action: "edit",
-      sortable: false,
-    },
-    {
-      field: "delete",
-      headerName: "Usuń",
-      flex: 100,
-      type: "action",
-      action: "delete",
-      sortable: false,
-    },
   ];
 
   return <EntityTable entityKey={entityKey} columnsConfig={columnsConfig} />;
 };
 
-export default Groups;
+export default Users;
 
-export const Route = createFileRoute("/groups/")({
-  component: () => <Groups />,
+export const Route = createFileRoute("/users/")({
+  component: () => <Users />,
 });

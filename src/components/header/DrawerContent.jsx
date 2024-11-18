@@ -42,17 +42,23 @@ const navigation = [
     type: "internal",
   },
   {
-    url: "/wp-admin/users.php",
+    segment: "users",
     title: "Użytkownicy",
     icon: <EntityIcon icon="users" size={24} />,
-    type: "external",
+    type: "internal",
   },
   {
-    url: "/wp-admin/edit.php?post_type=product&page=product_attributes",
+    segment: "terms",
     title: "Woo Atrybuty",
     icon: <EntityIcon icon="terms" size={24} />,
-    type: "external",
+    type: "internal",
   },
+  // {
+  //   url: "/wp-admin/edit.php?post_type=product&page=product_attributes",
+  //   title: "Woo Atrybuty",
+  //   icon: <EntityIcon icon="terms" size={24} />,
+  //   type: "external",
+  // },
 ];
 
 const DrawerContent = ({ isCollapsed, handleToggleDrawer }) => {

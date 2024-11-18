@@ -15,10 +15,10 @@ const Roles = () => {
 
   const columnsConfig = [
     { field: "id", headerName: "ID", flex: 100 },
-    { field: "name", headerName: "Name", flex: 300 },
+    { field: "name", headerName: "Nazwa", flex: 300 },
     {
       field: "users",
-      headerName: "Users",
+      headerName: "Użytkownicy",
       flex: 700,
       type: "limitedChips",
       sortable: false,
@@ -26,7 +26,7 @@ const Roles = () => {
     },
     {
       field: "logic_blocks",
-      headerName: "Logic blocks",
+      headerName: "Warunki",
       flex: 700,
       type: "limitedChips",
       sortable: false,
@@ -34,7 +34,7 @@ const Roles = () => {
     },
     {
       field: "edit",
-      headerName: "Edit",
+      headerName: "Edytuj",
       flex: 100,
       type: "action",
       action: "edit",
@@ -42,7 +42,7 @@ const Roles = () => {
     },
     {
       field: "delete",
-      headerName: "Delete",
+      headerName: "Usuń",
       flex: 100,
       type: "action",
       action: "delete",

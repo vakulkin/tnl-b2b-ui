@@ -36,14 +36,15 @@ const PageHeader = ({ entityKey }) => {
               {infoData?.many}
             </Typography>
           </InfoTooltip>
-
-          <ActionButton
-            icon={<AddCircleOutlineIcon />}
-            size="large"
-            label={`Dodaj ${infoData?.whom?.toLowerCase()}`}
-            ariaLabel="add"
-            onClick={() => handleFormDialogOpen("add")}
-          />
+          {infoData?.type === "plugin" && (
+            <ActionButton
+              icon={<AddCircleOutlineIcon />}
+              size="large"
+              label={`Dodaj ${infoData?.whom?.toLowerCase()}`}
+              ariaLabel="add"
+              onClick={() => handleFormDialogOpen("add")}
+            />
+          )}
         </>
       )}
     </Box>

@@ -13,6 +13,8 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UsersIndexImport } from './routes/users/index'
+import { Route as TermsIndexImport } from './routes/terms/index'
 import { Route as RulesIndexImport } from './routes/rules/index'
 import { Route as RolesIndexImport } from './routes/roles/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
@@ -30,6 +32,18 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const UsersIndexRoute = UsersIndexImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TermsIndexRoute = TermsIndexImport.update({
+  id: '/terms/',
+  path: '/terms/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const RulesIndexRoute = RulesIndexImport.update({
   id: '/rules/',
@@ -107,6 +121,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RulesIndexImport
       parentRoute: typeof rootRoute
     }
+    '/terms/': {
+      id: '/terms/'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/users/': {
+      id: '/users/'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof UsersIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -119,6 +147,8 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsIndexRoute
   '/roles': typeof RolesIndexRoute
   '/rules': typeof RulesIndexRoute
+  '/terms': typeof TermsIndexRoute
+  '/users': typeof UsersIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -128,6 +158,8 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsIndexRoute
   '/roles': typeof RolesIndexRoute
   '/rules': typeof RulesIndexRoute
+  '/terms': typeof TermsIndexRoute
+  '/users': typeof UsersIndexRoute
 }
 
 export interface FileRoutesById {
@@ -138,6 +170,8 @@ export interface FileRoutesById {
   '/products/': typeof ProductsIndexRoute
   '/roles/': typeof RolesIndexRoute
   '/rules/': typeof RulesIndexRoute
+  '/terms/': typeof TermsIndexRoute
+  '/users/': typeof UsersIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -149,8 +183,18 @@ export interface FileRouteTypes {
     | '/products'
     | '/roles'
     | '/rules'
+    | '/terms'
+    | '/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/groups' | '/logic-blocks' | '/products' | '/roles' | '/rules'
+  to:
+    | '/'
+    | '/groups'
+    | '/logic-blocks'
+    | '/products'
+    | '/roles'
+    | '/rules'
+    | '/terms'
+    | '/users'
   id:
     | '__root__'
     | '/'
@@ -159,6 +203,8 @@ export interface FileRouteTypes {
     | '/products/'
     | '/roles/'
     | '/rules/'
+    | '/terms/'
+    | '/users/'
   fileRoutesById: FileRoutesById
 }
 
@@ -169,6 +215,8 @@ export interface RootRouteChildren {
   ProductsIndexRoute: typeof ProductsIndexRoute
   RolesIndexRoute: typeof RolesIndexRoute
   RulesIndexRoute: typeof RulesIndexRoute
+  TermsIndexRoute: typeof TermsIndexRoute
+  UsersIndexRoute: typeof UsersIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -178,6 +226,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsIndexRoute: ProductsIndexRoute,
   RolesIndexRoute: RolesIndexRoute,
   RulesIndexRoute: RulesIndexRoute,
+  TermsIndexRoute: TermsIndexRoute,
+  UsersIndexRoute: UsersIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -197,7 +247,9 @@ export const routeTree = rootRoute
         "/logic-blocks/",
         "/products/",
         "/roles/",
-        "/rules/"
+        "/rules/",
+        "/terms/",
+        "/users/"
       ]
     },
     "/": {
@@ -217,6 +269,12 @@ export const routeTree = rootRoute
     },
     "/rules/": {
       "filePath": "rules/index.jsx"
+    },
+    "/terms/": {
+      "filePath": "terms/index.jsx"
+    },
+    "/users/": {
+      "filePath": "users/index.jsx"
     }
   }
 }

@@ -26,23 +26,23 @@ const Rules = () => {
 
   const columnsConfig = [
     { field: 'id', headerName: 'ID', flex: 50 },
-    { field: 'name', headerName: 'Name', flex: 200 },
-    { field: 'priority', headerName: 'Priority', flex: 70 },
-    { field: 'active', headerName: 'Active', flex: 70 },
+    { field: 'name', headerName: 'Nazwa', flex: 200 },
+    { field: 'priority', headerName: 'Priorytet', flex: 70 },
+    { field: 'active', headerName: 'Aktywny', flex: 70 },
     {
-      field: 'kind',
-      headerName: 'Kind',
+      field: 'product_rule',
+      headerName: 'Regula produktu',
       flex: 120,
       valueGetter: (params, row) =>
-        formatKindValue(params, row.value),
+        formatKindValue(params, row.product_rule_value),
       sortable: false
     },
     {
-      field: 'operation',
-      headerName: 'Operation',
+      field: 'cart_product_rule',
+      headerName: 'Regula w koszyku',
       flex: 120,
       valueGetter: (params, row) =>
-        formatKindValue(params, row.operation_value),
+        formatKindValue(params, row.cart_product_rule_value),
       sortable: false
     },
     { field: 'min_qty', headerName: 'Min Qty', flex: 80 },
