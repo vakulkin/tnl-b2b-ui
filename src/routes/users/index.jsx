@@ -15,7 +15,7 @@ const Users = () => {
 
   const columnsConfig = [
     { field: "id", headerName: "ID", flex: 100 },
-    { field: "user_email", headerName: "User email", flex: 300 },
+    { field: "name", headerName: "Email użytkownika", flex: 300 },
     {
       field: "roles",
       headerName: "Role",
@@ -23,14 +23,6 @@ const Users = () => {
       type: "limitedChips",
       sortable: false,
       description: infoData.roles.description,
-    },
-    {
-      field: "logic_blocks",
-      headerName: "Warunki",
-      flex: 700,
-      type: "limitedChips",
-      sortable: false,
-      description: infoData.logic_blocks.description,
     },
   ];
 

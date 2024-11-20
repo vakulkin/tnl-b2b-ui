@@ -15,11 +15,11 @@ const Products = () => {
 
   const columnsConfig = [
     { field: "id", headerName: "ID", flex: 100 },
-    { field: "name", headerName: "Nazwa", flex: 300 },
+    { field: "name", headerName: "Nazwa", flex: 500 },
     {
       field: "groups",
       headerName: "Grupy",
-      flex: 700,
+      flex: 600,
       type: "limitedChips",
       sortable: false,
       description: infoData.roles.description,
@@ -27,7 +27,7 @@ const Products = () => {
     {
       field: "logic_blocks",
       headerName: "Warunki",
-      flex: 700,
+      flex: 600,
       type: "limitedChips",
       sortable: false,
       description: infoData.logic_blocks.description,

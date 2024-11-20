@@ -1,5 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Box } from "@mui/material";
+import { useFormik } from "formik";
+import debounce from "lodash/debounce";
+
 import { getEntityStore } from "../../store";
 import { useFetchEntityList } from "../../useManagement";
 import PageHeader from "../general/PageHeader";
@@ -9,10 +12,10 @@ import LimitedChips from "../chips/LimitedChips";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import IconActionButton from "../buttons/IconActionButton";
-import SearchBar from "../general/SeachBar";
 import EntityDataGrid from "./EntityDataGrid";
 import PaginationComponent from "../general/PaginationComponent";
 import InfoTooltip from "../general/InfoTooltip";
+import SearchField from "../general/SearchField";
 
 const EntityTable = ({ entityKey, columnsConfig }) => {
   const useStore = getEntityStore(entityKey);
@@ -24,19 +27,41 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
   });
 
   const [sortModel, setSortModel] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
+  // Formik for handling search term
+  const formik = useFormik({
+    initialValues: { search: "" },
+    onSubmit: () => {},
+  });
+
+  // Debounce search term update
+  useEffect(() => {
+    const handler = debounce((value) => {
+      setDebouncedSearchTerm(value);
+      setPaginationModel((prev) => ({ ...prev, page: 0 }));
+    }, 500);
+
+    handler(formik.values.search);
+
+    return () => {
+      handler.cancel();
+    };
+  }, [formik.values.search]);
+
+  // Query params to fetch the data list
   const queryParams = useMemo(
     () => ({
       page: paginationModel.page + 1,
       per_page: paginationModel.pageSize,
       order_by: sortModel[0]?.field || "",
       order_dir: sortModel[0]?.sort || "ASC",
-      search: searchTerm,
+      search: debouncedSearchTerm,
     }),
-    [paginationModel, sortModel, searchTerm]
+    [paginationModel, sortModel, debouncedSearchTerm]
   );
 
+  // Fetch entity list with the current query params
   const {
     data: entityData,
     isLoading,
@@ -50,11 +75,6 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
 
   const handleSortModelChange = (newSortModel) => {
     setSortModel(newSortModel);
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    setPaginationModel((prev) => ({ ...prev, page: 0 }));
   };
 
   // Memoize columns to prevent unnecessary re-renders
@@ -72,7 +92,12 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
   return (
     <Box sx={{ p: 4, background: "#fff" }}>
       <PageHeader entityKey={entityKey} />
-      <SearchBar searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+      <form onSubmit={formik.handleSubmit}>
+        <SearchField
+          searchTerm={formik.values.search}
+          onSearchChange={formik.handleChange}
+        />
+      </form>
       <EntityDataGrid
         entityData={entityData}
         columns={columns}
@@ -82,15 +107,18 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
         onSortModelChange={handleSortModelChange}
       />
 
-      {totalPages > 1 && <PaginationComponent
-        disabled={isFetching}
-        totalPages={totalPages}
-        paginationModel={{ ...paginationModel, page: paginationModel.page + 1 }}
-        onPageChange={(event, value) => {
-          setPaginationModel((prev) => ({ ...prev, page: value - 1 }));
-        }}
-      />}
+      {totalPages > 1 && (
+        <PaginationComponent
+          disabled={isFetching}
+          totalPages={totalPages}
+          paginationModel={{ ...paginationModel, page: paginationModel.page + 1 }}
+          onPageChange={(event, value) => {
+            setPaginationModel((prev) => ({ ...prev, page: value - 1 }));
+          }}
+        />
+      )}
 
+      {/* Edit Modals */}
       <EditModal entityKey="rules" />
       <EditModal entityKey="logic_blocks" />
       <EditModal entityKey="roles" />
@@ -102,19 +130,16 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
   );
 };
 
+// Utility function to define columns
 const getColumns = (columnsConfig, entityKey, handleFormDialogOpen) =>
-  
   columnsConfig.map((col) => {
-
     const newCol = {
       ...col,
       renderHeader: (params) => (
-        <InfoTooltip field={params.field}>
-            {params.field}
-        </InfoTooltip>
+        <InfoTooltip field={params.field}>{params.field}</InfoTooltip>
       ),
-    }
-    
+    };
+
     switch (newCol.type) {
       case "limitedChips":
         return {

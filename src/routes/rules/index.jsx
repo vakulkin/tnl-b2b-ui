@@ -45,19 +45,19 @@ const Rules = () => {
         formatKindValue(params, row.cart_product_rule_value),
       sortable: false
     },
-    { field: 'min_qty', headerName: 'Min Qty', flex: 80 },
-    { field: 'max_qty', headerName: 'Max Qty', flex: 80 },
-    { field: 'show_table', headerName: 'Show Table', flex: 100, sortable: false },
+    { field: 'min_qty', headerName: 'Min. ilość', flex: 80 },
+    { field: 'max_qty', headerName: 'Maks. lość', flex: 80 },
+    { field: 'show_table', headerName: 'Pokaż w tabeli', flex: 100, sortable: false },
     {
       field: 'logic_blocks',
-      headerName: 'Logic Blocks',
+      headerName: 'Warunki',
       flex: 600,
       type: 'limitedChips',
       sortable: false
     },
     {
       field: 'edit',
-      headerName: 'Edit',
+      headerName: 'Edytuj',
       flex: 70,
       type: 'action',
       action: 'edit',
@@ -65,7 +65,7 @@ const Rules = () => {
     },
     {
       field: 'delete',
-      headerName: 'Delete',
+      headerName: 'Usuń',
       flex: 70,
       type: 'action',
       action: 'delete',

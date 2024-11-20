@@ -17,13 +17,6 @@ const Terms = () => {
     { field: 'id', headerName: 'ID', flex: 100 },
     { field: 'name', headerName: 'Nazwa', flex: 300 },
     {
-      field: 'products',
-      headerName: 'Produkty',
-      flex: 700,
-      type: 'limitedChips',
-      sortable: false,
-    },
-    {
       field: 'logic_blocks',
       headerName: 'Warunki',
       flex: 700,

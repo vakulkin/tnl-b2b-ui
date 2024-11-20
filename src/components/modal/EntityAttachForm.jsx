@@ -13,11 +13,12 @@ import {
 } from "../../useManagement";
 import SingleLoader from "../general/SingleLoader";
 import AttachedItems from "./AttachedItems";
-import SearchField from "./SearchField";
 import AttachmentItems from "./AttachmentItems";
 import PaginationComponent from "../general/PaginationComponent";
 import AddNewEntityButton from "../buttons/AddNewEntityButton";
 import InfoTooltip from "../general/InfoTooltip";
+import SearchField from "../general/SearchField";
+
 
 const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const [paginationModel, setPaginationModel] = useState({
@@ -72,7 +73,9 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const attachedData = entityData.data
     ? JSON.parse(entityData.data[depsKey] || "[]")
     : [];
-  const checkedIds = attachedData.map((item) => item.id);
+
+  const checkedIds = attachedData.map((item) => parseInt(item.id, 10));
+
   const disabled =
     entityData.isFetching ||
     attachmentsData.isFetching ||
@@ -86,14 +89,19 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   return (
     <Box sx={formStyles.container(attachmentInfoData.data.color)}>
       <DialogTitle>
-        <InfoTooltip field={depsKey} >Select {attachmentInfoData.data?.many.toLowerCase()}</InfoTooltip>
+        <InfoTooltip field={depsKey}>
+          Select {attachmentInfoData.data?.many.toLowerCase()}
+        </InfoTooltip>
       </DialogTitle>
       <DialogContent>
         <Typography>
           Which need to be added to {entityData.data?.name}
         </Typography>
         <AttachedItems attachedData={attachedData} />
-        <SearchField formik={formik} disabled={disabled} />
+        <SearchField
+          searchTerm={formik.values.search}
+          onSearchChange={formik.handleChange}
+        />
         {!!attachmentsData.data.items.length && (
           <AttachmentItems
             items={attachmentsData.data.items}
@@ -164,7 +172,9 @@ const handleChipClick = (
   depsData
 ) => {
   if (checked) {
-    const elementToDelete = attachedData.find((elem) => elem.id === item.id);
+    const elementToDelete = attachedData.find(
+      (elem) => elem.id === parseInt(item.id, 10)
+    );
     if (elementToDelete) {
       deleteMutation.mutate(elementToDelete.rel_id);
     }
