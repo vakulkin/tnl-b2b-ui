@@ -1,16 +1,8 @@
 import Tooltip from "@mui/material/Tooltip";
-import { useFetchInfoByKey } from "../../useManagement";
 import { Box, Typography } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
-const InfoTooltip = ({ field, children }) => {
-  const { data: infoData, isLoading: infoIsLoading } = useFetchInfoByKey(field);
-
-  if (infoIsLoading) {
-    return <>Loading...</>;
-  }
-
-  if (infoData && infoData.description) {
+const InfoTooltip = ({ text, children }) => {
     return (
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box>{children}</Box>
@@ -19,7 +11,7 @@ const InfoTooltip = ({ field, children }) => {
           title={
             <Typography
               variant="body2"
-              dangerouslySetInnerHTML={{ __html: infoData.description }}
+              dangerouslySetInnerHTML={{ __html: text }}
             />
           }
           arrow
@@ -28,9 +20,6 @@ const InfoTooltip = ({ field, children }) => {
         </Tooltip>
       </Box>
     );
-  }
-
-  return <Box>{children}</Box>;
-};
+  };
 
 export default InfoTooltip;

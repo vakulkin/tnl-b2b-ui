@@ -14,7 +14,7 @@ function addRootDivDataAttributes() {
     transformIndexHtml(html) {
       return html.replace(
         '<div id="root">',
-        '<div id="root" data-nonce="localhost" data-home-url="http://btwob.local">'
+        '<div id="root" data-nonce="localhost" data-home-url="http://btob.local">'
       );
     },
   };
@@ -34,7 +34,7 @@ export default defineConfig(({ command }) => {
     build: {
       outDir: path.resolve(
         __dirname,
-        "C:/Users/anton/Local Sites/btwob/app/public/wp-content/plugins/tnl-b2b-platform/ui"
+        "C:/Users/anton/Local Sites/btob/app/public/wp-content/plugins/tnl-b2b-platform/ui"
       ),
       emptyOutDir: true,
       rollupOptions: {

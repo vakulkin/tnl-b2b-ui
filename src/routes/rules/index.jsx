@@ -28,7 +28,7 @@ const Rules = () => {
     { field: 'id', headerName: 'ID', flex: 50 },
     { field: 'name', headerName: 'Nazwa', flex: 200 },
     { field: 'priority', headerName: 'Priorytet', flex: 70 },
-    { field: 'active', headerName: 'Aktywny', flex: 70 },
+    { field: 'status', headerName: 'Aktywny', flex: 70 },
     {
       field: 'product_rule',
       headerName: 'Regula produktu',

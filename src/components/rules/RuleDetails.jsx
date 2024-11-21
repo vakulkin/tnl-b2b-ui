@@ -3,7 +3,7 @@ import { formatKindValue } from "../../helpers";
 
 const RuleChips = ({ rule }) => {
   const chipData = [
-    { label: rule.active === "1" ? "active" : "inactive" },
+    { label: rule.status === "1" ? "status" : "inactive" },
     { label: `priority: ${rule.priority}` },
     { label: formatKindValue(rule.kind, rule.value) },
     rule.operation_value && { label: formatKindValue(rule.operation, rule.operation_value) },

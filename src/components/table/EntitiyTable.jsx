@@ -14,8 +14,8 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import IconActionButton from "../buttons/IconActionButton";
 import EntityDataGrid from "./EntityDataGrid";
 import PaginationComponent from "../general/PaginationComponent";
-import InfoTooltip from "../general/InfoTooltip";
 import SearchField from "../general/SearchField";
+import ColumnHeader from "./ColumnHeader";
 
 const EntityTable = ({ entityKey, columnsConfig }) => {
   const useStore = getEntityStore(entityKey);
@@ -136,7 +136,7 @@ const getColumns = (columnsConfig, entityKey, handleFormDialogOpen) =>
     const newCol = {
       ...col,
       renderHeader: (params) => (
-        <InfoTooltip field={params.field}>{params.field}</InfoTooltip>
+        <ColumnHeader params={params} />
       ),
     };
 

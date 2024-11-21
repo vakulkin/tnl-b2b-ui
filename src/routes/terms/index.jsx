@@ -1,36 +1,41 @@
-import { createFileRoute } from '@tanstack/react-router'
-import EntityTable from '../../components/table/EntitiyTable'
-import { useFetchGeneralInfo } from '../../useManagement'
-import SingleLoader from '../../components/general/SingleLoader'
+import { createFileRoute } from "@tanstack/react-router";
+import EntityTable from "../../components/table/EntitiyTable";
+import { useFetchGeneralInfo } from "../../useManagement";
+import SingleLoader from "../../components/general/SingleLoader";
 
 const Terms = () => {
-  const entityKey = 'terms'
+  const entityKey = "terms";
 
   const { data: infoData, isLoading: infoIsLoading } =
-    useFetchGeneralInfo(entityKey)
+    useFetchGeneralInfo(entityKey);
 
   if (infoIsLoading) {
-    return <SingleLoader icon={entityKey} size={34} />
+    return <SingleLoader icon={entityKey} size={34} />;
   }
 
   const columnsConfig = [
-    { field: 'id', headerName: 'ID', flex: 100 },
-    { field: 'name', headerName: 'Nazwa', flex: 300 },
+    { field: "id", headerName: "ID", flex: 100 },
+    { field: "name", headerName: "Nazwa", flex: 300 },
     {
-      field: 'logic_blocks',
-      headerName: 'Warunki',
+      field: "logic_blocks",
+      headerName: "Warunki",
       flex: 700,
-      type: 'limitedChips',
+      type: "limitedChips",
       sortable: false,
       description: infoData.logic_blocks.description,
     },
-  ]
+  ];
 
-  return <EntityTable entityKey={entityKey} columnsConfig={columnsConfig} />
-}
+  return (
+    <EntityTable
+      entityKey={entityKey}
+      columnsConfig={columnsConfig}
+    />
+  );
+};
 
-export default Terms
+export default Terms;
 
-export const Route = createFileRoute('/terms/')({
+export const Route = createFileRoute("/terms/")({
   component: () => <Terms />,
-})
+});
