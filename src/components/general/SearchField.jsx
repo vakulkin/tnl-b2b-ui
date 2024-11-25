@@ -1,8 +1,12 @@
 import { TextField } from "@mui/material";
+import { useFetchInfoByKey } from "../../useManagement";
 
-const SearchField = ({ searchTerm, onSearchChange }) => (
+const SearchField = ({ entityKey, searchTerm, onSearchChange }) => {
+  const entityInfoData = useFetchInfoByKey(entityKey);
+
+  return (
     <TextField
-      label="Search"
+      label={`Szukaj ${entityInfoData.isLoading ? "" : entityInfoData?.data.many.toLowerCase()}`}
       size="small"
       variant="standard"
       fullWidth
@@ -11,6 +15,7 @@ const SearchField = ({ searchTerm, onSearchChange }) => (
       onChange={onSearchChange}
       sx={{ mb: 2 }}
     />
-);
+  );
+};
 
 export default SearchField;

@@ -1,8 +1,8 @@
-import { Box, List } from '@mui/material';
-import DrawerHeader from './DrawerHeader';
-import NavigationItem from './NavigationItem';
-import ToggleCollapseButton from './ToggleCollapseButton';
-import EntityIcon from '../general/EntityIcon';
+import { Box, List } from "@mui/material";
+import DrawerHeader from "./DrawerHeader";
+import NavigationItem from "./NavigationItem";
+import ToggleCollapseButton from "./ToggleCollapseButton";
+import EntityIcon from "../general/EntityIcon";
 
 const navigation = [
   {
@@ -78,7 +78,7 @@ const NavigationList = ({ navigation, isCollapsed }) => (
   <List>
     {navigation.map((item) => (
       <NavigationItem
-        key={item.type === 'internal' ? item.segment : item.url}
+        key={item.type === "internal" ? item.segment : item.url}
         item={item}
         isCollapsed={isCollapsed}
       />

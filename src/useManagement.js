@@ -55,6 +55,7 @@ export const useGenericQuery = (queryKey, queryFn, enabled = true) =>
     onError: (error) =>
       console.error(`Error fetching ${JSON.stringify(queryKey)}:`, error),
     placeholderData: (prev) => prev,
+    refetchOnWindowFocus: false,
   });
 
 export const useGenericMutation = (mutationFn, onSuccessFn) => {
@@ -94,6 +95,9 @@ export const useFetchGeneralOptions = () => useGeneralSection("options");
 // Hook to fetch the entire "options" section
 export const useFetchGeneralDeps = () => useGeneralSection("deps");
 
+// Hook to fetch the entire "columns" section
+export const useFetchGeneralColumns = () => useGeneralSection("columns");
+
 // Hook to fetch a specific "info" item by key
 export const useFetchInfoByKey = (key) => useGeneralSection("info", key);
 
@@ -102,6 +106,10 @@ export const useFetchOptionByKey = (key) => useGeneralSection("options", key);
 
 // Hook to fetch a specific "deps" item by key
 export const useFetchDepsByKey = (key) => useGeneralSection("deps", key);
+
+// Hook to fetch a specific "columns" item by key
+export const useFetchColumnByKey = (key) => useGeneralSection("columns", key);
+
 // Entity management-specific hooks
 
 // Hook to fetch a list of entities

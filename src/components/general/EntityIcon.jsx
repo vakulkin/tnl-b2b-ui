@@ -8,7 +8,6 @@ import UsersIcon from "../../assets/icons/users.svg?react";
 import KitsIcon from "../../assets/icons/kits.svg?react";
 import InfoIcon from "../../assets/icons/info.svg?react";
 
-
 const iconMap = {
   groups: GroupsIcon,
   logic_blocks: LogicBlocksIcon,

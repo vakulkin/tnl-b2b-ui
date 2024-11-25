@@ -1,6 +1,13 @@
 import { DataGrid } from "@mui/x-data-grid";
 
-const EntityDataGrid = ({ entityData, columns, isFetching, paginationModel, onPaginationModelChange, onSortModelChange }) => (
+const EntityDataGrid = ({
+  entityData,
+  columns,
+  isFetching,
+  paginationModel,
+  onPaginationModelChange,
+  onSortModelChange,
+}) => (
   <DataGrid
     loading={isFetching}
     rows={entityData.items}

@@ -4,10 +4,8 @@ import SingleLoader from "../general/SingleLoader";
 import { getEntityStore } from "../../store";
 
 const EntityAttachDepsLoader = ({ entityKey }) => {
-
   const useStore = getEntityStore(entityKey);
   const { attachmentKey } = useStore();
-
 
   const {
     data: depsData,
@@ -19,7 +17,11 @@ const EntityAttachDepsLoader = ({ entityKey }) => {
   if (depsError) return "Error loading data.";
 
   return (
-    <EntityAttachForm entityKey={entityKey} depsKey={attachmentKey} depsData={depsData[attachmentKey]} />
+    <EntityAttachForm
+      entityKey={entityKey}
+      depsKey={attachmentKey}
+      depsData={depsData[attachmentKey]}
+    />
   );
 };
 

@@ -60,7 +60,7 @@ const EntityForm = ({ entityKey }) => {
   const initialValues = fieldsList.reduce((acc, field) => {
     acc[field.name] = isCreateMode
       ? field.type === "select"
-        ? field.options[0]
+        ? field.options[0].key
         : ""
       : entityData?.[field.name] || "";
     return acc;
@@ -95,6 +95,7 @@ const EntityForm = ({ entityKey }) => {
           <Form>
             <DialogContent>
               <FormFields
+                entityKey={entityKey}
                 fieldsList={fieldsList}
                 values={values}
                 handleChange={handleChange}

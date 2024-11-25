@@ -94,6 +94,7 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
       <PageHeader entityKey={entityKey} />
       <form onSubmit={formik.handleSubmit}>
         <SearchField
+          entityKey={entityKey}
           searchTerm={formik.values.search}
           onSearchChange={formik.handleChange}
         />
@@ -111,7 +112,10 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
         <PaginationComponent
           disabled={isFetching}
           totalPages={totalPages}
-          paginationModel={{ ...paginationModel, page: paginationModel.page + 1 }}
+          paginationModel={{
+            ...paginationModel,
+            page: paginationModel.page + 1,
+          }}
           onPageChange={(event, value) => {
             setPaginationModel((prev) => ({ ...prev, page: value - 1 }));
           }}
@@ -136,7 +140,7 @@ const getColumns = (columnsConfig, entityKey, handleFormDialogOpen) =>
     const newCol = {
       ...col,
       renderHeader: (params) => (
-        <ColumnHeader params={params} />
+        <ColumnHeader entityKey={entityKey} params={params} />
       ),
     };
 

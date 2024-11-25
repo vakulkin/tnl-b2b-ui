@@ -19,7 +19,6 @@ import AddNewEntityButton from "../buttons/AddNewEntityButton";
 import InfoTooltip from "../general/InfoTooltip";
 import SearchField from "../general/SearchField";
 
-
 const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   const [paginationModel, setPaginationModel] = useState({
     page: 1,
@@ -40,6 +39,9 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
     paginationModel.page,
     debouncedSearchTerm
   );
+
+  const entityInfoData = useAttachmentInfo(entityKey);
+
   const attachmentInfoData = useAttachmentInfo(depsKey);
 
   const createMutation = useCreateEntityMutation(depsData.relation.route, [
@@ -64,6 +66,7 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
 
   if (
     entityData.isLoading ||
+    entityInfoData.isLoading ||
     attachmentsData.isLoading ||
     attachmentInfoData.isLoading
   ) {
@@ -78,6 +81,7 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
 
   const disabled =
     entityData.isFetching ||
+    entityInfoData.isFetching ||
     attachmentsData.isFetching ||
     createMutation.isPending ||
     deleteMutation.isPending;
@@ -90,15 +94,19 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
     <Box sx={formStyles.container(attachmentInfoData.data.color)}>
       <DialogTitle>
         <InfoTooltip field={depsKey}>
-          Select {attachmentInfoData.data?.many.toLowerCase()}
+          <Typography variant="h2">
+            Wybierz {attachmentInfoData.data?.many.toLowerCase()}
+          </Typography>
         </InfoTooltip>
       </DialogTitle>
       <DialogContent>
-        <Typography>
-          Which need to be added to {entityData.data?.name}
+        <Typography variant="h4">
+          Do których należy dodać {entityInfoData.data?.whom.toLowerCase()}{" "}
+          &quot;{entityData.data?.name}&quot;
         </Typography>
         <AttachedItems attachedData={attachedData} />
         <SearchField
+          entityKey={entityKey}
           searchTerm={formik.values.search}
           onSearchChange={formik.handleChange}
         />

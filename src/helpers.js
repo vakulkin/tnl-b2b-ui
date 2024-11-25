@@ -77,8 +77,8 @@ export const convertToYupSchema = (fields) => {
           break;
         case "oneOf":
           validator = (validator || Yup.mixed()).oneOf(
-            field.options,
-            `Must be one of: ${field.options.join(", ")}`
+            field.options.map(i => i.key),
+            `Must be one of: ${field.options.map(i => i.title).join(", ")}`
           );
           break;
         default:

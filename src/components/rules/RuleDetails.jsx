@@ -6,7 +6,9 @@ const RuleChips = ({ rule }) => {
     { label: rule.status === "1" ? "status" : "inactive" },
     { label: `priority: ${rule.priority}` },
     { label: formatKindValue(rule.kind, rule.value) },
-    rule.operation_value && { label: formatKindValue(rule.operation, rule.operation_value) },
+    rule.operation_value && {
+      label: formatKindValue(rule.operation, rule.operation_value),
+    },
     { label: `min qty: ${rule.min_qty}` },
     { label: `max qty: ${rule.max_qty}` },
     { label: `table: ${rule.show_table}` },

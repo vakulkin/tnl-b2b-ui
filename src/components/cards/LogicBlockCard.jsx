@@ -19,7 +19,7 @@ const LogicBlockCard = ({ depsData }) => {
       />
 
       <Box sx={{ mt: 5, p: 4, background: "#F4F5F4", borderRadius: 2 }}>
-        <Box sx={{ mt: 3, p: 4, background: "#EAECEA", borderRadius: 2 }}>
+        <Box sx={{ p: 4, background: "#EAECEA", borderRadius: 2 }}>
           <EntityAttachForm
             entityKey="logic_blocks"
             depsKey="roles"

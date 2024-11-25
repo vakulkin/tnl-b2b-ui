@@ -23,7 +23,12 @@ const EditModal = ({ entityKey }) => {
   };
 
   return (
-    <Dialog open={isFormDialogOpen} onClose={handleFormDialogClose} maxWidth="xl" fullWidth>
+    <Dialog
+      open={isFormDialogOpen}
+      onClose={handleFormDialogClose}
+      maxWidth="xl"
+      fullWidth
+    >
       {renderContent()}
     </Dialog>
   );

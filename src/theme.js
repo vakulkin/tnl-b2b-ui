@@ -1,6 +1,5 @@
 import { createTheme } from '@mui/material/styles';
 import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
 
 const theme = createTheme({
   palette: {
@@ -19,7 +18,6 @@ const theme = createTheme({
     },
     h3: {
       fontSize: '1.15rem',
-      fontWeight: 300,
     },
     h4: {
       fontSize: '1.1rem',
@@ -32,11 +30,9 @@ const theme = createTheme({
     },
     body1: {
       fontSize: '1rem',
-      fontWeight: 300,
     },
     body2: {
       fontSize: '0.875rem',
-      fontWeight: 300,
     },
     button: {
       textTransform: 'none',

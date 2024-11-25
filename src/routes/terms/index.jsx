@@ -26,12 +26,7 @@ const Terms = () => {
     },
   ];
 
-  return (
-    <EntityTable
-      entityKey={entityKey}
-      columnsConfig={columnsConfig}
-    />
-  );
+  return <EntityTable entityKey={entityKey} columnsConfig={columnsConfig} />;
 };
 
 export default Terms;

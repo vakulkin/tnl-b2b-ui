@@ -6,8 +6,6 @@ import { formatLabel } from "../../helpers";
 const AttachmentItems = ({ items, checkedIds, disabled, handleChipClick }) => (
   <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
     {items.map((item) => {
-
-      
       const checked = checkedIds.includes(parseInt(item.id, 10));
       return (
         <Tooltip

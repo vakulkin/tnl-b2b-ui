@@ -25,5 +25,4 @@ const PaginationComponent = ({
   </Box>
 );
 
-
 export default PaginationComponent;

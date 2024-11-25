@@ -16,6 +16,10 @@ const Products = () => {
   const columnsConfig = [
     { field: "id", headerName: "ID", flex: 100 },
     { field: "name", headerName: "Nazwa", flex: 500 },
+    { field: "sku", headerName: "sku", flex: 200 },
+    { field: "price", headerName: "price", flex: 200 },
+    { field: "stock_status", headerName: "stock_status", flex: 200 },
+    { field: "stock_quantity", headerName: "stock_quantity", flex: 200 },
     {
       field: "groups",
       headerName: "Grupy",

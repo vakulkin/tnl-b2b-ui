@@ -1,9 +1,19 @@
 import { Chip, Tooltip } from "@mui/material";
 import EntityIcon from "../general/EntityIcon";
-import { chipBaseStyle, emptyIconChipStyle, iconOnlyChipStyle } from "../../helpers";
+import {
+  chipBaseStyle,
+  emptyIconChipStyle,
+  iconOnlyChipStyle,
+} from "../../helpers";
 
-const NoItemsChip = ({ infoData, emptyIcon, handleFormDialogOpen, entity, attachmentKey }) => (
-  <Tooltip title={`Dołącz ${infoData.many.toLowerCase()}`} arrow>
+const NoItemsChip = ({
+  infoData,
+  emptyIcon,
+  handleFormDialogOpen,
+  entity,
+  attachmentKey,
+}) => (
+  <Tooltip title={`Dołącz ${infoData?.many.toLowerCase()}`} arrow>
     <Chip
       icon={<EntityIcon icon={attachmentKey} size={14} />}
       label="dodaj"

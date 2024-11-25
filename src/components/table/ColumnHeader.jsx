@@ -1,17 +1,30 @@
-import { useFetchInfoByKey } from "../../useManagement";
+import { useFetchInfoByKey, useFetchColumnByKey } from "../../useManagement";
 import InfoTooltip from "../general/InfoTooltip";
 
-const ColumnHeader = ({ params }) => {
-  const { data, isLoading, isError } = useFetchInfoByKey(params.field);
+const ColumnHeader = ({ entityKey, params }) => {
+  const {
+    data: infoData,
+    isLoading: infoIsLoading,
+    isError: infoIsError,
+  } = useFetchInfoByKey(params.field);
 
-  if (isLoading) return <>is loading</>;
-  if (isError) return <div>Error loading data.</div>;
+  const {
+    data: columnData,
+    isLoading: columnIsLoading,
+    isError: columnIsError,
+  } = useFetchColumnByKey(entityKey);
 
-  if (data) {
-    return <InfoTooltip text={data.description}>{params.colDef.headerName}</InfoTooltip>;
+  if (infoIsLoading || columnIsLoading) return <>is loading</>;
+  if (infoIsError || columnIsError) return <div>Error loading data.</div>;
+
+  const columnName =
+    columnData?.[params.field]?.name ?? params.colDef.headerName;
+
+  if (infoData) {
+    return <InfoTooltip text={infoData.description}>{columnName}</InfoTooltip>;
   }
 
-  return <>{params.colDef.headerName}</>
+  return <>{columnName}</>;
 };
 
 export default ColumnHeader;
