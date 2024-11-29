@@ -93,7 +93,7 @@ const EntityAttachForm = ({ entityKey, depsKey, depsData }) => {
   return (
     <Box sx={formStyles.container(attachmentInfoData.data.color)}>
       <DialogTitle>
-        <InfoTooltip field={depsKey}>
+        <InfoTooltip text={attachmentInfoData.data.description}>
           <Typography variant="h2">
             Wybierz {attachmentInfoData.data?.many.toLowerCase()}
           </Typography>

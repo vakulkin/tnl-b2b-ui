@@ -27,7 +27,7 @@ const PageHeader = ({ entityKey }) => {
         <EntityIcon icon={entityKey} size={34} />
       ) : (
         <>
-          <InfoTooltip field={entityKey}>
+          <InfoTooltip text={infoData.description}>
             <Typography
               sx={{ display: "flex", alignItems: "center", gap: 2 }}
               variant="h1"
