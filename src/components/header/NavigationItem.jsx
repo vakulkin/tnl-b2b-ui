@@ -10,21 +10,40 @@ const NavigationItem = ({ item, isCollapsed }) => {
   const listItemIcon = getListItemIcon(item.icon);
   const listItemText = getListItemText(item.title, isCollapsed);
 
-  return item.type === "internal" ? (
-    <InternalNavigationLink
-      item={item}
-      commonProps={commonProps}
-      listItemIcon={listItemIcon}
-      listItemText={listItemText}
-    />
-  ) : (
-    <ExternalNavigationLink
-      item={item}
-      commonProps={commonProps}
-      listItemIcon={listItemIcon}
-      listItemText={listItemText}
-    />
-  );
+  if (item.type === "internal") {
+    return (
+      <InternalNavigationLink
+        item={item}
+        commonProps={commonProps}
+        listItemIcon={listItemIcon}
+        listItemText={listItemText}
+      />
+    );
+  }
+
+  if (item.type === "external") {
+    return (
+      <ExternalNavigationLink
+        item={item}
+        commonProps={commonProps}
+        listItemIcon={listItemIcon}
+        listItemText={listItemText}
+      />
+    );
+  }
+
+  if (item.type === "action") {
+    return (
+      <ActionNavigationLink
+        item={item}
+        commonProps={commonProps}
+        listItemIcon={listItemIcon}
+        listItemText={listItemText}
+      />
+    );
+  }
+
+  return null;
 };
 
 const getCommonProps = (isCollapsed, isActive) => ({
@@ -77,6 +96,13 @@ const ExternalNavigationLink = ({
     rel="noopener noreferrer"
     {...commonProps}
   >
+    {listItemIcon}
+    {listItemText}
+  </ListItemButton>
+);
+
+const ActionNavigationLink = ({ item, commonProps, listItemIcon, listItemText }) => (
+  <ListItemButton onClick={item.onClick} {...commonProps}>
     {listItemIcon}
     {listItemText}
   </ListItemButton>

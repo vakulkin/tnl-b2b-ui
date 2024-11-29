@@ -109,20 +109,26 @@ export const convertToYupSchema = (fields) => {
 };
 
 export const formatKindValue = (kind, value) => {
+  value = value ?? 0;
+
+  if (value === 0) {
+    return "";
+  }
+
   switch (kind) {
     case "equals":
-      return `= ${value} .-`; // Price equals a fixed value
+      return `= ${value} .-`;
     case "minus_percent":
-      return `- ${value}%`; // Decrease by percentage
+      return `- ${value}%`;
     case "plus_percent":
-      return `+ ${value}%`; // Increase by percentage
+      return `+ ${value}%`;
     case "minus_number":
-      return `- ${value} .-`; // Decrease by a fixed amount
+      return `- ${value} .-`;
     case "plus_number":
-      return `+ ${value} .-`; // Increase by a fixed amount
+      return `+ ${value} .-`;
     case "request_quote":
-      return "Cena na telefon";
+      return "Zapytaj o cenę";
     default:
-      return value; // Fallback for unknown kinds
+      return "";
   }
 };

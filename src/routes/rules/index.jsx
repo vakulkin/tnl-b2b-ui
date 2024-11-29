@@ -1,25 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import EntityTable from "../../components/table/EntitiyTable";
-
-const formatKindValue = (kind, value) => {
-  value = value || 0;
-  switch (kind) {
-    case "equals":
-      return `= ${value} .-`;
-    case "minus_percent":
-      return `- ${value}%`;
-    case "plus_percent":
-      return `+ ${value}%`;
-    case "minus_number":
-      return `- ${value} .-`;
-    case "plus_number":
-      return `+ ${value} .-`;
-    case "request_quote":
-      return "Cena na telefon";
-    default:
-      return "";
-  }
-};
+import { formatKindValue } from "../../helpers";
 
 const Rules = () => {
   const entityKey = "rules";
@@ -47,12 +28,12 @@ const Rules = () => {
     },
     { field: "min_qty", headerName: "Min. ilość", flex: 80 },
     { field: "max_qty", headerName: "Maks. lość", flex: 80 },
-    {
-      field: "show_table",
-      headerName: "Pokaż w tabeli",
-      flex: 100,
-      sortable: false,
-    },
+    // {
+    //   field: "show_table",
+    //   headerName: "Pokaż w tabeli",
+    //   flex: 100,
+    //   sortable: false,
+    // },
     {
       field: "logic_blocks",
       headerName: "Warunki",
