@@ -130,6 +130,7 @@ const EntityTable = ({ entityKey, columnsConfig }) => {
       <EditModal entityKey="terms" />
       <EditModal entityKey="products" />
       <EditModal entityKey="users" />
+      <EditModal entityKey="kits" />
     </Box>
   );
 };

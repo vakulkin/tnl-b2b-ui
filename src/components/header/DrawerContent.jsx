@@ -57,6 +57,12 @@ const DrawerContent = ({ isCollapsed, handleToggleDrawer }) => {
       type: "internal",
     },
     {
+      segment: "product-kits",
+      title: "Zestawy produktów",
+      icon: <EntityIcon icon="kits" size={24} />,
+      type: "internal",
+    },
+    {
       title: "Settings",
       icon: <EntityIcon icon="settings" size={24} />,
       type: "action",

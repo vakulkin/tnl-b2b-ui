@@ -113,12 +113,19 @@ export const useFetchColumnByKey = (key) => useGeneralSection("columns", key);
 // Entity management-specific hooks
 
 // Hook to fetch a list of entities
-export const useFetchEntityList = (entityName, subPath, data) => {
+export const useFetchEntityList = (
+  entityName,
+  subPath,
+  data,
+  enabled = true
+) => {
   const { nonce, homeUrl } = useDataStore();
   const apiUrl = buildApiUrl(homeUrl, entityName, subPath);
 
-  return useGenericQuery([entityName, subPath, data], () =>
-    makeApiRequest("get", apiUrl, nonce, data)
+  return useGenericQuery(
+    [entityName, subPath, data],
+    () => makeApiRequest("get", apiUrl, nonce, data),
+    enabled
   );
 };
 

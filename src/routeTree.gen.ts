@@ -19,6 +19,7 @@ import { Route as SettingsIndexImport } from './routes/settings/index'
 import { Route as RulesIndexImport } from './routes/rules/index'
 import { Route as RolesIndexImport } from './routes/roles/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
+import { Route as ProductKitsIndexImport } from './routes/product-kits/index'
 import { Route as LogicBlocksIndexImport } from './routes/logic-blocks/index'
 import { Route as GroupsIndexImport } from './routes/groups/index'
 
@@ -70,6 +71,12 @@ const ProductsIndexRoute = ProductsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProductKitsIndexRoute = ProductKitsIndexImport.update({
+  id: '/product-kits/',
+  path: '/product-kits/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LogicBlocksIndexRoute = LogicBlocksIndexImport.update({
   id: '/logic-blocks/',
   path: '/logic-blocks/',
@@ -105,6 +112,13 @@ declare module '@tanstack/react-router' {
       path: '/logic-blocks'
       fullPath: '/logic-blocks'
       preLoaderRoute: typeof LogicBlocksIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/product-kits/': {
+      id: '/product-kits/'
+      path: '/product-kits'
+      fullPath: '/product-kits'
+      preLoaderRoute: typeof ProductKitsIndexImport
       parentRoute: typeof rootRoute
     }
     '/products/': {
@@ -158,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/groups': typeof GroupsIndexRoute
   '/logic-blocks': typeof LogicBlocksIndexRoute
+  '/product-kits': typeof ProductKitsIndexRoute
   '/products': typeof ProductsIndexRoute
   '/roles': typeof RolesIndexRoute
   '/rules': typeof RulesIndexRoute
@@ -170,6 +185,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/groups': typeof GroupsIndexRoute
   '/logic-blocks': typeof LogicBlocksIndexRoute
+  '/product-kits': typeof ProductKitsIndexRoute
   '/products': typeof ProductsIndexRoute
   '/roles': typeof RolesIndexRoute
   '/rules': typeof RulesIndexRoute
@@ -183,6 +199,7 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/groups/': typeof GroupsIndexRoute
   '/logic-blocks/': typeof LogicBlocksIndexRoute
+  '/product-kits/': typeof ProductKitsIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/roles/': typeof RolesIndexRoute
   '/rules/': typeof RulesIndexRoute
@@ -197,6 +214,7 @@ export interface FileRouteTypes {
     | '/'
     | '/groups'
     | '/logic-blocks'
+    | '/product-kits'
     | '/products'
     | '/roles'
     | '/rules'
@@ -208,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/groups'
     | '/logic-blocks'
+    | '/product-kits'
     | '/products'
     | '/roles'
     | '/rules'
@@ -219,6 +238,7 @@ export interface FileRouteTypes {
     | '/'
     | '/groups/'
     | '/logic-blocks/'
+    | '/product-kits/'
     | '/products/'
     | '/roles/'
     | '/rules/'
@@ -232,6 +252,7 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   GroupsIndexRoute: typeof GroupsIndexRoute
   LogicBlocksIndexRoute: typeof LogicBlocksIndexRoute
+  ProductKitsIndexRoute: typeof ProductKitsIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   RolesIndexRoute: typeof RolesIndexRoute
   RulesIndexRoute: typeof RulesIndexRoute
@@ -244,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   GroupsIndexRoute: GroupsIndexRoute,
   LogicBlocksIndexRoute: LogicBlocksIndexRoute,
+  ProductKitsIndexRoute: ProductKitsIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   RolesIndexRoute: RolesIndexRoute,
   RulesIndexRoute: RulesIndexRoute,
@@ -267,6 +289,7 @@ export const routeTree = rootRoute
         "/",
         "/groups/",
         "/logic-blocks/",
+        "/product-kits/",
         "/products/",
         "/roles/",
         "/rules/",
@@ -283,6 +306,9 @@ export const routeTree = rootRoute
     },
     "/logic-blocks/": {
       "filePath": "logic-blocks/index.jsx"
+    },
+    "/product-kits/": {
+      "filePath": "product-kits/index.jsx"
     },
     "/products/": {
       "filePath": "products/index.jsx"

@@ -1,4 +1,6 @@
-import { Formik, Form } from "formik";
+import { useState, useEffect, useMemo } from "react";
+import { Formik, Form, useFormikContext } from "formik";
+import debounce from "lodash/debounce";
 import {
   DialogActions,
   Button,
@@ -19,7 +21,6 @@ import FormFields from "./FormFields";
 import SingleLoader from "../general/SingleLoader";
 import EntityAttachForm from "./EntityAttachForm";
 import LogicBlockCard from "../cards/LogicBlockCard";
-
 import { convertToYupSchema } from "../../helpers";
 
 const EntityForm = ({ entityKey }) => {
@@ -28,22 +29,38 @@ const EntityForm = ({ entityKey }) => {
 
   const isCreateMode = formMode === "add";
 
-  // Fetch form data, entity data, and entity info
+  const {
+    data: entityData,
+    isLoading: entityIsLoading,
+    isFetched: entityIsFetched,
+  } = useFetchEntityById(entityKey, "joined", selectedEntityId);
+
+  // Initialize formValues with initialValues or entityData
+  const initialFormValues = entityData || {};
+  const [formValues, setFormValues] = useState(initialFormValues);
+
+  // Memoize the debounced function
+  const debouncedHandleChange = useMemo(() => {
+    const handler = debounce((values) => {
+      setFormValues(values);
+    }, 500);
+
+    return handler;
+  }, []);
+
+  // Pass updated formValues to useFetchEntityList
   const { data: formData, isLoading: formIsLoading } = useFetchEntityList(
     entityKey,
-    "form"
+    "form",
+    { ...entityData, ...formValues },
+    (entityIsFetched && !isCreateMode) || isCreateMode
   );
-  const { data: entityData, isLoading: entityIsLoading } = useFetchEntityById(
-    entityKey,
-    "joined",
-    selectedEntityId
-  );
+
   const { data: infoData, isLoading: infoIsLoading } =
     useFetchInfoByKey(entityKey);
   const { data: depsData, isLoading: depsIsLoading } =
     useFetchDepsByKey(entityKey);
 
-  // Mutation hooks for creating and updating
   const createMutation = useCreateEntityMutation(entityKey, [
     [entityKey, "simple"],
     [entityKey, "joined"],
@@ -80,6 +97,25 @@ const EntityForm = ({ entityKey }) => {
 
   const disabled = createMutation.isPending || updateMutation.isPending;
 
+  // // FormObserver component to update formValues state
+  // const FormObserver = () => {
+  //   const { values } = useFormikContext();
+
+  //   useEffect(() => {
+  //     // Debounced update of formValues and customAction
+  //     debouncedHandleChange(values);
+  //   }, [values]);
+
+  //   // Cleanup function to cancel debounced calls if the component unmounts
+  //   useEffect(() => {
+  //     return () => {
+  //       debouncedHandleChange.cancel();
+  //     };
+  //   }, []);
+
+  //   return null;
+  // };
+
   return (
     <>
       <DialogTitle>
@@ -88,11 +124,12 @@ const EntityForm = ({ entityKey }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        enableReinitialize
+        // enableReinitialize
         onSubmit={handleSubmit}
       >
         {({ errors, touched, handleChange, values }) => (
           <Form>
+            {/* <FormObserver /> */}
             <DialogContent>
               <FormFields
                 entityKey={entityKey}

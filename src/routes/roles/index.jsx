@@ -33,6 +33,14 @@ const Roles = () => {
       description: infoData.logic_blocks.description,
     },
     {
+      field: "kits",
+      headerName: "Zestawy",
+      flex: 600,
+      type: "limitedChips",
+      sortable: false,
+      description: infoData.kits.description,
+    },
+    {
       field: "edit",
       headerName: "Edytuj",
       flex: 100,
