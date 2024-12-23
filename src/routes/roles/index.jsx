@@ -17,6 +17,11 @@ const Roles = () => {
     { field: "id", headerName: "ID", flex: 100 },
     { field: "name", headerName: "Nazwa", flex: 300 },
     {
+      field: "type",
+      headerName: "Rodzaj",
+      flex: 100,
+    },
+    {
       field: "users",
       headerName: "Użytkownicy",
       flex: 700,
