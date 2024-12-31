@@ -15,7 +15,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as UsersIndexImport } from './routes/users/index'
 import { Route as TermsIndexImport } from './routes/terms/index'
-import { Route as SettingsIndexImport } from './routes/settings/index'
 import { Route as RulesIndexImport } from './routes/rules/index'
 import { Route as RolesIndexImport } from './routes/roles/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
@@ -44,12 +43,6 @@ const UsersIndexRoute = UsersIndexImport.update({
 const TermsIndexRoute = TermsIndexImport.update({
   id: '/terms/',
   path: '/terms/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const SettingsIndexRoute = SettingsIndexImport.update({
-  id: '/settings/',
-  path: '/settings/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -142,13 +135,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RulesIndexImport
       parentRoute: typeof rootRoute
     }
-    '/settings/': {
-      id: '/settings/'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/terms/': {
       id: '/terms/'
       path: '/terms'
@@ -176,7 +162,6 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsIndexRoute
   '/roles': typeof RolesIndexRoute
   '/rules': typeof RulesIndexRoute
-  '/settings': typeof SettingsIndexRoute
   '/terms': typeof TermsIndexRoute
   '/users': typeof UsersIndexRoute
 }
@@ -189,7 +174,6 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsIndexRoute
   '/roles': typeof RolesIndexRoute
   '/rules': typeof RulesIndexRoute
-  '/settings': typeof SettingsIndexRoute
   '/terms': typeof TermsIndexRoute
   '/users': typeof UsersIndexRoute
 }
@@ -203,7 +187,6 @@ export interface FileRoutesById {
   '/products/': typeof ProductsIndexRoute
   '/roles/': typeof RolesIndexRoute
   '/rules/': typeof RulesIndexRoute
-  '/settings/': typeof SettingsIndexRoute
   '/terms/': typeof TermsIndexRoute
   '/users/': typeof UsersIndexRoute
 }
@@ -218,7 +201,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/roles'
     | '/rules'
-    | '/settings'
     | '/terms'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
@@ -230,7 +212,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/roles'
     | '/rules'
-    | '/settings'
     | '/terms'
     | '/users'
   id:
@@ -242,7 +223,6 @@ export interface FileRouteTypes {
     | '/products/'
     | '/roles/'
     | '/rules/'
-    | '/settings/'
     | '/terms/'
     | '/users/'
   fileRoutesById: FileRoutesById
@@ -256,7 +236,6 @@ export interface RootRouteChildren {
   ProductsIndexRoute: typeof ProductsIndexRoute
   RolesIndexRoute: typeof RolesIndexRoute
   RulesIndexRoute: typeof RulesIndexRoute
-  SettingsIndexRoute: typeof SettingsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
@@ -269,7 +248,6 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsIndexRoute: ProductsIndexRoute,
   RolesIndexRoute: RolesIndexRoute,
   RulesIndexRoute: RulesIndexRoute,
-  SettingsIndexRoute: SettingsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }
@@ -293,7 +271,6 @@ export const routeTree = rootRoute
         "/products/",
         "/roles/",
         "/rules/",
-        "/settings/",
         "/terms/",
         "/users/"
       ]
@@ -318,9 +295,6 @@ export const routeTree = rootRoute
     },
     "/rules/": {
       "filePath": "rules/index.jsx"
-    },
-    "/settings/": {
-      "filePath": "settings/index.jsx"
     },
     "/terms/": {
       "filePath": "terms/index.jsx"

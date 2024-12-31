@@ -40,13 +40,13 @@ const EntityForm = ({ entityKey }) => {
   const [formValues, setFormValues] = useState(initialFormValues);
 
   // Memoize the debounced function
-  const debouncedHandleChange = useMemo(() => {
-    const handler = debounce((values) => {
-      setFormValues(values);
-    }, 500);
+  // const debouncedHandleChange = useMemo(() => {
+  //   const handler = debounce((values) => {
+  //     setFormValues(values);
+  //   }, 500);
 
-    return handler;
-  }, []);
+  //   return handler;
+  // }, []);
 
   // Pass updated formValues to useFetchEntityList
   const { data: formData, isLoading: formIsLoading } = useFetchEntityList(
@@ -155,7 +155,7 @@ const EntityForm = ({ entityKey }) => {
           </Form>
         )}
       </Formik>
-      {!isCreateMode &&
+      {!isCreateMode && depsData && 
         (entityKey === "logic_blocks" ? (
           <LogicBlockCard depsData={depsData} />
         ) : (
